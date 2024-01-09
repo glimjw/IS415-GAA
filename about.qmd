@@ -2,8 +2,12 @@
 title: "About"
 ---
 
-About this site
+## About Me
 
-```{r}
-1 + 1
-```
+##### I am a 3rd year IS student, Majoring in Business Analytics and Digital Business. My passion lies in harnessing the power of data analysis and visualization to make impactful business decisions using technology.
+
+##### In IS415, I am excited to learn how Geospatial Analytics is able to generate insightful analysis, which will diversify my knowledge in data analytics. This will also value add to my major with an alternative source of data analysis.
+
+## About Site
+
+##### This is where I will be uploading my [Hands-on]{.underline}, [In-class]{.underline} and [Take-home]{.underline} exercises, where I explore R programming language and build on my competencies in data analytics.

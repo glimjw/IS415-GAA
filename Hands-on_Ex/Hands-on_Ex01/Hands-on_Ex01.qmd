@@ -18,7 +18,7 @@ pacman::p_load(tidyverse, sf)
 # Importing a geospatial data in shapefile format
 
 ```{r}
-mpsz <- st_read(dsn = "data/geospatial", layer = "MP14_SUBZONE_WEB_PL")
+mpsz <- st_read(dsn = "../../data/wk1_data/geospatial", layer = "MP14_SUBZONE_WEB_PL")
 ```
 
 ## Plotting the Geospatial Data
@@ -38,19 +38,19 @@ pacman::p_load(sf, tidyverse)
 ## Importing polygon feature data in shapefile format
 
 ```{r}
-mpsz = st_read(dsn = "data/geospatial", layer = "MP14_SUBZONE_WEB_PL")
+mpsz = st_read(dsn = "../../data/wk1_data/geospatial", layer = "MP14_SUBZONE_WEB_PL")
 ```
 
 ## Importing polyline feature data in shapefile form
 
 ```{r}
-cyclingpath = st_read(dsn = "data/geospatial", layer = "CyclingPathGazette")
+cyclingpath = st_read(dsn = "../../data/wk1_data/geospatial", layer = "CyclingPathGazette")
 ```
 
 ## Importing GIS data in kml format
 
 ```{r}
-preschool = st_read("data/geospatial/PreSchoolsLocation.kml")
+preschool = st_read("../../data/wk1_data/geospatial/PreSchoolsLocation.kml")
 ```
 
 # **Checking the Content of A Simple Feature Data Frame**
@@ -114,7 +114,7 @@ st_geometry(preschool3414)
 ## Importing the aspatial data
 
 ```{r}
-listings <- read_csv("data/aspatial/listings.csv")
+listings <- read_csv("../../data/wk1_data/aspatial/listings.csv")
 
 list(listings)
 ```
