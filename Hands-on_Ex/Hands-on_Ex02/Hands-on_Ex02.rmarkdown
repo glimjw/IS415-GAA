@@ -486,6 +486,8 @@ tmap_arrange(youngmap, agedmap, asp=1, ncol=2)
 
 Instead of creating small multiple choropleth map, you can also use selection funtion to map spatial objects meeting the selection criterion.
 
+In this example, we will focus on the CENTRAL REGION
+
 
 ```{r}
 tm_shape(mpsz_pop2020[mpsz_pop2020$REGION_N=="CENTRAL REGION", ])+
