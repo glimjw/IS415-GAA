@@ -170,8 +170,36 @@
   {
     "objectID": "In-class_Ex/In-class_Ex02/In-class_Ex02.html",
     "href": "In-class_Ex/In-class_Ex02/In-class_Ex02.html",
-    "title": "In-class-Exercise 2: R for Geospatial Data Science",
+    "title": "R for Geospatial Data Science",
     "section": "",
-    "text": "Getting Started\n::: callout-note ### DIY Using the step you have learned in previous lesson,\n\ncreate a folder called In-class_Ex02.\ncreate a new Quarto document called In-class_Ex02."
+    "text": "Before we start, create the folder and file\n\n\n\n\ncreate a folder called In-class_Ex02.\ncreate a new Quarto document called In-class_Ex02.\n\n\n\nWrite a code check to load the R packages into R environment\nThe follwing R-packages will be used: - Arrow - Lubridate - Tidyverse - tmap - sf\n\n\nCode\npacman::p_load(arrow, lubridate, tidyverse, sf, tmap)\n\n\n\n\n\n\nCode\ndf &lt;- read_parquet(\"../../data/GrabPosisi/part-00000-8bbff892-97d2-4011-9961-703e38972569.c000.snappy - Copy.parquet\")\n\n\nConvert the data type of pingtimestamp from character to date-time (to make sure the data are of the correct format)\n\n\nCode\ndf$pingtimestamp &lt;- as_datetime(df$pingtimestamp)\n\n\n\n\n\n\nExtracting trips’ origin locations\nDerive three new columns (i.e. variables) for weekday, starting hour and day of the month\nName the output tibble data.frame origin.df\n\n\n\nCode\norigin_df &lt;- df %&gt;%\n  group_by(trj_id) %&gt;%\n  arrange(pingtimestamp) %&gt;%\n  filter(row_number()==1) %&gt;%\n  mutate(weekday = wday(pingtimestamp,\n                        label=TRUE,\n                        abbr=TRUE),\n         start_hr = factor(hour(pingtimestamp)),\n         day = factor(mday(pingtimestamp)))\n\n\n** the wday/label/abbr/etc are part of the Lubridate function ** factor will change the data to ordinal scale - an order (if not it would be just recognise the data as pure numbers instead of hour/min/etc)\n\n\n\nExtract trip’s destination locations.\n\n\nCode\ndestination_df &lt;- df %&gt;%\n  group_by(trj_id) %&gt;%\n  arrange(desc(pingtimestamp)) %&gt;%\n  filter(row_number()==1) %&gt;%\n  mutate(weekday = wday(pingtimestamp,\n                        label=TRUE,\n                        abbr=TRUE),\n         start_hr = factor(hour(pingtimestamp)),\n         day = factor(mday(pingtimestamp)))\n\n\n** sort the timestamp backwards (using desc) to get the last timestamp of a trip (trj_id)\nTo reuse the tables, we need to create rds\n\n\n\n\n\nCode\norigin_df &lt;- read_rds(\"data/rds/origin_df.rds\")\ndestination_df &lt;- read_rds(\"data/rds/destination_df.rds\")"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#importing-grab-posisi-dataset",
+    "href": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#importing-grab-posisi-dataset",
+    "title": "R for Geospatial Data Science",
+    "section": "",
+    "text": "Code\ndf &lt;- read_parquet(\"../../data/GrabPosisi/part-00000-8bbff892-97d2-4011-9961-703e38972569.c000.snappy - Copy.parquet\")\n\n\nConvert the data type of pingtimestamp from character to date-time (to make sure the data are of the correct format)\n\n\nCode\ndf$pingtimestamp &lt;- as_datetime(df$pingtimestamp)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#extracting-trip-starting-locations",
+    "href": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#extracting-trip-starting-locations",
+    "title": "R for Geospatial Data Science",
+    "section": "",
+    "text": "Extracting trips’ origin locations\nDerive three new columns (i.e. variables) for weekday, starting hour and day of the month\nName the output tibble data.frame origin.df\n\n\n\nCode\norigin_df &lt;- df %&gt;%\n  group_by(trj_id) %&gt;%\n  arrange(pingtimestamp) %&gt;%\n  filter(row_number()==1) %&gt;%\n  mutate(weekday = wday(pingtimestamp,\n                        label=TRUE,\n                        abbr=TRUE),\n         start_hr = factor(hour(pingtimestamp)),\n         day = factor(mday(pingtimestamp)))\n\n\n** the wday/label/abbr/etc are part of the Lubridate function ** factor will change the data to ordinal scale - an order (if not it would be just recognise the data as pure numbers instead of hour/min/etc)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#extracting-trip-ending-locations",
+    "href": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#extracting-trip-ending-locations",
+    "title": "R for Geospatial Data Science",
+    "section": "",
+    "text": "Extract trip’s destination locations.\n\n\nCode\ndestination_df &lt;- df %&gt;%\n  group_by(trj_id) %&gt;%\n  arrange(desc(pingtimestamp)) %&gt;%\n  filter(row_number()==1) %&gt;%\n  mutate(weekday = wday(pingtimestamp,\n                        label=TRUE,\n                        abbr=TRUE),\n         start_hr = factor(hour(pingtimestamp)),\n         day = factor(mday(pingtimestamp)))\n\n\n** sort the timestamp backwards (using desc) to get the last timestamp of a trip (trj_id)\nTo reuse the tables, we need to create rds"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#import-data-to-use-the-rds",
+    "href": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#import-data-to-use-the-rds",
+    "title": "R for Geospatial Data Science",
+    "section": "",
+    "text": "Code\norigin_df &lt;- read_rds(\"data/rds/origin_df.rds\")\ndestination_df &lt;- read_rds(\"data/rds/destination_df.rds\")"
   }
 ]
