@@ -1,0 +1,16 @@
+---
+title: "In-class-Exercise 2: R for Geospatial Data Science"
+execute:
+  warning: false
+date: "`r Sys.Date()`"
+---
+
+# Getting Started
+
+::: callout-note
+### DIY
+Using the step you have learned in previous lesson,
+
+- create a folder called In-class_Ex02.
+- create a new Quarto document called In-class_Ex02.
+

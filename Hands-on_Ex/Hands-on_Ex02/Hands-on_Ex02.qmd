@@ -389,8 +389,7 @@ tm_shape(mpsz_pop2020)+
 
 #### **By defining a group-by variable in tm_facets()**
 
-In this example, multiple small choropleth maps are created by using tm_facets().
-The multiple maps will show the data for each type of variable under "tm_facets()"
+In this example, multiple small choropleth maps are created by using tm_facets(). The multiple maps will show the data for each type of variable under "tm_facets()"
 
 ```{r}
 tm_shape(mpsz_pop2020) +
@@ -411,7 +410,7 @@ tm_shape(mpsz_pop2020) +
 
 In this example, multiple small choropleth maps are created by creating multiple stand-alone maps with tmap_arrange().
 
-We create the individual "mini" maps, thereafter we will arrange them 
+We create the individual "mini" maps, thereafter we will arrange them
 
 ```{r}
 youngmap <- tm_shape(mpsz_pop2020)+ 
