@@ -1,0 +1,137 @@
+---
+title: "Hands-on-Exercise 3.1: 1st Order Spatial Point Patterns Analysis Methods"
+execute:
+  warning: false
+date: "`r Sys.Date()`"
+---
+
+## 4.1 Overview
+
+**Spatial Point Pattern Analysis** is the **evaluation of the pattern or distribution, of a set of points on a surface**. The point can be location of:
+
+-   events such as crime, traffic accident and disease onset, or
+-   business services (coffee and fastfood outlets) or facilities such as childcare and eldercare.
+
+Using appropriate functions of spatstat, this hands-on exercise aims to discover the spatial point processes of childecare centres in Singapore.
+
+The specific questions we would like to answer are as follows:
+
+-   are the childcare centres in Singapore randomly distributed throughout the country?
+-   if the answer is not, then the next logical question is where are the locations with higher concentration of childcare centres?
+
+## 4.2 The data
+
+To provide answers to the questions above, three data sets will be used. They are:
+
+-   `CHILDCARE`, a point feature data providing both location and attribute information of childcare centres. It was downloaded from Data.gov.sg and is in geojson format.
+
+-   `MP14_SUBZONE_WEB_PL`, a polygon feature data providing information of URA 2014 Master Plan Planning Subzone boundary data. It is in ESRI shapefile format. This data set was also downloaded from Data.gov.sg.
+
+-   `CostalOutline`, a polygon feature data showing the national boundary of Singapore. It is provided by SLA and is in ESRI shapefile format.
+
+## 4.3 **Installing and Loading the R packages**
+
+In this hands-on exercise, five R packages will be used, they are:
+
+-   [**sf**](https://r-spatial.github.io/sf/), a relatively new R package specially designed to import, manage and process vector-based geospatial data in R.
+
+-   [**spatstat**](https://spatstat.org/), which has a wide range of useful functions for point pattern analysis. In this hands-on exercise, it will be used to perform 1st- and 2nd-order spatial point patterns analysis and derive kernel density estimation (KDE) layer.
+
+-   [**raster**](https://cran.r-project.org/web/packages/raster/) which reads, writes, manipulates, analyses and model of gridded spatial data (i.e. raster). In this hands-on exercise, it will be used to convert image output generate by spatstat into raster format.
+
+-   [**maptools**](https://cran.r-project.org/web/packages/maptools/) which provides a set of tools for manipulating geographic data. In this hands-on exercise, we mainly use it to convert *Spatial* objects into *ppp* format of **spatstat**.
+
+-   [**tmap**](https://cran.r-project.org/web/packages/tmap/) which provides functions for plotting cartographic quality static point patterns maps or interactive maps by using [leaflet](https://leafletjs.com/) API.
+
+Use the code chunk below to install and launch the five R packages.
+
+```{r}
+pacman::p_load(sf, raster, spatstat, maptools, tmap)
+```
+
+## **4.4 Spatial Data Wrangling**
+
+### **4.4.1 Importing the spatial data**
+
+In this section, [*st_read()*](https://r-spatial.github.io/sf/reference/st_read.html) of **sf** package will be used to import these three geospatial data sets into R. The 3 data are childcare (preschoollocation), coastal outline, and MP14 subzone.
+
+```{r}
+childcare_sf <- st_read("data/PreSchoolsLocation.geojson")
+```
+
+```{r}
+sg_sf <- st_read(dsn = "data/geospatial/NationalMapPolygonKML.geojson")
+```
+
+```{r}
+mpsz_sf <- st_read(dsn = "data/geospatial", 
+                layer = "MP14_SUBZONE_WEB_PL")
+```
+
+Before we can use these data for analysis, it is important for us to ensure that they are projected in same projection system.
+
+> DIY: Using the appropriate sf function you learned in Hands-on Exercise 2, retrieve the referencing system information of these geospatial data.
+
+```{r}
+st_crs(childcare_sf)
+```
+
+```{r}
+st_crs(sg_sf)
+```
+
+```{r}
+st_crs(mpsz_sf)
+```
+
+> DIY: Using the method you learned in Lesson 2, assign the correct crs to mpsz_sf and sg_sf simple feature data frames.
+
+The cr information isn’t appropriate. `childcare_sf` is in WGS84, while the other two are in SVY21
+
+```{r}
+mpsz_sf <- st_transform(mpsz_sf, crs= 3414)
+st_crs(mpsz_sf)
+```
+
+### 4.4.2 Mapping the geospatial data sets
+
+Let's plot a map to show their spatial patterns for each dataframe
+
+childcare_sf consists of spatial points, so it cannot accept tm_fill/tm_borders/tm_polygons. So we have to use tm_dots()
+
+```{r}
+tm_shape(mpsz_sf) +
+  tm_polygons() +
+tm_shape(sg_sf) +
+  tm_polygons() +
+tm_shape(childcare_sf) +
+  tm_dots()
+```
+
+Alternatively, we can prepare a pin map by using this code chunk:
+
+```{r}
+tmap_mode('view')
+tm_shape(childcare_sf)+
+  tm_dots()
+```
+
+```{r}
+tmap_mode('plot')
+```
+
+Notice that at the interactive mode, tmap is using leaflet for R API. The advantage of this interactive pin map is it allows us to **navigate and zoom around the map freely**.
+
+## **4.5 Geospatial Data wrangling**
+
+Although simple feature data frame is gaining popularity again sp’s Spatial\* classes, there are, however, many geospatial analysis packages require the input geospatial data in sp’s Spatial\* classes. In this section, you will learn how to **convert simple feature data frame to sp’s Spatial\* class.**
+
+### 4.5.1 **Converting sf data frames to sp’s Spatial\* class** 
+
+The code chunk below uses [*as_Spatial()*](https://r4gdsa.netlify.app/chap04.html) of **sf** package to convert the three geospatial data from simple feature data frame to sp’s Spatial\* class.
+
+```{r}
+childcare <- as_Spatial(childcare_sf)
+mpsz <- as_Spatial(mpsz_sf)
+sg <- as_Spatial(sg_sf)
+```

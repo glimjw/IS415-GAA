@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2024-01-15">
+<meta name="dcterms.date" content="2024-01-16">
 
 <title>IS415-GAA - Hands-on-Exercise 2: Thematic Mapping and GeoVisualisation with R</title>
 <style>
@@ -129,6 +129,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html" rel="" target="">
  <span class="dropdown-text">Hands-on Exercise 2</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex04.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex05.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 5</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -199,22 +211,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
-  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">Getting Started</a></li>
-  <li><a href="#importing-data-into-r" id="toc-importing-data-into-r" class="nav-link" data-scroll-target="#importing-data-into-r"><strong>Importing Data into R</strong></a>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">2.1 Overview</a></li>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">2.2 Getting Started</a></li>
+  <li><a href="#importing-data-into-r" id="toc-importing-data-into-r" class="nav-link" data-scroll-target="#importing-data-into-r">2.3 Importing Data into R</a>
   <ul class="collapse">
-  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data"><strong>The Data</strong></a></li>
-  <li><a href="#importing-geospatial-data-into-r" id="toc-importing-geospatial-data-into-r" class="nav-link" data-scroll-target="#importing-geospatial-data-into-r"><strong>Importing Geospatial Data into R</strong></a></li>
-  <li><a href="#importing-attribute-data-into-r" id="toc-importing-attribute-data-into-r" class="nav-link" data-scroll-target="#importing-attribute-data-into-r"><strong>Importing Attribute Data into R</strong></a></li>
-  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation"><strong>Data Preparation</strong></a></li>
-  <li><a href="#choropleth-mapping-geospatial-data-using-tmap" id="toc-choropleth-mapping-geospatial-data-using-tmap" class="nav-link" data-scroll-target="#choropleth-mapping-geospatial-data-using-tmap"><strong>Choropleth Mapping Geospatial Data Using tmap</strong></a></li>
-  <li><a href="#creating-a-choropleth-map-by-using-tmaps-elements" id="toc-creating-a-choropleth-map-by-using-tmaps-elements" class="nav-link" data-scroll-target="#creating-a-choropleth-map-by-using-tmaps-elements"><strong>Creating a choropleth map by using tmap’s elements</strong></a></li>
-  <li><a href="#drawing-a-choropleth-map-using-tm_fill-and-tm_border" id="toc-drawing-a-choropleth-map-using-tm_fill-and-tm_border" class="nav-link" data-scroll-target="#drawing-a-choropleth-map-using-tm_fill-and-tm_border"><strong>Drawing a choropleth map using tm_fill() and <em>tm_border()</em></strong>*</a></li>
-  <li><a href="#data-classification-methods-of-tmap" id="toc-data-classification-methods-of-tmap" class="nav-link" data-scroll-target="#data-classification-methods-of-tmap"><strong>Data classification methods of tmap</strong></a></li>
-  <li><a href="#colour-scheme" id="toc-colour-scheme" class="nav-link" data-scroll-target="#colour-scheme"><strong>Colour Scheme</strong></a></li>
-  <li><a href="#map-layouts" id="toc-map-layouts" class="nav-link" data-scroll-target="#map-layouts"><strong>Map Layouts</strong></a></li>
-  <li><a href="#drawing-small-multiple-choropleth-maps" id="toc-drawing-small-multiple-choropleth-maps" class="nav-link" data-scroll-target="#drawing-small-multiple-choropleth-maps"><strong>Drawing Small Multiple Choropleth Maps</strong></a></li>
-  <li><a href="#mappping-spatial-object-meeting-a-selection-criterion" id="toc-mappping-spatial-object-meeting-a-selection-criterion" class="nav-link" data-scroll-target="#mappping-spatial-object-meeting-a-selection-criterion"><strong>Mappping Spatial Object Meeting a Selection Criterion</strong></a></li>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data">2.3.1 The Data</a></li>
+  <li><a href="#importing-geospatial-data-into-r" id="toc-importing-geospatial-data-into-r" class="nav-link" data-scroll-target="#importing-geospatial-data-into-r">2.3.2 Importing Geospatial Data into R</a></li>
+  <li><a href="#importing-attribute-data-into-r" id="toc-importing-attribute-data-into-r" class="nav-link" data-scroll-target="#importing-attribute-data-into-r">2.3.3 Importing Attribute Data into R</a></li>
+  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">2.3.4 Data Preparation</a></li>
+  </ul></li>
+  <li><a href="#choropleth-mapping-geospatial-data-using-tmap" id="toc-choropleth-mapping-geospatial-data-using-tmap" class="nav-link" data-scroll-target="#choropleth-mapping-geospatial-data-using-tmap">2.4 Choropleth Mapping Geospatial Data Using tmap</a>
+  <ul class="collapse">
+  <li><a href="#plotting-a-choropleth-map-quickly-by-using-qtm" id="toc-plotting-a-choropleth-map-quickly-by-using-qtm" class="nav-link" data-scroll-target="#plotting-a-choropleth-map-quickly-by-using-qtm">2.4.1 Plotting a choropleth map quickly by using qtm()</a></li>
+  <li><a href="#creating-a-choropleth-map-by-using-tmaps-elements" id="toc-creating-a-choropleth-map-by-using-tmaps-elements" class="nav-link" data-scroll-target="#creating-a-choropleth-map-by-using-tmaps-elements">2.4.2 Creating a choropleth map by using tmap’s elements</a></li>
+  <li><a href="#drawing-a-choropleth-map-using-tm_fill-and-tm_border" id="toc-drawing-a-choropleth-map-using-tm_fill-and-tm_border" class="nav-link" data-scroll-target="#drawing-a-choropleth-map-using-tm_fill-and-tm_border">2.4.2.3 Drawing a choropleth map using tm_fill() and <em>tm_border()</em></a></li>
+  <li><a href="#data-classification-methods-of-tmap" id="toc-data-classification-methods-of-tmap" class="nav-link" data-scroll-target="#data-classification-methods-of-tmap">2.4.3 Data classification methods of tmap</a></li>
+  <li><a href="#colour-scheme" id="toc-colour-scheme" class="nav-link" data-scroll-target="#colour-scheme">2.4.4 Colour Scheme</a></li>
+  <li><a href="#map-layouts" id="toc-map-layouts" class="nav-link" data-scroll-target="#map-layouts">2.4.5 Map Layouts</a></li>
+  <li><a href="#drawing-small-multiple-choropleth-maps" id="toc-drawing-small-multiple-choropleth-maps" class="nav-link" data-scroll-target="#drawing-small-multiple-choropleth-maps">2.4.6 Drawing Small Multiple Choropleth Maps</a></li>
+  <li><a href="#mapping-spatial-object-meeting-a-selection-criterion" id="toc-mapping-spatial-object-meeting-a-selection-criterion" class="nav-link" data-scroll-target="#mapping-spatial-object-meeting-a-selection-criterion">2.4.7 Mapping Spatial Object Meeting a Selection Criterion</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -235,7 +250,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 15, 2024</p>
+      <p class="date">January 16, 2024</p>
     </div>
   </div>
   
@@ -246,11 +261,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 <section id="overview" class="level2">
-<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<h2 class="anchored" data-anchor-id="overview">2.1 Overview</h2>
 <p>In this chapter, you will learn how to plot functional and truthful choropleth maps by using an R package called <strong>tmap</strong> package.</p>
 </section>
 <section id="getting-started" class="level2">
-<h2 class="anchored" data-anchor-id="getting-started">Getting Started</h2>
+<h2 class="anchored" data-anchor-id="getting-started">2.2 Getting Started</h2>
 <p>In this hands-on exercise, the key R package use is tmap package in R. Beside tmap package, four other R packages will be used. They are: readr for importing delimited text file (part of tidyverse) tidyr for tidying data (part of tidyverse) dplyr for wrangling data (part of tidyverse) sf for handling geospatial data.</p>
 <p>The code chunk below will be used to install and load these packages in RStudio. Note: installing tidyverse = instally readr/tidyr/dplyr</p>
 <div class="cell">
@@ -258,13 +273,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 <section id="importing-data-into-r" class="level2">
-<h2 class="anchored" data-anchor-id="importing-data-into-r"><strong>Importing Data into R</strong></h2>
+<h2 class="anchored" data-anchor-id="importing-data-into-r">2.3 Importing Data into R</h2>
 <section id="the-data" class="level3">
-<h3 class="anchored" data-anchor-id="the-data"><strong>The Data</strong></h3>
+<h3 class="anchored" data-anchor-id="the-data">2.3.1 The Data</h3>
 <p>Two data set will be used to create the choropleth map: - Master Plan 2014 Subzone Boundary (MP14_SUBZONE_WEB_PL) - Singapore Residents by Subzone / Age / Sex / Type of Dwelling (respopagesextod2011to2020.csv)</p>
 </section>
 <section id="importing-geospatial-data-into-r" class="level3">
-<h3 class="anchored" data-anchor-id="importing-geospatial-data-into-r"><strong>Importing Geospatial Data into R</strong></h3>
+<h3 class="anchored" data-anchor-id="importing-geospatial-data-into-r">2.3.2 Importing Geospatial Data into R</h3>
 <p>The code chunk below uses the st_read() function of sf package to import MP14_SUBZONE_WEB_PL shapefile into R as a simple feature data frame called mpsz.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>mpsz <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"../../data/wk1_data/geospatial"</span>, </span>
@@ -323,7 +338,7 @@ First 10 features:
 </div>
 </section>
 <section id="importing-attribute-data-into-r" class="level3">
-<h3 class="anchored" data-anchor-id="importing-attribute-data-into-r"><strong>Importing Attribute Data into R</strong></h3>
+<h3 class="anchored" data-anchor-id="importing-attribute-data-into-r">2.3.3 Importing Attribute Data into R</h3>
 <p>Next, we will import respopagsex2011to2020.csv file into RStudio and save the file into an R dataframe called popdata.</p>
 <p>The task will be performed by using read_csv() function of readr package as shown in the code chunk below.</p>
 <div class="cell">
@@ -331,10 +346,10 @@ First 10 features:
 </div>
 </section>
 <section id="data-preparation" class="level3">
-<h3 class="anchored" data-anchor-id="data-preparation"><strong>Data Preparation</strong></h3>
+<h3 class="anchored" data-anchor-id="data-preparation">2.3.4 Data Preparation</h3>
 <p>Before we start creating the thematic map, we need to prepare a data table with year 2020 values, which consists of the variables (PA, SZ, YOUNG, ECONOMY ACTIVE, AGED, TOTAL, DEPENDENCY).</p>
 <section id="data-wrangling" class="level4">
-<h4 class="anchored" data-anchor-id="data-wrangling"><strong>Data wrangling</strong></h4>
+<h4 class="anchored" data-anchor-id="data-wrangling">2.3.4.1 Data wrangling</h4>
 <p>The data wrangling and transformation functions that we will be using: - pivot_wider() of tidyr package, and - mutate(), filter(), group_by() and select() of dplyr package</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>popdata2020 <span class="ot">&lt;-</span> popdata <span class="sc">%&gt;%</span></span>
@@ -358,7 +373,7 @@ First 10 features:
 </div>
 </section>
 <section id="joining-the-attribute-data-and-geospatial-data" class="level4">
-<h4 class="anchored" data-anchor-id="joining-the-attribute-data-and-geospatial-data"><strong>Joining the attribute data and geospatial data</strong></h4>
+<h4 class="anchored" data-anchor-id="joining-the-attribute-data-and-geospatial-data">2.3.4.2 Joining the attribute data and geospatial data</h4>
 <p>Before performing the georelational join, we need to convert the values in PA and SZ fields to uppercase. This is because the values of PA and SZ fields are made up of upper- and lowercase. On the other hand, the SUBZONE_N and PLN_AREA_N are in uppercase.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>popdata2020 <span class="ot">&lt;-</span> popdata2020 <span class="sc">%&gt;%</span></span>
@@ -376,12 +391,13 @@ First 10 features:
 </div>
 </section>
 </section>
-<section id="choropleth-mapping-geospatial-data-using-tmap" class="level3">
-<h3 class="anchored" data-anchor-id="choropleth-mapping-geospatial-data-using-tmap"><strong>Choropleth Mapping Geospatial Data Using tmap</strong></h3>
+</section>
+<section id="choropleth-mapping-geospatial-data-using-tmap" class="level2">
+<h2 class="anchored" data-anchor-id="choropleth-mapping-geospatial-data-using-tmap">2.4 Choropleth Mapping Geospatial Data Using tmap</h2>
 <p>Choropleth mapping involves the symbolisation of enumeration units, such as countries, provinces, states, counties or census units, using area patterns or graduated colors.</p>
 <p>Two approaches can be used to prepare thematic map using tmap, they are: - Plotting a thematic map quickly by using qtm(). - Plotting highly customisable thematic map by using tmap elements.</p>
-<section id="plotting-a-choropleth-map-quickly-by-using-qtm" class="level4">
-<h4 class="anchored" data-anchor-id="plotting-a-choropleth-map-quickly-by-using-qtm"><strong>Plotting a choropleth map quickly by using qtm()</strong></h4>
+<section id="plotting-a-choropleth-map-quickly-by-using-qtm" class="level3">
+<h3 class="anchored" data-anchor-id="plotting-a-choropleth-map-quickly-by-using-qtm">2.4.1 Plotting a choropleth map quickly by using qtm()</h3>
 <p>The easiest and quickest to draw a choropleth map using tmap is using qtm(). It is concise and provides a good default visualisation in many cases.</p>
 <p>The code chunk below will draw a cartographic standard choropleth map as shown below.</p>
 <ul>
@@ -397,9 +413,8 @@ First 10 features:
 </div>
 </div>
 </section>
-</section>
 <section id="creating-a-choropleth-map-by-using-tmaps-elements" class="level3">
-<h3 class="anchored" data-anchor-id="creating-a-choropleth-map-by-using-tmaps-elements"><strong>Creating a choropleth map by using tmap’s elements</strong></h3>
+<h3 class="anchored" data-anchor-id="creating-a-choropleth-map-by-using-tmaps-elements">2.4.2 Creating a choropleth map by using tmap’s elements</h3>
 <p>To draw a high quality cartographic choropleth map as shown in the figure below, tmap’s drawing elements should be used.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mpsz_pop2020)<span class="sc">+</span></span>
@@ -424,7 +439,7 @@ First 10 features:
 </div>
 </div>
 <section id="drawing-a-base-map" class="level4">
-<h4 class="anchored" data-anchor-id="drawing-a-base-map"><strong>Drawing a base map</strong></h4>
+<h4 class="anchored" data-anchor-id="drawing-a-base-map">2.4.2.1 Drawing a base map</h4>
 <p>In the code chunk below, tm_shape() is used to define the input data (i.e mpsz_pop2020) and tm_polygons() is used to draw the planning subzone polygons</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mpsz_pop2020) <span class="sc">+</span></span>
@@ -435,7 +450,7 @@ First 10 features:
 </div>
 </section>
 <section id="drawing-a-choropleth-map-using-tm_polygons" class="level4">
-<h4 class="anchored" data-anchor-id="drawing-a-choropleth-map-using-tm_polygons"><strong>Drawing a choropleth map using tm_polygons()</strong></h4>
+<h4 class="anchored" data-anchor-id="drawing-a-choropleth-map-using-tm_polygons">2.4.2.2 Drawing a choropleth map using tm_polygons()</h4>
 <p>To draw a choropleth map showing the geographical distribution of a selected variable by planning subzone, we just need to assign the target variable such as Dependency to tm_polygons().</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mpsz_pop2020)<span class="sc">+</span></span>
@@ -447,7 +462,7 @@ First 10 features:
 </section>
 </section>
 <section id="drawing-a-choropleth-map-using-tm_fill-and-tm_border" class="level3">
-<h3 class="anchored" data-anchor-id="drawing-a-choropleth-map-using-tm_fill-and-tm_border"><strong>Drawing a choropleth map using tm_fill() and <em>tm_border()</em></strong>*</h3>
+<h3 class="anchored" data-anchor-id="drawing-a-choropleth-map-using-tm_fill-and-tm_border">2.4.2.3 Drawing a choropleth map using tm_fill() and <em>tm_border()</em></h3>
 <p>Actually, tm_polygons() is a wraper of tm_fill() and tm_border(). tm_fill() shades the polygons by using the default colour scheme and tm_borders() adds the borders of the shapefile onto the choropleth map.</p>
 <p>The code chunk below draws a choropleth map by using tm_fill() alone. This map will not show the border.</p>
 <div class="cell">
@@ -474,12 +489,12 @@ First 10 features:
 </div>
 </section>
 <section id="data-classification-methods-of-tmap" class="level3">
-<h3 class="anchored" data-anchor-id="data-classification-methods-of-tmap"><strong>Data classification methods of tmap</strong></h3>
+<h3 class="anchored" data-anchor-id="data-classification-methods-of-tmap">2.4.3 Data classification methods of tmap</h3>
 <p>tmap provides a total ten data classification methods, namely: fixed, sd, equal, pretty (default), quantile, kmeans, hclust, bclust, fisher, and jenks</p>
 <p>“pretty” classification method is the default method.</p>
 <p>To define a data classification method, the style argument of tm_fill() or tm_polygons() will be used.</p>
 <section id="plotting-choropleth-maps-with-built-in-classification-methods" class="level4">
-<h4 class="anchored" data-anchor-id="plotting-choropleth-maps-with-built-in-classification-methods"><strong>Plotting choropleth maps with built-in classification methods</strong></h4>
+<h4 class="anchored" data-anchor-id="plotting-choropleth-maps-with-built-in-classification-methods">2.4.3.1 Plotting choropleth maps with built-in classification methods</h4>
 <p>The code chunk below shows a quantile data classification that used 5 classes.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mpsz_pop2020)<span class="sc">+</span></span>
@@ -515,7 +530,7 @@ First 10 features:
 </div>
 </section>
 <section id="plotting-choropleth-map-with-custome-break" class="level4">
-<h4 class="anchored" data-anchor-id="plotting-choropleth-map-with-custome-break"><strong>Plotting choropleth map with custome break</strong></h4>
+<h4 class="anchored" data-anchor-id="plotting-choropleth-map-with-custome-break">2.4.3.2 Plotting choropleth map with custome break</h4>
 <p>Checking the descriptive statistics</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mpsz_pop2020<span class="sc">$</span>DEPENDENCY)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -538,10 +553,10 @@ First 10 features:
 </section>
 </section>
 <section id="colour-scheme" class="level3">
-<h3 class="anchored" data-anchor-id="colour-scheme"><strong>Colour Scheme</strong></h3>
+<h3 class="anchored" data-anchor-id="colour-scheme">2.4.4 Colour Scheme</h3>
 <p>tmap supports colour ramps either defined by the user or a set of predefined colour ramps from the RColorBrewer package</p>
 <section id="using-colourbrewer-palette" class="level4">
-<h4 class="anchored" data-anchor-id="using-colourbrewer-palette"><strong>Using ColourBrewer palette</strong></h4>
+<h4 class="anchored" data-anchor-id="using-colourbrewer-palette">2.4.4.1 Using ColourBrewer palette</h4>
 <p>We can change the colour to “palette” argument in the “tm_fill()” in the code</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mpsz_pop2020)<span class="sc">+</span></span>
@@ -568,10 +583,10 @@ First 10 features:
 </section>
 </section>
 <section id="map-layouts" class="level3">
-<h3 class="anchored" data-anchor-id="map-layouts"><strong>Map Layouts</strong></h3>
+<h3 class="anchored" data-anchor-id="map-layouts">2.4.5 Map Layouts</h3>
 <p>We can include title, scale bar, compass, margins and aspect ratios in our map.</p>
 <section id="map-legend" class="level4">
-<h4 class="anchored" data-anchor-id="map-legend"><strong>Map Legend</strong></h4>
+<h4 class="anchored" data-anchor-id="map-legend">2.4.5.1 Map Legend</h4>
 <p>In <strong>tmap</strong>, several legend options are provided to change the placement, format and appearance of the legend.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mpsz_pop2020)<span class="sc">+</span></span>
@@ -596,7 +611,7 @@ First 10 features:
 </div>
 </section>
 <section id="map-style" class="level4">
-<h4 class="anchored" data-anchor-id="map-style"><strong>Map style</strong></h4>
+<h4 class="anchored" data-anchor-id="map-style">2.4.5.2 Map style</h4>
 <p><strong>tmap</strong> allows a wide variety of layout settings to be changed. They can be called by using tmap_style().</p>
 <p>The code chunk below shows the classic style is used.</p>
 <div class="cell">
@@ -612,7 +627,7 @@ First 10 features:
 </div>
 </section>
 <section id="cartographic-furniture" class="level4">
-<h4 class="anchored" data-anchor-id="cartographic-furniture"><strong>Cartographic Furniture</strong></h4>
+<h4 class="anchored" data-anchor-id="cartographic-furniture">2.4.5.3 Cartographic Furniture</h4>
 <p>Beside map style, tmap also also provides arguments to draw other map furniture such as compass, scale bar and grid lines.</p>
 <p>We can simply add them by using tm_compass(), tm_scale_bar() and tm_grid()</p>
 <div class="cell">
@@ -644,13 +659,13 @@ First 10 features:
 </section>
 </section>
 <section id="drawing-small-multiple-choropleth-maps" class="level3">
-<h3 class="anchored" data-anchor-id="drawing-small-multiple-choropleth-maps"><strong>Drawing Small Multiple Choropleth Maps</strong></h3>
+<h3 class="anchored" data-anchor-id="drawing-small-multiple-choropleth-maps">2.4.6 Drawing Small Multiple Choropleth Maps</h3>
 <p>In tmap, small multiple maps can be plotted in three ways:</p>
 <p>- by assigning multiple values to at least one of the asthetic arguments</p>
 <p>- by defining a group-by variable in tm_facets()</p>
 <p>- by creating multiple stand-alone maps with tmap_arrange()</p>
 <section id="by-assigning-multiple-values-to-at-least-one-of-the-aesthetic-arguments" class="level4">
-<h4 class="anchored" data-anchor-id="by-assigning-multiple-values-to-at-least-one-of-the-aesthetic-arguments"><strong>By assigning multiple values to at least one of the aesthetic arguments</strong></h4>
+<h4 class="anchored" data-anchor-id="by-assigning-multiple-values-to-at-least-one-of-the-aesthetic-arguments">2.4.6.1 By assigning multiple values to at least one of the aesthetic arguments</h4>
 <p>In this example, small multiple choropleth maps are created by defining ncols in tm_fill()</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mpsz_pop2020)<span class="sc">+</span></span>
@@ -677,7 +692,7 @@ First 10 features:
 </div>
 </section>
 <section id="by-defining-a-group-by-variable-in-tm_facets" class="level4">
-<h4 class="anchored" data-anchor-id="by-defining-a-group-by-variable-in-tm_facets"><strong>By defining a group-by variable in tm_facets()</strong></h4>
+<h4 class="anchored" data-anchor-id="by-defining-a-group-by-variable-in-tm_facets">2.4.6.2 By defining a group-by variable in tm_facets()</h4>
 <p>In this example, multiple small choropleth maps are created by using tm_facets(). The multiple maps will show the data for each type of variable under “tm_facets()”</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mpsz_pop2020) <span class="sc">+</span></span>
@@ -698,7 +713,7 @@ First 10 features:
 </div>
 </section>
 <section id="by-creating-multiple-stand-alone-maps-with-tmap_arrange" class="level4">
-<h4 class="anchored" data-anchor-id="by-creating-multiple-stand-alone-maps-with-tmap_arrange"><strong>By creating multiple stand-alone maps with tmap_arrange()</strong></h4>
+<h4 class="anchored" data-anchor-id="by-creating-multiple-stand-alone-maps-with-tmap_arrange">2.4.6.3 By creating multiple stand-alone maps with tmap_arrange()</h4>
 <p>In this example, multiple small choropleth maps are created by creating multiple stand-alone maps with tmap_arrange().</p>
 <p>We create the individual “mini” maps, thereafter we will arrange them</p>
 <div class="cell">
@@ -719,9 +734,9 @@ First 10 features:
 </div>
 </section>
 </section>
-<section id="mappping-spatial-object-meeting-a-selection-criterion" class="level3">
-<h3 class="anchored" data-anchor-id="mappping-spatial-object-meeting-a-selection-criterion"><strong>Mappping Spatial Object Meeting a Selection Criterion</strong></h3>
-<p>Instead of creating small multiple choropleth map, you can also use selection funtion to map spatial objects meeting the selection criterion.</p>
+<section id="mapping-spatial-object-meeting-a-selection-criterion" class="level3">
+<h3 class="anchored" data-anchor-id="mapping-spatial-object-meeting-a-selection-criterion">2.4.7 Mapping Spatial Object Meeting a Selection Criterion</h3>
+<p>Instead of creating small multiple choropleth map, you can also use selection function to map spatial objects meeting the selection criterion.</p>
 <p>In this example, we will focus on the CENTRAL REGION</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mpsz_pop2020[mpsz_pop2020<span class="sc">$</span>REGION_N<span class="sc">==</span><span class="st">"CENTRAL REGION"</span>, ])<span class="sc">+</span></span>

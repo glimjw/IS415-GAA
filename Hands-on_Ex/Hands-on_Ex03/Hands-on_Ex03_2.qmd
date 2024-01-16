@@ -1,0 +1,6 @@
+---
+title: "Hands-on-Exercise 2: Thematic Mapping and GeoVisualisation with R"
+execute:
+  warning: false
+date: "`r Sys.Date()`"
+---
