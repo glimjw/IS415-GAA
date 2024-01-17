@@ -46,7 +46,8 @@ In this hands-on exercise, five R packages will be used, they are:
 Use the code chunk below to install and launch the five R packages.
 
 ```{r}
-pacman::p_load(sf, raster, spatstat, maptools, tmap)
+install.packages("maptools", repos = "https://packagemanager.posit.co/cran/2023-10-13")
+pacman::p_load(sf, raster, spatstat, tmap)
 ```
 
 ## **4.4 Spatial Data Wrangling**
@@ -56,11 +57,13 @@ pacman::p_load(sf, raster, spatstat, maptools, tmap)
 In this section, [*st_read()*](https://r-spatial.github.io/sf/reference/st_read.html) of **sf** package will be used to import these three geospatial data sets into R. The 3 data are childcare (preschoollocation), coastal outline, and MP14 subzone.
 
 ```{r}
-childcare_sf <- st_read("data/PreSchoolsLocation.geojson")
+childcare_sf <- st_read("data/childcareservices.geojson") %>%
+  st_transform(crs = 3414)
 ```
 
 ```{r}
-sg_sf <- st_read(dsn = "data/geospatial/NationalMapPolygonKML.geojson")
+sg_sf <- st_read("data/MasterPlan2019SubzoneBoundaryNoSeaGEOJSON.geojson") %>%
+  st_transform(crs = 3414)
 ```
 
 ```{r}
@@ -86,7 +89,7 @@ st_crs(mpsz_sf)
 
 > DIY: Using the method you learned in Lesson 2, assign the correct crs to mpsz_sf and sg_sf simple feature data frames.
 
-The cr information isn’t appropriate. `childcare_sf` is in WGS84, while the other two are in SVY21
+The cr information isn’t appropriate. `childcare_sf`  and 'sg_sf' are in WGS84, while the 'other two are'mpsz_sf' is in SVY21
 
 ```{r}
 mpsz_sf <- st_transform(mpsz_sf, crs= 3414)
@@ -98,11 +101,22 @@ st_crs(mpsz_sf)
 Let's plot a map to show their spatial patterns for each dataframe
 
 childcare_sf consists of spatial points, so it cannot accept tm_fill/tm_borders/tm_polygons. So we have to use tm_dots()
+```{r}
+invalid_mpsz_sf <- which(!st_is_valid(mpsz_sf))
+invalid_sg_sf <- which(!st_is_valid(sg_sf))
+invalid_childcare_sf <- which(!st_is_valid(childcare_sf))
+
+# Print the indices of the invalid geometries
+print(invalid_mpsz_sf)
+print(invalid_sg_sf)
+print(invalid_childcare_sf)
+```
 
 ```{r}
-tm_shape(mpsz_sf) +
-  tm_polygons() +
+# Now, try plotting again
 tm_shape(sg_sf) +
+  tm_polygons() +
+tm_shape(mpsz_sf) +
   tm_polygons() +
 tm_shape(childcare_sf) +
   tm_dots()
@@ -126,12 +140,173 @@ Notice that at the interactive mode, tmap is using leaflet for R API. The advant
 
 Although simple feature data frame is gaining popularity again sp’s Spatial\* classes, there are, however, many geospatial analysis packages require the input geospatial data in sp’s Spatial\* classes. In this section, you will learn how to **convert simple feature data frame to sp’s Spatial\* class.**
 
-### 4.5.1 **Converting sf data frames to sp’s Spatial\* class** 
-
-The code chunk below uses [*as_Spatial()*](https://r4gdsa.netlify.app/chap04.html) of **sf** package to convert the three geospatial data from simple feature data frame to sp’s Spatial\* class.
-
 ```{r}
 childcare <- as_Spatial(childcare_sf)
 mpsz <- as_Spatial(mpsz_sf)
-sg <- as_Spatial(sg_sf)
+sg <- as_Spatial(st_zm(sg_sf))
 ```
+
+Show the information of these 3 Spatial\* classes
+
+```{r}
+childcare
+```
+
+```{r}
+mpsz
+```
+
+```{r}
+sg
+```
+
+### **4.5.2 Converting the Spatial\* class into generic sp format**
+
+**spatstat** requires the analytical data in ***ppp*** object form. There is no direct way to convert a Spatial\* classes into ***ppp*** object. We need to convert the ***Spatial*** **classes**\* into ***Spatial*** object first.
+
+The codes chunk below converts the Spatial\* classes into generic sp objects.
+
+```{r}
+childcare_sp <- as(childcare, "SpatialPoints")
+sg_sp <- as(sg, "SpatialPolygons")
+```
+
+Let's display the sp objects properties
+
+```{r}
+childcare_sp
+```
+
+```{r}
+sg_sp
+```
+
+### **4.5.3 Converting the generic sp format into spatstat’s ppp format**
+
+Now, we will use *as.ppp()* function of **spatstat** to convert the spatial data into **spatstat**’s ***ppp*** object format.
+
+```{r}
+str(childcare_sp)
+```
+```{r}
+# Extract coordinates
+coords <- coordinates(childcare_sp)
+
+# Create a ppp object
+childcare_ppp <- ppp(coords[, 1], coords[, 2], marks = coords[, 3])
+```
+
+Now, let us plot childcare_ppp and examine the different.
+
+```{r}
+plot(childcare_ppp)
+```
+
+You can take a quick look at the summary statistics of the newly created ppp object by using the code chunk below.
+
+```{r}
+summary(childcare_ppp)
+```
+
+### **4.5.4 Handling duplicated points**
+
+We can check the duplication in a ***ppp*** object by using the code chunk below.
+
+```{r}
+any(duplicated(childcare_ppp))
+```
+
+To count the number of co-indicence point, we will use the multiplicity() function as shown in the code chunk below.
+
+```{r}
+multiplicity(childcare_ppp)
+```
+
+If we want to know how many locations have more than one point event, we can use the code chunk below.
+
+```{r}
+sum(multiplicity(childcare_ppp) > 1)
+```
+
+The output shows that there are 128 duplicated point events.
+
+To view the locations of these duplicate point events, we will plot childcare data by using the code chunk below.
+
+```{r}
+tmap_mode('view')
+tm_shape(childcare) +
+  tm_dots(alpha=0.4, 
+          size=0.05)
+```
+
+There are three ways to overcome this problem. The easiest way is to delete the duplicates. But, that will also mean that some useful point events will be lost.
+
+The second solution is use jittering, which will add a small perturbation to the duplicate points so that they do not occupy the exact same space.
+
+The third solution is to make each point “unique” and then attach the duplicates of the points to the patterns as marks, as attributes of the points. Then you would need analytical techniques that take into account these marks.
+
+The code chunk below implements the jittering approach.
+
+```{r}
+childcare_ppp_jit <- rjitter(childcare_ppp, 
+                             retry=TRUE, 
+                             nsim=1, 
+                             drop=TRUE)
+```
+
+```{r}
+any(duplicated(childcare_ppp_jit))
+```
+```{r}
+multiplicity(childcare_ppp)
+```
+
+```{r}
+sum(multiplicity(childcare_ppp) > 1)
+```
+```{r}
+tmap_mode('view')
+tm_shape(childcare) +
+  tm_dots(alpha=0.4, 
+          size=0.05)
+```
+There are three ways to overcome this problem. The easiest way is to delete the duplicates. But, that will also mean that some useful point events will be lost.
+
+The second solution is use jittering, which will add a small perturbation to the duplicate points so that they do not occupy the exact same space.
+
+The third solution is to make each point “unique” and then attach the duplicates of the points to the patterns as marks, as attributes of the points. Then you would need analytical techniques that take into account these marks.
+
+The code chunk below implements the jittering approach.
+
+```{r}
+childcare_ppp_jit <- rjitter(childcare_ppp, 
+                             retry=TRUE, 
+                             nsim=1, 
+                             drop=TRUE)
+```
+
+```{r}
+any(duplicated(childcare_ppp_jit))
+```
+
+### **4.5.5 Creating *owin* object**
+
+When analysing spatial point patterns, it is a good practice to confine the analysis with a geographical area like Singapore boundary. In spatstat, an object called owin is specially designed to represent this polygonal region.
+
+The code chunk below is used to covert sg SpatialPolygon object into owin object of spatstat.
+```{r}
+sg_sp
+```
+#```{r}
+# Convert the SpatialPolygons object sg_sp to owin
+#sg_owin <- as(sg_sp, "owin")
+#```
+
+The output object can be displayed by using plot() function
+
+#```{r}
+
+# Plot the map
+#plot(sg_owin, main = "sg_owin")
+
+#```
