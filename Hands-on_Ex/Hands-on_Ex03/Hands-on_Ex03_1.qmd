@@ -46,8 +46,12 @@ In this hands-on exercise, five R packages will be used, they are:
 Use the code chunk below to install and launch the five R packages.
 
 ```{r}
+#| eval: false
 install.packages("maptools", repos = "https://packagemanager.posit.co/cran/2023-10-13")
-pacman::p_load(sf, raster, spatstat, tmap)
+```
+
+```{r}
+pacman::p_load(maptools, sf, raster, spatstat, tmap, tidyverse)
 ```
 
 ## **4.4 Spatial Data Wrangling**

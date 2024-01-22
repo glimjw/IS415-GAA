@@ -1,0 +1,113 @@
+---
+title: "R for Geospatial Data Science"
+date: "`r Sys.Date()`"
+format: 
+  html: 
+    code-fold: true
+    code-summary: "Show the code"
+    toc-depth: 4
+execute:
+  eval: true
+  echo: true
+  warning: false
+editor: visual
+---
+
+## Install maptools
+
+```{r}
+#| eval: false
+install.packages("maptools", repos = "https://packagemanager.posit.co/cran/2023-10-13")
+```
+
+```{r}
+pacman::p_load(maptools, sf, raster, spatstat, tmap, tidyverse)
+```
+
+## Importing spatial data
+
+```{r}
+childcare_sf <- st_read("data/geospatial/ChildCareServices.geojson") %>%
+  st_transform(crs = 3414)
+mpsz_sf <- st_read(dsn = "data/geospatial", layer="MP14_SUBZONE_WEB_PL")
+```
+```{r}
+plot(mpsz_sf)
+```
+## Creating coastal outline
+"Dissolve" the boundaries in the map, and get the coastal outline.
+
+```{r}
+sg_sf <- mpsz_sf %>%
+  st_union()
+```
+
+```{r}
+plot(sg_sf)
+```
+## Geosptial Data Wrangling
+
+### Creating ppp objects: sf method
+
+ppp can only be used with sf 
+
+```{r}
+childcare_ppp <- as.ppp(childcare_sf)
+```
+
+```{r}
+summary(childcare_ppp)
+```
+### Handling duplicated points
+
+We can check the duplication in a ppp object by using this code chunk
+
+```{r}
+any(duplicated(childcare_ppp))
+```
+### Creating owin object 
+
+Must be sf layer instead of sp. It only works with sf layers only.
+
+```{r}
+sg_owin <- as.owin(sg_sf)
+```
+
+```{r}
+plot(sg_owin)
+```
+
+### Combining owin with ppp
+
+Put the ppp into the owin that we have created
+
+```{r}
+childcareSG_ppp = sg_owin(childcare_ppp)
+```
+
+```{r}
+plot(childcareSG_ppp)
+```
+
+### Extract map of specific area
+
+We use sf layer instead of sp
+
+```{r}
+str(mpsz_sf)
+```
+
+```{r}
+pg <- mpsz_sf %>% filter(PLN_AREA_N == "PUNGGOL")
+tm <- mpsz_sf %>% filter(PLN_AREA_N == "TAMPINES")
+ck <- mpsz_sf %>% filter(PLN_AREA_N == "CHOA CHU KANG")
+jw <- mpsz_sf %>% filter(PLN_AREA_N == "JURONG WEST")
+
+```
+```{r fig.width=16, fig.height=10}
+par(mflow=c(2,2))
+plot(pg, main = "Punggol")
+plot(pg, main = "Tampines")
+plot(pg, main = "Choa Chu Kang")
+plot(pg, main = "Jurong West")
+```

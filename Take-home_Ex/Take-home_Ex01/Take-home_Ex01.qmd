@@ -1,0 +1,25 @@
+---
+title: "Take-home Exercise 1: Application of Spatial Point Patterns Analysis to discover the geographical distribution of Grab hailing services in Singapore"
+date: "`r Sys.Date()`"
+format: 
+  html: 
+    code-fold: true
+    code-summary: "Show the code"
+    toc-depth: 4
+execute:
+  eval: true
+  echo: true
+  warning: false
+editor: visual
+---
+
+## Install maptools
+
+```{r}
+#| eval: false
+install.packages("maptools", repos = "https://packagemanager.posit.co/cran/2023-10-13")
+```
+
+```{r}
+pacman::p_load(maptools, sf, raster, spatstat, tmap, tidyverse)
+```
