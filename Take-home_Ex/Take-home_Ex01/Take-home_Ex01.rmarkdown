@@ -1,0 +1,239 @@
+---
+title: "Take-home Exercise 1: Application of Spatial Point Patterns Analysis to discover the geographical distribution of Grab hailing services in Singapore"
+date: "`r Sys.Date()`"
+format: 
+  html: 
+    code-fold: true
+    code-summary: "Show the code"
+    toc-depth: 4
+execute:
+  eval: true
+  echo: true
+  warning: false
+editor: visual
+---
+
+
+## **Setting the Scene**
+
+Human mobility, the movement of human beings in space and time, reflects the spatial-temporal characteristics of human behavior. With the advancement Information and Communication Technologies (ICT) especially smart phone, a large volume of data related to human mobility have been collected. By using appropriate GIS analysis methods, these data are potentially useful in supporting smart city planning and management.
+
+In Singapore, one of the important source of data related to human mobility is from [Land Transport Authority (LTA) DataMall](https://datamall.lta.gov.sg/content/datamall/en.html). Two data sets related to human mobility are provided by the portal, they are: Passenger Volume by Origin Destination Train Stations and Passenger Volume by Origin Destination Bus Stops. One of the limitation of these data sets is that their location are biased to either bus stops or MRT/LRT stations. In 2020, another very interesting human mobility data set called [Grab Posisi](https://engineering.grab.com/grab-posisi) was released by GRAB, one of the largest shared taxi operator in South-east Asia. There are two data sets been released and one of them is for Singapore.
+
+## **Objectives**
+
+Geospatial analytics hold tremendous potential to address complex problems facing society. In this study, you are tasked to apply appropriate spatial point patterns analysis methods to discover the geographical and spatio-temporal distribution of Grab hailing services locations in Singapore.
+
+## 1 Install maptools
+
+
+```{r}
+#| eval: false
+install.packages("maptools", repos = "https://packagemanager.posit.co/cran/2023-10-13")
+```
+
+
+Installing the required tools for the analysis (e.g. sf, tidyverse, maptools, etc)
+
+
+```{r}
+pacman::p_load(maptools, sf, raster, spatstat, tmap, tidyverse, arrow, lubridate)
+```
+
+
+## 2 Data Import and Wrangling
+
+This is where we import the data and prepare it before analysis.
+
+Let's use st_read() of sf package to import these three geospatial data sets into R. And we will be using other functions to prepare our data upon importing them.
+
+The 3 data are:
+
+-   Grab Taxi location points ([Grab-Posisi](https://engineering.grab.com/grab-posisi))
+
+-   Road layer within SG ([Geofabrik download server](https://download.geofabrik.de/)) \[Malaysia, Singapore, and Brunei coverage\]
+
+-   SG Boundary ([data.gov.sg](https://beta.data.gov.sg/collections/1749/view)) \[Master Plan 2019 Subzone Boundary (No Sea)\]
+
+### 2.1 Grab Taxi lcoation points (grab_df)
+
+Let's use read_parquet() function to read the grab parquet file, and import it into grab_df
+
+
+```{r}
+grab_df <- read_parquet("data/aspatial/GrabPosisi/part-00000-8bbff892-97d2-4011-9961-703e38972569.c000.snappy - Copy.parquet")
+```
+
+
+Convert the timestamp for grab_df
+
+
+```{r}
+grab_df$pingtimestamp <- as_datetime(grab_df$pingtimestamp)
+```
+
+
+Let's take a glimpse of our grab_df data
+
+
+```{r}
+glimpse(grab_df)
+```
+
+
+Save the data into grab_rds
+
+
+```{r}
+write_rds(grab_df, "data/rds/grab.rds")
+```
+
+
+Extracting trip starting locations (origin_df)
+
+
+```{r}
+origin_df <- grab_df %>% 
+  group_by(trj_id) %>% 
+  arrange(pingtimestamp) %>% 
+  filter(row_number()==1) %>%
+  mutate(weekday = wday(pingtimestamp,
+                        label=TRUE,
+                        abbr=TRUE),
+         start_hr = factor(hour(pingtimestamp)),
+         day = factor(mday(pingtimestamp)))
+```
+
+
+Extracting trip ending locations (destination_df)
+
+
+```{r}
+destination_df <- grab_df %>%
+  group_by(trj_id) %>%
+  arrange(desc(pingtimestamp)) %>%
+  filter(row_number()==1) %>%
+  mutate(weekday = wday(pingtimestamp,
+                        label=TRUE,
+                        abbr=TRUE),
+         end_hr = factor(hour(pingtimestamp)),
+         day = factor(mday(pingtimestamp)))
+```
+
+
+Let's save a copy of both origin_df and destination_df into the rds folder
+
+
+```{r}
+write_rds(origin_df, "data/rds/origin_df.rds")
+write_rds(destination_df, "data/rds/destination_df.rds")
+```
+
+
+Let's convert grab_df from aspatial data into geospatial data
+
+
+```{r}
+origin_sf <- st_as_sf(origin_df,
+                      coords = c("rawlng", "rawlat"),
+                      crs = 4326) %>%
+  st_transform(crs = 3414)
+
+destination_sf <- st_as_sf(destination_df,
+                      coords = c("rawlng", "rawlat"),
+                      crs = 4326) %>%
+  st_transform(crs = 3414)
+```
+
+
+Let's check the referencing system info of this road_df
+
+
+```{r}
+st_crs(origin_sf)
+```
+
+Since it is in SVY21 format, we will standardise the crs
+
+```{r}
+origin_sf <- st_transform(origin_sf, crs= 3414)
+destination_sf <- st_transform(destination_sf, crs= 3414)
+st_crs(origin_sf)
+```
+
+
+Let's visualise how grab_df looked like by using the **trips' origin** locations
+
+
+```{r}
+tmap_mode("plot")
+tm_shape(origin_sf) +
+  tm_dots()
+```
+
+
+Let's visualise how grab_df looked like by using the **trips' destination** locations
+
+
+```{r}
+tmap_mode("plot")
+tm_shape(destination_sf) +
+  tm_dots()
+```
+
+
+### 2.2 Road layer within SG (road_sf)
+
+Let's use st_read() function to read the roads file, and import it into road_df
+
+
+```{r}
+road_sf <- st_read(dsn = "data/geospatial/malaysia-singapore-brunei-latest-free.shp", 
+                layer = "gis_osm_roads_free_1")
+```
+
+
+Let's check the referencing system info of this road_df
+
+
+```{r}
+st_crs(road_sf)
+```
+
+### 2.3 SG Boundary (mpsz_sf)
+
+Let's use st_read() function to read the Master Plan Subzone Boundary file, and import it into road_df
+
+
+```{r}
+mpsz_sf <- st_read("data/geospatial/MasterPlan2019SubzoneBoundaryNoSeaGEOJSON.geojson") %>%
+  st_transform(crs = 3414)
+```
+
+Let's plot mpsz to see how it looks like
+
+
+```{r}
+# Set tmap mode to plotting
+tmap_mode("plot")
+
+# Plot the map
+tm_shape(mpsz_sf) +
+  tm_borders() +
+  tm_layout(frame = FALSE) +
+  tm_basemap(server = "Stamen.TonerLite") +
+  tm_shape(mpsz_sf) +
+  tm_borders(lwd = 0.5) +
+  tm_layout(legend.show = FALSE)
+
+```
+
+
+Now, let's combine both mpsz_sf and road_sf
+
+```{r}
+tm_shape(mpsz_sf) +
+  tm_polygons() +
+tm_shape(road_sf) +
+  tm_lines()
+```
