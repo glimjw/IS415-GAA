@@ -1,0 +1,72 @@
+---
+title: "Network Constrained Spatial Point Patterns Analysis"
+date: "`r Sys.Date()`"
+format: 
+  html: 
+    code-fold: true
+    code-summary: "Show the code"
+    toc-depth: 4
+execute:
+  eval: true
+  echo: true
+  warning: false
+editor: visual
+---
+
+## Install maptools
+
+```{r}
+#| eval: false
+install.packages("maptools", repos = "https://packagemanager.posit.co/cran/2023-10-13")
+```
+
+```{r}
+pacman::p_load(maptools, sf, raster, spatstat, tmap, tidyverse, spNetwork, classInt, viridis)
+```
+
+## Data Import and Preparation
+
+```{r}
+network <- st_read(dsn="data/geospatial",                   layer="Punggol_St")
+```
+```{r}
+childcare <- st_read(dsn="data/geospatial",
+                     layer="Punggol_CC")
+```
+We can examine the structure of the output SpatialDataFrame in RStudio. Alternative, code chunk below can be used to print the content of network SpatialLineDataFrame and childcare SpatialPointsDataFrame by using the code chunk below.
+
+```{r}
+str(network)
+str(childcare)
+```
+When I exploring spNetwork’s functions, it came to my attention that spNetwork is expecting the geospatial data contains complete CRS information.
+
+In the code chunk below, spTransform() of sp package is used to assign EPSG code to the SpatialDataFrames. The epsg:3414 is the code for svy21.
+
+Plot - static map
+View - interactive map (zoom in and out)
+
+```{r}
+tmap_mode('view')
+tm_shape(childcare) +
+  tm_dots() +
+  tm_shape(network) +
+  tm_lines()
+tmap_mode('plot')
+```
+
+```{r}
+lixels <- lixelize_lines(network, 750, mindist = 375)
+```
+mindist is the middle dist
+```{r}
+samples <- lines_center(lixels)
+```
+
+```{r}
+densities <- nkde(network, events = childcare, w = rep(1,nrow(childcare)), samples = samples, kernel_name = "quartic", bw = 300, div= "bw", method= "simple", digits = 1, tol = 1, grid_shape = c(1,1), max_depth = 8, agg = 5, #we aggregate events within a 5m radius (faster calculation)
+                  sparse = TRUE,
+                  verbose = FALSE)
+```
+
+

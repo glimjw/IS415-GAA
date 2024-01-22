@@ -1,5 +1,5 @@
 ---
-title: "R for Geospatial Data Science"
+title: "In-class Exercise 3"
 date: "`r Sys.Date()`"
 format: 
   html: 
@@ -50,7 +50,7 @@ plot(sg_sf)
 ### Creating ppp objects: sf method
 
 ppp can only be used with sf 
-
+v
 ```{r}
 childcare_ppp <- as.ppp(childcare_sf)
 ```
@@ -84,7 +84,7 @@ Put the ppp into the owin that we have created
 error in: childcareSG_ppp = sg_owin(childcare_ppp)
 
 ```{r}
-childcareSG_ppp = sg_owin(childcare_ppp)
+childcareSG_ppp = childcare_ppp[sg_owin]
 ```
 
 ```{r}
