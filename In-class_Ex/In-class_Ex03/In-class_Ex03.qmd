@@ -81,6 +81,8 @@ plot(sg_owin)
 
 Put the ppp into the owin that we have created
 
+error in: childcareSG_ppp = sg_owin(childcare_ppp)
+
 ```{r}
 childcareSG_ppp = sg_owin(childcare_ppp)
 ```
