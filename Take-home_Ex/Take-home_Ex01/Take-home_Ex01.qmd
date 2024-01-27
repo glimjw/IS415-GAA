@@ -1,5 +1,16 @@
 ---
---- title: "Take-home Exercise 1: Application of Spatial Point Patterns Analysis to discover the geographical distribution of Grab hailing services in Singapore" date: "`r Sys.Date()`" format:    html:      code-fold: true     code-summary: "Show the code"     toc-depth: 4 execute:   eval: true   echo: true   warning: false editor: visual ---
+title: "Take-home Exercise 1: Application of Spatial Point Patterns Analysis to discover the geographical distribution of Grab hailing services in Singapore" 
+date: "`r Sys.Date()`" 
+format: 
+  html: 
+    code-fold: true 
+    code-summary: "Show the code" 
+    toc-depth: 4 
+execute: 
+  eval: true 
+  echo: true 
+  warning: false 
+  editor: visual
 ---
 
 ## **Setting the Scene**
@@ -12,17 +23,20 @@ In Singapore, one of the important source of data related to human mobility is f
 
 Geospatial analytics hold tremendous potential to address complex problems facing society. In this study, you are tasked to apply appropriate spatial point patterns analysis methods to discover the geographical and spatio-temporal distribution of Grab hailing services locations in Singapore.
 
-## 1 Install maptools
+## **1 Install maptools**
 
-```{r} #| eval: false install.packages("maptools", repos = "https://packagemanager.posit.co/cran/2023-10-13")}
+```{r}
+#| eval: false 
+install.packages("maptools", repos = "https://packagemanager.posit.co/cran/2023-10-13")
 ```
 
 Installing the required tools for the analysis (e.g. sf, tidyverse, maptools, etc)
 
-```{r} pacman::p_load(maptools, sf, raster, spatstat, tmap, tidyverse, arrow, lubridate)}
+```{r}
+pacman::p_load(maptools, sf, raster, spatstat, tmap, tidyverse, arrow, lubridate)
 ```
 
-## 2 Data Import and Wrangling
+## **2 Data Import and Wrangling**
 
 This is where we import the data and prepare it before analysis.
 
@@ -36,173 +50,274 @@ The 3 data are:
 
 -   SG Boundary ([data.gov.sg](https://beta.data.gov.sg/collections/1749/view)) \[Master Plan 2019 Subzone Boundary (No Sea)\]
 
-### 2.1 Grab Taxi lcoation points (grab_df)
+### **2.1 Grab Taxi lcoation points (grab_df)**
 
 Let's use read_parquet() function to read the grab parquet file, and import it into grab_df
 
-```{r} grab_df <- read_parquet("data/aspatial/GrabPosisi/part-00000-8bbff892-97d2-4011-9961-703e38972569.c000.snappy - Copy.parquet")}
+```{r}
+grab_df <- read_parquet("data/aspatial/GrabPosisi/part-00000-8bbff892-97d2-4011-9961-703e38972569.c000.snappy - Copy.parquet")
 ```
 
 Convert the timestamp for grab_df
 
-```{r} grab_df$pingtimestamp <- as_datetime(grab_df$pingtimestamp)}
+```{r}
+grab_df$pingtimestamp <- as_datetime(grab_df$pingtimestamp)
 ```
 
 Let's take a glimpse of our grab_df data
 
-```{r} glimpse(grab_df)}
+```{r}
+glimpse(grab_df)
 ```
 
 Save the data into grab_rds
 
-```{r} write_rds(grab_df, "data/rds/grab.rds")}
+```{r}
+write_rds(grab_df, "data/rds/grab.rds")
 ```
 
 Extracting trip starting locations (origin_df)
 
-```{r} origin_df <- grab_df %>%    group_by(trj_id) %>%    arrange(pingtimestamp) %>%    filter(row_number()==1) %>%   mutate(weekday = wday(pingtimestamp,                         label=TRUE,                         abbr=TRUE),          start_hr = factor(hour(pingtimestamp)),          day = factor(mday(pingtimestamp)))}
+```{r}
+origin_df <- grab_df %>% group_by(trj_id) %>% arrange(pingtimestamp) %>% filter(row_number()==1) %>% mutate(weekday = wday(pingtimestamp, label=TRUE, abbr=TRUE), start_hr = factor(hour(pingtimestamp)), day = factor(mday(pingtimestamp)))
 ```
 
 Extracting trip ending locations (destination_df)
 
-```{r} destination_df <- grab_df %>%   group_by(trj_id) %>%   arrange(desc(pingtimestamp)) %>%   filter(row_number()==1) %>%   mutate(weekday = wday(pingtimestamp,                         label=TRUE,                         abbr=TRUE),          end_hr = factor(hour(pingtimestamp)),          day = factor(mday(pingtimestamp)))}
+```{r}
+destination_df <- grab_df %>% group_by(trj_id) %>% arrange(desc(pingtimestamp)) %>% filter(row_number()==1) %>% mutate(weekday = wday(pingtimestamp, label=TRUE, abbr=TRUE), end_hr = factor(hour(pingtimestamp)), day = factor(mday(pingtimestamp)))
 ```
 
 Let's save a copy of both origin_df and destination_df into the rds folder
 
-```{r} write_rds(origin_df, "data/rds/origin_df.rds") write_rds(destination_df, "data/rds/destination_df.rds")}
+```{r}
+write_rds(origin_df, "data/rds/origin_df.rds") 
+write_rds(destination_df, "data/rds/destination_df.rds")
 ```
 
-Let's convert grab_df from aspatial data into geospatial data
+Let's convert the grab_df from aspatial data into geospatial data
 
-```{r} origin_sf <- st_as_sf(origin_df,                       coords = c("rawlng", "rawlat"),                       crs = 4326) %>%   st_transform(crs = 3414)  destination_sf <- st_as_sf(destination_df,                       coords = c("rawlng", "rawlat"),                       crs = 4326) %>%   st_transform(crs = 3414)}
+```{r}
+origin_sf <- st_as_sf(origin_df, coords = c("rawlng", "rawlat"), crs = 4326) %>% 
+  st_transform(crs = 3414) 
+destination_sf <- st_as_sf(destination_df, coords = c("rawlng", "rawlat"), crs = 4326) %>% 
+  st_transform(crs = 3414)
 ```
 
 Let's check the referencing system info of this road_df
 
-```{r} st_crs(origin_sf)}
+```{r}
+st_crs(origin_sf)
 ```
 
 Since it is in SVY21 format, we will standardise the crs
 
-```{r} origin_sf <- st_transform(origin_sf, crs= 3414) destination_sf <- st_transform(destination_sf, crs= 3414) st_crs(origin_sf)}
+```{r}
+origin_sf <- st_transform(origin_sf, crs= 3414) 
+destination_sf <- st_transform(destination_sf, crs= 3414) 
+st_crs(origin_sf)
 ```
 
 Let's visualise how grab_df looked like by using the **trips' origin** locations
 
-```{r} tmap_mode("plot") tm_shape(origin_sf) +   tm_dots()}
+```{r}
+tmap_mode("plot") 
+tm_shape(origin_sf) + 
+  tm_dots()
 ```
 
 Let's visualise how grab_df looked like by using the **trips' destination** locations
 
-```{r} tmap_mode("plot") tm_shape(destination_sf) +   tm_dots()}
+```{r}
+tmap_mode("plot") 
+tm_shape(destination_sf) + 
+  tm_dots()
 ```
 
-### 2.2 Road layer within SG (road_sf)
+### **2.2 Road layer within SG (road_sf)**
 
 Let's use st_read() function to read the roads file, and import it into road_df
 
-```{r} road_sf <- st_read(dsn = "data/geospatial/malaysia-singapore-brunei-latest-free.shp",                  layer = "gis_osm_roads_free_1")}
+```{r}
+#road_sf <- st_read(dsn = "data/geospatial/malaysia-singapore-brunei-latest-free.shp", layer = "gis_osm_roads_free_1")
 ```
 
 Let's check the referencing system info of this road_df
 
-```{r} st_crs(road_sf)}
-```
-
-### 2.3 SG Boundary (mpsz_sf)
-
-Let's use st_read() function to read the Master Plan Subzone Boundary file, and import it into road_df
-
-```{r} mpsz_sf <- st_read(dsn = "data/geospatial/MPSZ-2019",                  layer = "MPSZ-2019")}
-```
-
-Let's check the referencing system info of this road_df
-
-```{r} st_crs(mpsz_sf)}
+```{r}
+#st_crs(road_sf)
 ```
 
 Since it is in WGS 84 format, we will standardise the crs
 
-```{r} mpsz_sf <- st_transform(mpsz_sf, crs= 3414) st_crs(mpsz_sf)}
+```{r}
+#road_sf <- st_transform(road_sf, crs= 3414) 
+#st_crs(road_sf)
+```
+
+```{r}
+#plot(road_sf)
+```
+
+### **2.3 SG Boundary (mpsz_sf)**
+
+Let's use st_read() function to read the Master Plan Subzone Boundary file, and import it into mpsz_sf
+
+```{r}
+mpsz_sf <- st_read(dsn = "data/geospatial/MPSZ-2019", layer = "MPSZ-2019")
+```
+
+Let's check the referencing system info of this mpsz_sf
+
+```{r}
+st_crs(mpsz_sf)
+```
+
+Since it is in WGS 84 format, we will standardise the crs
+
+```{r}
+mpsz_sf <- st_transform(mpsz_sf, crs= 3414) 
+st_crs(mpsz_sf)
 ```
 
 Let's plot mpsz to see how it looks like
 
-```{r} # Set tmap mode to plotting tmap_mode("plot")  # Plot the map tm_shape(mpsz_sf) +   tm_borders() +   tm_layout(frame = FALSE) +   tm_basemap(server = "Stamen.TonerLite") +   tm_shape(mpsz_sf) +   tm_borders(lwd = 0.5) +   tm_layout(legend.show = FALSE)}
+```{r}
+# Set tmap mode to plotting 
+tmap_mode("plot") 
+# Plot the map 
+tm_shape(mpsz_sf) + 
+  tm_borders() + 
+  tm_layout(frame = FALSE) + 
+  tm_basemap(server = "Stamen.TonerLite") + 
+  tm_shape(mpsz_sf) + 
+  tm_borders(lwd = 0.5) + 
+  tm_layout(legend.show = FALSE) 
 ```
 
 Now, let's combine both mpsz_sf and road_sf
 
-```{r} tm_shape(mpsz_sf) +   tm_polygons() + tm_shape(origin_sf) +   tm_dots()}
+```{r}
+tm_shape(mpsz_sf) + 
+  tm_polygons() + 
+  tm_shape(origin_sf) + 
+  tm_dots()
 ```
 
-### 2.4 Convert our sf data frames to sp's spatial\* class
+### **2.4 Convert our sf data frames to sp's spatial\* class**
 
 Convert origin_sf to sp's spatial\* class
 
-```{r} origin <- as_Spatial(origin_sf) mpsz <- as_Spatial(mpsz_sf)}
+```{r}
+origin <- as_Spatial(origin_sf) 
+mpsz <- as_Spatial(mpsz_sf)
 ```
 
-### 2.5 Convert our spatial\* class into sp format
+### **2.5 Convert our spatial\* class into sp format**
 
 Convert origin and mpsz to sp format
 
-```{r} origin_sp <- as(origin, "SpatialPoints") mpsz_sp <- as(mpsz, "SpatialPolygons")}
+```{r}
+origin_sp <- as(origin, "SpatialPoints") 
+mpsz_sp <- as(mpsz, "SpatialPolygons")
 ```
 
-### 2.6 Convert our sp format into ppp
+### **2.6 Convert our sp format into ppp**
 
 Convert origin_sp to ppp format
 
-```{r} origin_ppp <- as(origin_sp, "ppp") origin_ppp}
+```{r}
+origin_ppp <- as(origin_sp, "ppp") 
+origin_ppp
+plot(origin_ppp)
 ```
 
-```{r} plot(origin_ppp)}
-```
+### **2.7 Check for any Duplicated Points**
 
-### 2.7 Check for any Duplicated Points
-
-```{r} any(duplicated(origin_ppp))}
+```{r}
+any(duplicated(origin_ppp))
 ```
 
 Let's plot the points on the map
 
-```{r} tmap_mode('view') tm_shape(origin) +   tm_dots(alpha=0.4,            size=0.05)}
+```{r}
+tmap_mode('view') 
+tm_shape(origin) + 
+  tm_dots(alpha=0.4, size=0.05)
 ```
 
-### 2.8 Creating the owin object
+### **2.8 Creating the owin object**
 
-```{r} mpsz_owin <- as(mpsz_sp, "owin")}
+```{r}
+mpsz_owin <- as(mpsz_sp, "owin")
+plot(mpsz_owin)
 ```
 
-```{r} plot(mpsz_owin)}
-```
-
-### 2.9 Combining ppp with owin object
+### **2.9 Combining ppp with owin object**
 
 Let's combine the ppp with the newly created owin object
 
-```{r} # Now you can use this mpsz_owin object in your ppp operation originMPSZ_ppp <- origin_ppp[mpsz_owin]  plot(originMPSZ_ppp)}
+```{r}
+# Now you can use this mpsz_owin object in your ppp operation 
+originMPSZ_ppp <- origin_ppp[mpsz_owin] 
+plot(originMPSZ_ppp)
 ```
 
-## 3 Kernel Density Estimation
+## **3 Kernel Density Estimation**
 
-### 3.1 Computing the kernel density estimation (KDE) of grab hailing services
+### **3.1 Computing the kernel density estimation (KDE) of grab hailing services**
 
 The purpose of KDE is to apply the function to each data point, and thereafter it will averages the location of that point with respect to the location of another data point, based on bandwidth of the kernel.
 
 Let's compute the KDE
 
-```{r} kde_originMPSZ_bw <- density(originMPSZ_ppp, sigma=bw.diggle, edge=TRUE, kernel="gaussian") plot(kde_originMPSZ_bw)}
+```{r}
+kde_originMPSZ_bw <- density(originMPSZ_ppp, sigma=bw.diggle, edge=TRUE, kernel="gaussian") 
+plot(kde_originMPSZ_bw)
 ```
 
-Since the unit of measurement is pretty small, let's rescale it to km.
+Since the unit of measurement is pretty small, let's re-scale it to km.
 
-```{r} originMPSZ_ppp.km <- rescale(originMPSZ_ppp, 1000, "km")}
+```{r}
+originMPSZ_ppp.km <- rescale(originMPSZ_ppp, 1000, "km")
+kde_originMPSZ_ppp.bw <- density(originMPSZ_ppp.km, sigma=bw.diggle, edge=TRUE, kernel="gaussian") 
+plot(kde_originMPSZ_ppp.bw)
 ```
 
-```{r} kde_originMPSZ_ppp.bw <- density(originMPSZ_ppp.km, sigma=bw.diggle, edge=TRUE, kernel="gaussian") plot(kde_originMPSZ_ppp.bw)}
+### **3.1 Observations**
+
+Based on the plot, we can see that:
+
+\- There is a higher density in the East side, which is a small part that is in yellow. We can say that there are more trips originating from the East side.
+
+\- There are other parts of the island that has mini purple dots, indicating that there is a medium density. This could show that there is a relatively normal ride demand across the island.
+
+\- Apart of the above, the island is mostly in blue from the first sight. So it indicate that the ridership for grab is not really high.
+
+## **4 Network Constrained KDE (NetKDE) Analysis**
+
+We will perform NetKDE to estimate the intensity of grab hailing across a map.
+
+### **4.1 Preparing the lixels objects**
+
+SpatialLines object need to be cut into lixels with a specified minimal distance
+
+We will transform road_sf to sp first
+
+```{r}
+#road <- spTransform(road_sf, CRS("+init=epsg:3414"))
 ```
 
-Based on the plot, we can see that: - There is a higher density in the East side, which is a small part that is in yellow. We can say that there are more trips originating from the East side. - There are other parts of the island that has mini purple dots, indicating that there is a medium density. This could show that there is a relatively normal ride demand across the island. - Apart of the above, the island is mostly in blue from the first sight. So it indicate that the ridership for grab is not really high.
+```{r}
+#lixels <- lixelize_lines(road_sf, 
+                         #700, 
+                         #mindist = 350)
+```
+
+### **4.2 Generating line centre points**
+
+We will create spNetwork which will be used to generate a SpatialPointsDataFrame
+
+```{r}
+#samples <- lines_center(lixels)
+```
