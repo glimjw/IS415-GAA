@@ -139,24 +139,20 @@ tm_shape(destination_sf) +
 Let's use st_read() function to read the roads file, and import it into road_df
 
 ```{r}
-#road_sf <- st_read(dsn = "data/geospatial/malaysia-singapore-brunei-latest-free.shp", layer = "gis_osm_roads_free_1")
+road_sf <- st_read(dsn = "data/geospatial/malaysia-singapore-brunei-latest-free.shp", layer = "gis_osm_roads_free_1")
 ```
 
 Let's check the referencing system info of this road_df
 
 ```{r}
-#st_crs(road_sf)
+st_crs(road_sf)
 ```
 
 Since it is in WGS 84 format, we will standardise the crs
 
 ```{r}
-#road_sf <- st_transform(road_sf, crs= 3414) 
-#st_crs(road_sf)
-```
-
-```{r}
-#plot(road_sf)
+road_sf <- st_transform(road_sf, crs= 3414) 
+st_crs(road_sf)
 ```
 
 ### **2.3 SG Boundary (mpsz_sf)**
@@ -284,7 +280,7 @@ kde_originMPSZ_ppp.bw <- density(originMPSZ_ppp.km, sigma=bw.diggle, edge=TRUE, 
 plot(kde_originMPSZ_ppp.bw)
 ```
 
-### **3.1 Observations**
+### **3.2 Observations**
 
 Based on the plot, we can see that:
 
@@ -310,8 +306,8 @@ We will transform road_sf to sp first
 
 ```{r}
 #lixels <- lixelize_lines(road_sf, 
-                         #700, 
-                         #mindist = 350)
+#                         700, 
+#                         mindist = 350)
 ```
 
 ### **4.2 Generating line centre points**
