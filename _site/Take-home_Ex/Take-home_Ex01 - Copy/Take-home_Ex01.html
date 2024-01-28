@@ -219,20 +219,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#setting-the-scene" id="toc-setting-the-scene" class="nav-link active" data-scroll-target="#setting-the-scene">Setting the Scene</a></li>
-  <li><a href="#objectives" id="toc-objectives" class="nav-link" data-scroll-target="#objectives">Objectives</a></li>
-  <li><a href="#install-maptools" id="toc-install-maptools" class="nav-link" data-scroll-target="#install-maptools">1 Install maptools</a></li>
-  <li><a href="#data-import-and-wrangling" id="toc-data-import-and-wrangling" class="nav-link" data-scroll-target="#data-import-and-wrangling">2 Data Import and Wrangling</a>
+  <li><a href="#setting-the-scene" id="toc-setting-the-scene" class="nav-link active" data-scroll-target="#setting-the-scene"><strong>Setting the Scene</strong></a></li>
+  <li><a href="#objectives" id="toc-objectives" class="nav-link" data-scroll-target="#objectives"><strong>Objectives</strong></a></li>
+  <li><a href="#install-maptools" id="toc-install-maptools" class="nav-link" data-scroll-target="#install-maptools"><strong>1 Install maptools</strong></a></li>
+  <li><a href="#data-import-and-wrangling" id="toc-data-import-and-wrangling" class="nav-link" data-scroll-target="#data-import-and-wrangling"><strong>2 Data Import and Wrangling</strong></a>
   <ul class="collapse">
-  <li><a href="#grab-taxi-lcoation-points-grab_df" id="toc-grab-taxi-lcoation-points-grab_df" class="nav-link" data-scroll-target="#grab-taxi-lcoation-points-grab_df">2.1 Grab Taxi lcoation points (grab_df)</a></li>
-  <li><a href="#road-layer-within-sg-road_sf" id="toc-road-layer-within-sg-road_sf" class="nav-link" data-scroll-target="#road-layer-within-sg-road_sf">2.2 Road layer within SG (road_sf)</a></li>
-  <li><a href="#sg-boundary-mpsz_sf" id="toc-sg-boundary-mpsz_sf" class="nav-link" data-scroll-target="#sg-boundary-mpsz_sf">2.3 SG Boundary (mpsz_sf)</a></li>
-  <li><a href="#convert-our-sf-data-frames-to-sps-spatial-class" id="toc-convert-our-sf-data-frames-to-sps-spatial-class" class="nav-link" data-scroll-target="#convert-our-sf-data-frames-to-sps-spatial-class">2.4 Convert our sf data frames to sp’s spatial* class</a></li>
-  <li><a href="#convert-our-spatial-class-into-sp-format" id="toc-convert-our-spatial-class-into-sp-format" class="nav-link" data-scroll-target="#convert-our-spatial-class-into-sp-format">2.5 Convert our spatial* class into sp format</a></li>
-  <li><a href="#convert-our-sp-format-into-ppp" id="toc-convert-our-sp-format-into-ppp" class="nav-link" data-scroll-target="#convert-our-sp-format-into-ppp">2.6 Convert our sp format into ppp</a></li>
-  <li><a href="#check-for-any-duplicated-points" id="toc-check-for-any-duplicated-points" class="nav-link" data-scroll-target="#check-for-any-duplicated-points">2.7 Check for any Duplicated Points</a></li>
-  <li><a href="#creating-the-owin-object" id="toc-creating-the-owin-object" class="nav-link" data-scroll-target="#creating-the-owin-object">2.8 Creating the owin object</a></li>
-  <li><a href="#combining-ppp-with-owin-object" id="toc-combining-ppp-with-owin-object" class="nav-link" data-scroll-target="#combining-ppp-with-owin-object">2.9 Combining ppp with owin object</a></li>
+  <li><a href="#grab-taxi-lcoation-points-grab_df" id="toc-grab-taxi-lcoation-points-grab_df" class="nav-link" data-scroll-target="#grab-taxi-lcoation-points-grab_df"><strong>2.1 Grab Taxi lcoation points (grab_df)</strong></a></li>
+  <li><a href="#road-layer-within-sg-road_sf" id="toc-road-layer-within-sg-road_sf" class="nav-link" data-scroll-target="#road-layer-within-sg-road_sf"><strong>2.2 Road layer within SG (road_sf)</strong></a></li>
+  <li><a href="#sg-boundary-mpsz_sf" id="toc-sg-boundary-mpsz_sf" class="nav-link" data-scroll-target="#sg-boundary-mpsz_sf"><strong>2.3 SG Boundary (mpsz_sf)</strong></a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
   </ul></li>
   </ul>
 </nav>
@@ -264,18 +259,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 <section id="setting-the-scene" class="level2">
-<h2 class="anchored" data-anchor-id="setting-the-scene">Setting the Scene</h2>
+<h2 class="anchored" data-anchor-id="setting-the-scene"><strong>Setting the Scene</strong></h2>
 <p>Human mobility, the movement of human beings in space and time, reflects the spatial-temporal characteristics of human behavior. With the advancement Information and Communication Technologies (ICT) especially smart phone, a large volume of data related to human mobility have been collected. By using appropriate GIS analysis methods, these data are potentially useful in supporting smart city planning and management.</p>
 <p>In Singapore, one of the important source of data related to human mobility is from <a href="https://datamall.lta.gov.sg/content/datamall/en.html">Land Transport Authority (LTA) DataMall</a>. Two data sets related to human mobility are provided by the portal, they are: Passenger Volume by Origin Destination Train Stations and Passenger Volume by Origin Destination Bus Stops. One of the limitation of these data sets is that their location are biased to either bus stops or MRT/LRT stations. In 2020, another very interesting human mobility data set called <a href="https://engineering.grab.com/grab-posisi">Grab Posisi</a> was released by GRAB, one of the largest shared taxi operator in South-east Asia. There are two data sets been released and one of them is for Singapore.</p>
 </section>
 <section id="objectives" class="level2">
-<h2 class="anchored" data-anchor-id="objectives">Objectives</h2>
+<h2 class="anchored" data-anchor-id="objectives"><strong>Objectives</strong></h2>
 <p>Geospatial analytics hold tremendous potential to address complex problems facing society. In this study, you are tasked to apply appropriate spatial point patterns analysis methods to discover the geographical and spatio-temporal distribution of Grab hailing services locations in Singapore.</p>
 </section>
 <section id="install-maptools" class="level2">
-<h2 class="anchored" data-anchor-id="install-maptools">1 Install maptools</h2>
+<h2 class="anchored" data-anchor-id="install-maptools"><strong>1 Install maptools</strong></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"maptools"</span>, <span class="at">repos =</span> <span class="st">"https://packagemanager.posit.co/cran/2023-10-13"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"maptools"</span>, <span class="at">repos =</span> <span class="st">"https://packagemanager.posit.co/cran/2023-10-13"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"spatstat"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Installing the required tools for the analysis (e.g.&nbsp;sf, tidyverse, maptools, etc)</p>
 <div class="cell">
@@ -283,7 +279,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 <section id="data-import-and-wrangling" class="level2">
-<h2 class="anchored" data-anchor-id="data-import-and-wrangling">2 Data Import and Wrangling</h2>
+<h2 class="anchored" data-anchor-id="data-import-and-wrangling"><strong>2 Data Import and Wrangling</strong></h2>
 <p>This is where we import the data and prepare it before analysis``.</p>
 <p>Let’s use st_read() of sf package to import these three geospatial data sets into R. And we will be using other functions to prepare our data upon importing them.</p>
 <p>The 3 data are:</p>
@@ -293,7 +289,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>SG Boundary (<a href="https://beta.data.gov.sg/collections/1749/view">data.gov.sg</a>) [Master Plan 2019 Subzone Boundary (No Sea)]</p></li>
 </ul>
 <section id="grab-taxi-lcoation-points-grab_df" class="level3">
-<h3 class="anchored" data-anchor-id="grab-taxi-lcoation-points-grab_df">2.1 Grab Taxi lcoation points (grab_df)</h3>
+<h3 class="anchored" data-anchor-id="grab-taxi-lcoation-points-grab_df"><strong>2.1 Grab Taxi lcoation points (grab_df)</strong></h3>
 <p>Let’s use read_parquet() function to read the grab parquet file, and import it into grab_df</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>grab_df <span class="ot">&lt;-</span> <span class="fu">read_parquet</span>(<span class="st">"data/aspatial/GrabPosisi/part-00000-8bbff892-97d2-4011-9961-703e38972569.c000.snappy - Copy.parquet"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -459,101 +455,29 @@ PROJCRS["SVY21 / Singapore TM",
 </div>
 </section>
 <section id="road-layer-within-sg-road_sf" class="level3">
-<h3 class="anchored" data-anchor-id="road-layer-within-sg-road_sf">2.2 Road layer within SG (road_sf)</h3>
+<h3 class="anchored" data-anchor-id="road-layer-within-sg-road_sf"><strong>2.2 Road layer within SG (road_sf)</strong></h3>
 <p>Let’s use st_read() function to read the roads file, and import it into road_df</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>road_sf <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/malaysia-singapore-brunei-latest-free.shp"</span>, <span class="at">layer =</span> <span class="st">"gis_osm_roads_free_1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Reading layer `gis_osm_roads_free_1' from data source 
-  `C:\glimjw\IS415-GAA\Take-home_Ex\Take-home_Ex01\data\geospatial\malaysia-singapore-brunei-latest-free.shp' 
-  using driver `ESRI Shapefile'
-Simple feature collection with 1764332 features and 10 fields
-Geometry type: LINESTRING
-Dimension:     XY
-Bounding box:  xmin: 99.66041 ymin: 0.8021131 xmax: 119.2601 ymax: 7.514393
-Geodetic CRS:  WGS 84</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#road_sf &lt;- st_read(dsn = "data/geospatial/malaysia-singapore-brunei-latest-free.shp", layer = "gis_osm_roads_free_1")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s check the referencing system info of this road_df</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(road_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Coordinate Reference System:
-  User input: WGS 84 
-  wkt:
-GEOGCRS["WGS 84",
-    DATUM["World Geodetic System 1984",
-        ELLIPSOID["WGS 84",6378137,298.257223563,
-            LENGTHUNIT["metre",1]]],
-    PRIMEM["Greenwich",0,
-        ANGLEUNIT["degree",0.0174532925199433]],
-    CS[ellipsoidal,2],
-        AXIS["latitude",north,
-            ORDER[1],
-            ANGLEUNIT["degree",0.0174532925199433]],
-        AXIS["longitude",east,
-            ORDER[2],
-            ANGLEUNIT["degree",0.0174532925199433]],
-    ID["EPSG",4326]]</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#st_crs(road_sf)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Since it is in WGS 84 format, we will standardise the crs</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>road_sf <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(road_sf, <span class="at">crs=</span> <span class="dv">3414</span>) </span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(road_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Coordinate Reference System:
-  User input: EPSG:3414 
-  wkt:
-PROJCRS["SVY21 / Singapore TM",
-    BASEGEOGCRS["SVY21",
-        DATUM["SVY21",
-            ELLIPSOID["WGS 84",6378137,298.257223563,
-                LENGTHUNIT["metre",1]]],
-        PRIMEM["Greenwich",0,
-            ANGLEUNIT["degree",0.0174532925199433]],
-        ID["EPSG",4757]],
-    CONVERSION["Singapore Transverse Mercator",
-        METHOD["Transverse Mercator",
-            ID["EPSG",9807]],
-        PARAMETER["Latitude of natural origin",1.36666666666667,
-            ANGLEUNIT["degree",0.0174532925199433],
-            ID["EPSG",8801]],
-        PARAMETER["Longitude of natural origin",103.833333333333,
-            ANGLEUNIT["degree",0.0174532925199433],
-            ID["EPSG",8802]],
-        PARAMETER["Scale factor at natural origin",1,
-            SCALEUNIT["unity",1],
-            ID["EPSG",8805]],
-        PARAMETER["False easting",28001.642,
-            LENGTHUNIT["metre",1],
-            ID["EPSG",8806]],
-        PARAMETER["False northing",38744.572,
-            LENGTHUNIT["metre",1],
-            ID["EPSG",8807]]],
-    CS[Cartesian,2],
-        AXIS["northing (N)",north,
-            ORDER[1],
-            LENGTHUNIT["metre",1]],
-        AXIS["easting (E)",east,
-            ORDER[2],
-            LENGTHUNIT["metre",1]],
-    USAGE[
-        SCOPE["Cadastre, engineering survey, topographic mapping."],
-        AREA["Singapore - onshore and offshore."],
-        BBOX[1.13,103.59,1.47,104.07]],
-    ID["EPSG",3414]]</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#road_sf &lt;- st_transform(road_sf, crs= 3414) </span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co">#st_crs(road_sf)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="sg-boundary-mpsz_sf" class="level3">
-<h3 class="anchored" data-anchor-id="sg-boundary-mpsz_sf">2.3 SG Boundary (mpsz_sf)</h3>
+<h3 class="anchored" data-anchor-id="sg-boundary-mpsz_sf"><strong>2.3 SG Boundary (mpsz_sf)</strong></h3>
 <p>Let’s use st_read() function to read the Master Plan Subzone Boundary file, and import it into mpsz_sf</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>mpsz_sf <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/MPSZ-2019"</span>, <span class="at">layer =</span> <span class="st">"MPSZ-2019"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>mpsz_sf <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/MPSZ-2019"</span>, <span class="at">layer =</span> <span class="st">"MPSZ-2019"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Reading layer `MPSZ-2019' from data source 
-  `C:\glimjw\IS415-GAA\Take-home_Ex\Take-home_Ex01\data\geospatial\MPSZ-2019' 
+  `C:\glimjw\IS415-GAA\Take-home_Ex\Take-home_Ex01 - Copy\data\geospatial\MPSZ-2019' 
   using driver `ESRI Shapefile'
 Simple feature collection with 332 features and 6 fields
 Geometry type: MULTIPOLYGON
@@ -564,7 +488,7 @@ Geodetic CRS:  WGS 84</code></pre>
 </div>
 <p>Let’s check the referencing system info of this mpsz_sf</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(mpsz_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(mpsz_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Coordinate Reference System:
   User input: WGS 84 
@@ -587,8 +511,8 @@ GEOGCRS["WGS 84",
 </div>
 <p>Since it is in WGS 84 format, we will standardise the crs</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>mpsz_sf <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(mpsz_sf, <span class="at">crs=</span> <span class="dv">3414</span>) </span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(mpsz_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>mpsz_sf <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(mpsz_sf, <span class="at">crs=</span> <span class="dv">3414</span>) </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(mpsz_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Coordinate Reference System:
   User input: EPSG:3414 
@@ -635,88 +559,33 @@ PROJCRS["SVY21 / Singapore TM",
 </div>
 <p>Let’s plot mpsz to see how it looks like</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set tmap mode to plotting </span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">"plot"</span>) </span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the map </span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mpsz_sf) <span class="sc">+</span> </span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>() <span class="sc">+</span> </span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">frame =</span> <span class="cn">FALSE</span>) <span class="sc">+</span> </span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_basemap</span>(<span class="at">server =</span> <span class="st">"Stamen.TonerLite"</span>) <span class="sc">+</span> </span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(mpsz_sf) <span class="sc">+</span> </span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">lwd =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.show =</span> <span class="cn">FALSE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set tmap mode to plotting </span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">"plot"</span>) </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the map </span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mpsz_sf) <span class="sc">+</span> </span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>() <span class="sc">+</span> </span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">frame =</span> <span class="cn">FALSE</span>) <span class="sc">+</span> </span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_basemap</span>(<span class="at">server =</span> <span class="st">"Stamen.TonerLite"</span>) <span class="sc">+</span> </span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(mpsz_sf) <span class="sc">+</span> </span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">lwd =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.show =</span> <span class="cn">FALSE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Now, let’s combine both mpsz_sf and road_sf</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mpsz_sf) <span class="sc">+</span> </span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span> </span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origin_sf) <span class="sc">+</span> </span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_dots</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mpsz_sf) <span class="sc">+</span> </span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span> </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origin_sf) <span class="sc">+</span> </span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_dots</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
-<section id="convert-our-sf-data-frames-to-sps-spatial-class" class="level3">
-<h3 class="anchored" data-anchor-id="convert-our-sf-data-frames-to-sps-spatial-class">2.4 Convert our sf data frames to sp’s spatial* class</h3>
-<p>Convert origin_sf to sp’s spatial* class</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>origin <span class="ot">&lt;-</span> <span class="fu">as_Spatial</span>(origin_sf) </span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>mpsz <span class="ot">&lt;-</span> <span class="fu">as_Spatial</span>(mpsz_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="convert-our-spatial-class-into-sp-format" class="level3">
-<h3 class="anchored" data-anchor-id="convert-our-spatial-class-into-sp-format">2.5 Convert our spatial* class into sp format</h3>
-<p>Convert origin and mpsz to sp format</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>origin_sp <span class="ot">&lt;-</span> <span class="fu">as</span>(origin, <span class="st">"SpatialPoints"</span>) </span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>mpsz_sp <span class="ot">&lt;-</span> <span class="fu">as</span>(mpsz, <span class="st">"SpatialPolygons"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="convert-our-sp-format-into-ppp" class="level3">
-<h3 class="anchored" data-anchor-id="convert-our-sp-format-into-ppp">2.6 Convert our sp format into ppp</h3>
-<p>Convert origin_sp to ppp format</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spatstat)</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming origin_sp is a SpatialPoints object</span></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> <span class="fu">coordinates</span>(origin_sp)</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a rectangular window covering the entire extent of the points</span></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>window <span class="ot">&lt;-</span> <span class="fu">owin</span>(<span class="at">xrange =</span> <span class="fu">range</span>(coords[, <span class="dv">1</span>]), <span class="at">yrange =</span> <span class="fu">range</span>(coords[, <span class="dv">2</span>]))</span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a ppp object with the adjusted window</span></span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>origin_ppp <span class="ot">&lt;-</span> <span class="fu">ppp</span>(coords[, <span class="dv">1</span>], coords[, <span class="dv">2</span>], <span class="at">window =</span> window)</span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>origin_ppp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Planar point pattern: 28000 points
-window: rectangle = [3661.47, 49845.23] x [25201.14, 49685.08] units</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(origin_ppp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-</section>
-<section id="check-for-any-duplicated-points" class="level3">
-<h3 class="anchored" data-anchor-id="check-for-any-duplicated-points">2.7 Check for any Duplicated Points</h3>
-<p><code>{r} any(duplicated(origin_ppp))}</code></p>
-<p>Let’s plot the points on the map</p>
-<p><code>{r} tmap_mode('view')  tm_shape(origin) +    tm_dots(alpha=0.4, size=0.05)}</code></p>
-</section>
-<section id="creating-the-owin-object" class="level3">
-<h3 class="anchored" data-anchor-id="creating-the-owin-object">2.8 Creating the owin object</h3>
-<p><code>{r} mpsz_owin &lt;- as.owin(mpsz_sp) plot(mpsz_owin)}</code></p>
-<p><code>{r} summary(mpsz_owin)}</code></p>
-</section>
-<section id="combining-ppp-with-owin-object" class="level3">
-<h3 class="anchored" data-anchor-id="combining-ppp-with-owin-object">2.9 Combining ppp with owin object</h3>
-<p>Let’s combine the ppp with the newly created owin object</p>
-<p><code>{r} # Now you can use this mpsz_owin object in your ppp operation  originMPSZ_ppp &lt;- origin_ppp[mpsz_owin]  plot(originMPSZ_ppp)}</code></p>
+<section id="section" class="level3">
+<h3 class="anchored" data-anchor-id="section"></h3>
 
 
 </section>
