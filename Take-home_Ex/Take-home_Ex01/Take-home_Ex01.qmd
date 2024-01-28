@@ -1,16 +1,9 @@
 ---
 title: "Take-home Exercise 1: Application of Spatial Point Patterns Analysis to discover the geographical distribution of Grab hailing services in Singapore" 
+execute:
+  warning: false
 date: "`r Sys.Date()`" 
-format: 
-  html: 
-    code-fold: true 
-    code-summary: "Show the code" 
-    toc-depth: 4 
-execute: 
-  eval: true 
-  echo: true 
-  warning: false 
-  editor: visual
+
 ---
 
 ## **Setting the Scene**
@@ -38,7 +31,7 @@ pacman::p_load(maptools, sf, raster, spatstat, tmap, tidyverse, arrow, lubridate
 
 ## **2 Data Import and Wrangling**
 
-This is where we import the data and prepare it before analysis.
+This is where we import the data and prepare it before analysis``.
 
 Let's use st_read() of sf package to import these three geospatial data sets into R. And we will be using other functions to prepare our data upon importing them.
 
@@ -223,8 +216,19 @@ mpsz_sp <- as(mpsz, "SpatialPolygons")
 Convert origin_sp to ppp format
 
 ```{r}
-origin_ppp <- as(origin_sp, "ppp") 
+library(spatstat)
+
+# Assuming origin_sp is a SpatialPoints object
+coords <- coordinates(origin_sp)
+
+# Create a rectangular window covering the entire extent of the points
+window <- owin(xrange = range(coords[, 1]), yrange = range(coords[, 2]))
+
+# Create a ppp object with the adjusted window
+origin_ppp <- ppp(coords[, 1], coords[, 2], window = window)
+
 origin_ppp
+
 plot(origin_ppp)
 ```
 
@@ -245,8 +249,12 @@ tm_shape(origin) +
 ### **2.8 Creating the owin object**
 
 ```{r}
-mpsz_owin <- as(mpsz_sp, "owin")
+mpsz_owin <- as.owin(mpsz_sp)
 plot(mpsz_owin)
+```
+
+```{r}
+summary(mpsz_owin)
 ```
 
 ### **2.9 Combining ppp with owin object**
