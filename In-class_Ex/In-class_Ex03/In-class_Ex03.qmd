@@ -31,10 +31,13 @@ childcare_sf <- st_read("data/geospatial/ChildCareServices.geojson") %>%
   st_transform(crs = 3414)
 mpsz_sf <- st_read(dsn = "data/geospatial", layer="MP14_SUBZONE_WEB_PL")
 ```
+
 ```{r}
 plot(mpsz_sf)
 ```
+
 ## Creating coastal outline
+
 "Dissolve" the boundaries in the map, and get the coastal outline.
 
 ```{r}
@@ -45,12 +48,13 @@ sg_sf <- mpsz_sf %>%
 ```{r}
 plot(sg_sf)
 ```
+
 ## Geosptial Data Wrangling
 
 ### Creating ppp objects: sf method
 
-ppp can only be used with sf 
-v
+ppp can only be used with sf v
+
 ```{r}
 childcare_ppp <- as.ppp(childcare_sf)
 ```
@@ -58,6 +62,7 @@ childcare_ppp <- as.ppp(childcare_sf)
 ```{r}
 summary(childcare_ppp)
 ```
+
 ### Handling duplicated points
 
 We can check the duplication in a ppp object by using this code chunk
@@ -65,7 +70,8 @@ We can check the duplication in a ppp object by using this code chunk
 ```{r}
 any(duplicated(childcare_ppp))
 ```
-### Creating owin object 
+
+### Creating owin object
 
 Must be sf layer instead of sp. It only works with sf layers only.
 
@@ -106,6 +112,7 @@ ck <- mpsz_sf %>% filter(PLN_AREA_N == "CHOA CHU KANG")
 jw <- mpsz_sf %>% filter(PLN_AREA_N == "JURONG WEST")
 
 ```
+
 ```{r fig.width=16, fig.height=10}
 par(mflow=c(2,2))
 plot(pg, main = "Punggol")

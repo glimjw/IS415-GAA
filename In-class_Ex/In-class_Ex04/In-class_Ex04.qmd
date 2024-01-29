@@ -1,0 +1,97 @@
+---
+title: "In-class Exercise 4"
+date: "`r Sys.Date()`"
+format: 
+  html: 
+    code-fold: true
+    code-summary: "Show the code"
+    toc-depth: 4
+execute:
+  eval: true
+  echo: true
+  warning: false
+editor: visual
+---
+
+Add new GWModel with the other packages
+
+```{r}
+pacman::p_load(sf, spdep, tmap, tidyverse, knitr,GWmodel)
+```
+
+import the hunan data
+
+```{r}
+hunan <- st_read(dsn = "data/geospatial", 
+                 layer = "Hunan")
+```
+
+```{r}
+hunan2012 <- read_csv("data/aspatial/Hunan_2012.csv")
+```
+
+```{r}
+hunan <- left_join(hunan, hunan2012) %>%
+  select(1:4, 7, 15)
+```
+
+Convert hunan into sp format (cos GWModel only accepts sp format)
+
+```{r}
+hunan_sp <- hunan %>%
+  as_Spatial()
+```
+
+compute the summary statistics
+
+bw is the bandwidth
+
+bw is the number of neighbours IF adaptive = TRUE / bw is the dist IF adaptive = FALSE
+
+```{r}
+gwstat <- gwss(data = hunan_sp,
+               vars = "GDPPC",
+               bw = 6,
+               kernel = "bisquare",
+               adaptive = TRUE,
+               longlat = T)
+```
+
+plot the diff data types first .. GDPPC_LM, etc under hunan_sp
+
+OTHERS \[exploratory codes\]
+
+```{r}
+longitude <- map_dbl(hunan$geometry, ~st_centroid(.x)[[1]])
+```
+
+We do the same for latitude with one key difference. We access the second value per each centroid with \[\[2\]\].
+
+```{r}
+latitude <- map_dbl(hunan$geometry, ~st_centroid(.x)[[2]])
+```
+
+Now that we have latitude and longitude, we use cbind to put longitude and latitude into the same object.
+
+```{r}
+coords <- cbind(longitude, latitude)
+```
+
+We check the first few observations to see if things are formatted correctly.
+
+```{r}
+head(coords)
+```
+
+```{r}
+k1 <- knn2nb(knearneigh(coords))
+```
+
+```{r}
+k1dists <- unlist(nbdists(k1, coords, longlat = TRUE))
+```
+
+```{r}
+#| fig-width: 12
+#| fig-height: 8
+```

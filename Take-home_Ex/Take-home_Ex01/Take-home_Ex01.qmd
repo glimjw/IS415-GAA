@@ -28,6 +28,7 @@ install.packages("maptools", repos = "https://packagemanager.posit.co/cran/2023-
 Installing the required tools for the analysis (e.g. sf, tidyverse, maptools, etc)
 
 ```{r}
+#| eval: false 
 pacman::p_load(maptools, sf, raster, spatstat, tmap, tidyverse, arrow, lubridate)
 ```
 
@@ -50,42 +51,59 @@ The 3 data are:
 Let's use read_parquet() function to read the grab parquet file, and import it into grab_df
 
 ```{r}
-grab_df <- read_parquet("data/aspatial/GrabPosisi/part-00000-8bbff892-97d2-4011-9961-703e38972569.c000.snappy - Copy.parquet")
+#| eval: false 
+# Check if the data is already loaded
+if (!exists("road_sf")) {
+  # Import data if not loaded
+  grab_df <- read_parquet("data/aspatial/GrabPosisi/part-00000-8bbff892-97d2-4011-9961-703e38972569.c000.snappy - Copy.parquet")
+}
 ```
 
 Convert the timestamp for grab_df
 
 ```{r}
+#| eval: false 
+
 grab_df$pingtimestamp <- as_datetime(grab_df$pingtimestamp)
 ```
 
 Let's take a glimpse of our grab_df data
 
 ```{r}
+#| eval: false 
+
 glimpse(grab_df)
 ```
 
 Save the data into grab_rds
 
 ```{r}
+#| eval: false 
+
 write_rds(grab_df, "data/rds/grab.rds")
 ```
 
 Extracting trip starting locations (origin_df)
 
 ```{r}
+#| eval: false 
+
 origin_df <- grab_df %>% group_by(trj_id) %>% arrange(pingtimestamp) %>% filter(row_number()==1) %>% mutate(weekday = wday(pingtimestamp, label=TRUE, abbr=TRUE), start_hr = factor(hour(pingtimestamp)), day = factor(mday(pingtimestamp)))
 ```
 
 Extracting trip ending locations (destination_df)
 
 ```{r}
+#| eval: false 
+
 destination_df <- grab_df %>% group_by(trj_id) %>% arrange(desc(pingtimestamp)) %>% filter(row_number()==1) %>% mutate(weekday = wday(pingtimestamp, label=TRUE, abbr=TRUE), end_hr = factor(hour(pingtimestamp)), day = factor(mday(pingtimestamp)))
 ```
 
 Let's save a copy of both origin_df and destination_df into the rds folder
 
 ```{r}
+#| eval: false 
+
 write_rds(origin_df, "data/rds/origin_df.rds") 
 write_rds(destination_df, "data/rds/destination_df.rds")
 ```
@@ -93,6 +111,8 @@ write_rds(destination_df, "data/rds/destination_df.rds")
 Let's convert the grab_df from aspatial data into geospatial data
 
 ```{r}
+#| eval: false 
+
 origin_sf <- st_as_sf(origin_df, coords = c("rawlng", "rawlat"), crs = 4326) %>% 
   st_transform(crs = 3414) 
 destination_sf <- st_as_sf(destination_df, coords = c("rawlng", "rawlat"), crs = 4326) %>% 
@@ -102,12 +122,16 @@ destination_sf <- st_as_sf(destination_df, coords = c("rawlng", "rawlat"), crs =
 Let's check the referencing system info of this road_df
 
 ```{r}
+#| eval: false 
+
 st_crs(origin_sf)
 ```
 
 Since it is in SVY21 format, we will standardise the crs
 
 ```{r}
+#| eval: false 
+
 origin_sf <- st_transform(origin_sf, crs= 3414) 
 destination_sf <- st_transform(destination_sf, crs= 3414) 
 st_crs(origin_sf)
@@ -116,6 +140,8 @@ st_crs(origin_sf)
 Let's visualise how grab_df looked like by using the **trips' origin** locations
 
 ```{r}
+#| eval: false 
+
 tmap_mode("plot") 
 tm_shape(origin_sf) + 
   tm_dots()
@@ -124,6 +150,8 @@ tm_shape(origin_sf) +
 Let's visualise how grab_df looked like by using the **trips' destination** locations
 
 ```{r}
+#| eval: false 
+
 tmap_mode("plot") 
 tm_shape(destination_sf) + 
   tm_dots()
@@ -134,18 +162,28 @@ tm_shape(destination_sf) +
 Let's use st_read() function to read the roads file, and import it into road_df
 
 ```{r}
-road_sf <- st_read(dsn = "data/geospatial/malaysia-singapore-brunei-latest-free.shp", layer = "gis_osm_roads_free_1")
+#| eval: false 
+
+# Check if the data is already loaded
+if (!exists("road_sf")) {
+  # Import data if not loaded
+  road_sf <- st_read(dsn = "data/geospatial/malaysia-singapore-brunei-latest-free.shp", layer = "gis_osm_roads_free_1", n=5)
+}
 ```
 
 Let's check the referencing system info of this road_df
 
 ```{r}
+#| eval: false 
+
 st_crs(road_sf)
 ```
 
 Since it is in WGS 84 format, we will standardise the crs
 
 ```{r}
+#| eval: false 
+
 road_sf <- st_transform(road_sf, crs= 3414) 
 st_crs(road_sf)
 ```
@@ -155,18 +193,28 @@ st_crs(road_sf)
 Let's use st_read() function to read the Master Plan Subzone Boundary file, and import it into mpsz_sf
 
 ```{r}
-mpsz_sf <- st_read(dsn = "data/geospatial/MPSZ-2019", layer = "MPSZ-2019")
+#| eval: false 
+
+# Check if the data is already loaded
+if (!exists("mpsz_sf")) {
+  # Import data if not loaded
+  mpsz_sf <- st_read(dsn = "data/geospatial/MPSZ-2019", layer = "MPSZ-2019")
+}
 ```
 
 Let's check the referencing system info of this mpsz_sf
 
 ```{r}
+#| eval: false 
+
 st_crs(mpsz_sf)
 ```
 
 Since it is in WGS 84 format, we will standardise the crs
 
 ```{r}
+#| eval: false 
+
 mpsz_sf <- st_transform(mpsz_sf, crs= 3414) 
 st_crs(mpsz_sf)
 ```
@@ -174,6 +222,8 @@ st_crs(mpsz_sf)
 Let's plot mpsz to see how it looks like
 
 ```{r}
+#| eval: false 
+
 # Set tmap mode to plotting 
 tmap_mode("plot") 
 # Plot the map 
@@ -189,6 +239,8 @@ tm_shape(mpsz_sf) +
 Now, let's combine both mpsz_sf and road_sf
 
 ```{r}
+#| eval: false 
+
 tm_shape(mpsz_sf) + 
   tm_polygons() + 
   tm_shape(origin_sf) + 
@@ -200,6 +252,8 @@ tm_shape(mpsz_sf) +
 Convert origin_sf to sp's spatial\* class
 
 ```{r}
+#| eval: false 
+
 origin <- as_Spatial(origin_sf) 
 mpsz <- as_Spatial(mpsz_sf)
 ```
@@ -209,6 +263,8 @@ mpsz <- as_Spatial(mpsz_sf)
 Convert origin and mpsz to sp format
 
 ```{r}
+#| eval: false 
+
 origin_sp <- as(origin, "SpatialPoints") 
 mpsz_sp <- as(mpsz, "SpatialPolygons")
 ```
@@ -218,6 +274,8 @@ mpsz_sp <- as(mpsz, "SpatialPolygons")
 Convert origin_sp to ppp format
 
 ```{r}
+#| eval: false 
+
 library(spatstat)
 
 # Assuming origin_sp is a SpatialPoints object
@@ -234,36 +292,34 @@ origin_ppp
 plot(origin_ppp)
 ```
 
-### 2.7 Check for any Duplicated Points
-
-```{r}
-any(duplicated(origin_ppp))
-```
-
-Let's plot the points on the map
-
-```{r}
-tmap_mode('view')  
-tm_shape(origin) +    
-  tm_dots(alpha=0.4, size=0.05)
-```
-
-### 2.8 Creating the owin object
+### 2.7 Creating the owin object
 
 ```{r} 
+#| eval: false 
+
 mpsz_owin <- as.owin(mpsz_sp) 
+```
+
+Let's plot the new owin
+```{r}
+#| eval: false 
+
 plot(mpsz_owin)
 ```
 
 ```{r} 
+#| eval: false 
+
 summary(mpsz_owin)
 ```
 
-### 2.9 Combining ppp with owin object
+### 2.8 Combining ppp with owin object
 
 Let's combine the ppp with the newly created owin object
 
 ```{r} 
+#| eval: false 
+
 # Now you can use this mpsz_owin object in your ppp operation  
 originMPSZ_ppp <- origin_ppp[mpsz_owin] 
 plot(originMPSZ_ppp)
