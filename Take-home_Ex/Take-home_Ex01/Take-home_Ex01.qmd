@@ -28,7 +28,7 @@ install.packages("maptools", repos = "https://packagemanager.posit.co/cran/2023-
 Installing the required tools for the analysis (e.g. sf, tidyverse, maptools, etc)
 
 ```{r}
-pacman::p_load(maptools, sf, raster, spatstat, tmap, tidyverse, arrow, lubridate, dplyr)
+pacman::p_load(maptools, sf, raster, spatstat, tmap, tidyverse, arrow, lubridate, dplyr, spNetwork)
 ```
 
 ## 2 Data Import and Wrangling
@@ -200,7 +200,6 @@ st_crs(mpsz_sf)
 Since it is in WGS 84 format, we will standardise the crs
 
 ```{r}
-
 mpsz_sf <- st_transform(mpsz_sf, crs= 3414) 
 st_crs(mpsz_sf)
 ```
@@ -221,7 +220,7 @@ tm_shape(mpsz_sf) +
   tm_layout(legend.show = FALSE) 
 ```
 
-Now, let's combine both mpsz_sf and road_sf
+Now, let's combine both mpsz_sf and origin_sf
 
 ```{r}
 tm_shape(mpsz_sf) + 
@@ -295,3 +294,146 @@ Let's combine the ppp with the newly created owin object
 originMPSZ_ppp <- origin_ppp[mpsz_owin] 
 plot(originMPSZ_ppp)
 ```
+
+## **3 Kernel Density Estimation**
+
+### **3.1 Computing the kernel density estimation (KDE) of grab hailing services**
+
+The purpose of KDE is to apply the function to each data point, and thereafter it will averages the location of that point with respect to the location of another data point, based on bandwidth of the kernel.
+
+Let's compute the KDE
+
+```{r}
+kde_originMPSZ_bw <- density(originMPSZ_ppp, sigma=bw.diggle, edge=TRUE, kernel="gaussian")  
+plot(kde_originMPSZ_bw)
+```
+
+Since the unit of measurement is pretty small, let's re-scale it to km.
+
+```{r}
+originMPSZ_ppp.km <- rescale(originMPSZ_ppp, 1000, "km") 
+kde_originMPSZ_ppp.bw <- density(originMPSZ_ppp.km, sigma=bw.diggle, edge=TRUE, kernel="gaussian")  
+plot(kde_originMPSZ_ppp.bw)
+```
+
+### **3.2 Observations from kernel density estimation (KDE) of grab hailing services**
+
+Based on the plot, we can see that:
+
+\- There is a **higher density** in the **East side**, which is a small part that is in yellow. We can say that there are **more trips originating from the East side**.
+
+\- There are other parts of the island that has mini purple dots, indicating that there is a medium density. This could show that there is a relatively **normal ride demand across the island**.
+
+\- Apart of the above, the island is mostly in blue from the first sight. So it indicate that the ridership for grab is not really high.
+
+### **3.3 Zooming into kernel density estimation (KDE) of grab hailing services in the east**
+
+Let's extract the Eastern Region area to look deeper into the high density. We will also extract the Western and Central Region areas for comparison usage.
+
+```{r}
+east = mpsz[mpsz@data$REGION_N == "EAST REGION",]
+west = mpsz[mpsz@data$REGION_N == "WEST REGION",]
+central = mpsz[mpsz@data$REGION_N == "CENTRAL REGION",]
+
+par(mfrow=c(2,2))
+plot(east, main = "East Region")
+plot(west, main = "West Region")
+plot(central, main = "Central Region")
+```
+
+Convert the Eastern Region area to generic sp format
+
+```{r}
+east_sp = as(east, "SpatialPolygons")
+west_sp = as(west, "SpatialPolygons")
+central_sp = as(central, "SpatialPolygons")
+```
+
+Create the owin object for it
+
+```{r}
+east_owin = as(east_sp, "owin")
+west_owin = as(west_sp, "owin")
+central_owin = as(central_sp, "owin")
+```
+
+Let's combine the grab points with the Eastern Region area
+
+```{r}
+grab_east_ppp = origin_ppp[east_owin]
+grab_west_ppp = origin_ppp[west_owin]
+grab_central_ppp = origin_ppp[central_owin]
+```
+
+Let's transform the unit of measurement to km
+
+```{r}
+grab_east_ppp.km = rescale(grab_east_ppp, 1000, "km")
+grab_west_ppp.km = rescale(grab_west_ppp, 1000, "km")
+grab_central_ppp.km = rescale(grab_central_ppp, 1000, "km")
+```
+
+#### 3.3.1 Let's plot the Eastern and Western Regions area and compare it
+
+```{r}
+par(mfrow=c(1,2))
+plot(grab_east_ppp.km, main="East Region")
+plot(grab_west_ppp.km, main="West Region")
+```
+
+Note: We can see that the western region has more grab rides, as there are more grab origin points as shown by the darker area.
+
+Let's compare the KDE of both Eastern and Western Regions
+
+```{r}
+par(mfrow=c(1,2))
+plot(density(grab_east_ppp.km, 
+             sigma=bw.diggle, 
+             edge=TRUE, 
+             kernel="gaussian"),
+     main="Eastern Region")
+plot(density(grab_west_ppp.km, 
+             sigma=bw.diggle, 
+             edge=TRUE, 
+             kernel="gaussian"),
+     main="Western Region")
+```
+
+Even though, the KDE density of whole Singapore map indicates that there is a high density on the Eastern Region of the island.
+
+However, when we plot the Origin points of both the Eastern and Western Regions, we noticed that there are actually more grab origin points in the Western Region as oppose to the main map.
+
+When we plot the KDE density of both the Eastern and Western regions of island, we noticed that there were more points with high density in the western region. However, in the Eastern Region, we can see that there is a high density situated at one point, apart from the other tiny points of high density.
+
+Let's zoom in and see the KDE density of the Eastern Region. It looks like the area with high density is situated at Changi Airport area.
+
+Set up our Changi Airport area
+
+```{r}
+ChangiAirport = mpsz[mpsz@data$SUBZONE_N == "CHANGI AIRPORT",]
+ChangiAirport_sp = as(ChangiAirport, "SpatialPolygons")
+ChangiAirport_owin = as(ChangiAirport_sp, "owin")
+ChangiAirport_ppp = origin_ppp[ChangiAirport_owin]
+ChangiAirport_ppp.km = rescale(ChangiAirport_ppp, 1000, "km")
+```
+
+Let's plot and compare
+
+```{r}
+par(mfrow=c(1,2))
+plot(density(grab_east_ppp.km, 
+             sigma=bw.diggle, 
+             edge=TRUE, 
+             kernel="gaussian"),
+     main="Eastern Region")
+plot(density(ChangiAirport_ppp.km, 
+             sigma=bw.diggle, 
+             edge=TRUE, 
+             kernel="gaussian"),
+     main="Changi Airport")
+```
+
+We could see that, indeed, the line with high density is situated at Changi Airport within the Eastern Region. We can indicate that there is a significantly high volume of grab rides originating from Changi Airport.
+
+
+

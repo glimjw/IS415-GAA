@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>IS415-GAA - Take-home Exercise 1: backup</title>
+<title>IS415-GAA – take-home_ex01_copy</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -180,206 +180,15 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#setting-the-scene" id="toc-setting-the-scene" class="nav-link active" data-scroll-target="#setting-the-scene"><strong>Setting the Scene</strong></a></li>
-  <li><a href="#objectives" id="toc-objectives" class="nav-link" data-scroll-target="#objectives"><strong>Objectives</strong></a></li>
-  <li><a href="#install-maptools" id="toc-install-maptools" class="nav-link" data-scroll-target="#install-maptools"><strong>1 Install maptools</strong></a></li>
-  <li><a href="#data-import-and-wrangling" id="toc-data-import-and-wrangling" class="nav-link" data-scroll-target="#data-import-and-wrangling"><strong>2 Data Import and Wrangling</strong></a>
-  <ul class="collapse">
-  <li><a href="#grab-taxi-lcoation-points-grab_df" id="toc-grab-taxi-lcoation-points-grab_df" class="nav-link" data-scroll-target="#grab-taxi-lcoation-points-grab_df"><strong>2.1 Grab Taxi lcoation points (grab_df)</strong></a></li>
-  <li><a href="#road-layer-within-sg-road_sf" id="toc-road-layer-within-sg-road_sf" class="nav-link" data-scroll-target="#road-layer-within-sg-road_sf"><strong>2.2 Road layer within SG (road_sf)</strong></a></li>
-  <li><a href="#sg-boundary-mpsz_sf" id="toc-sg-boundary-mpsz_sf" class="nav-link" data-scroll-target="#sg-boundary-mpsz_sf"><strong>2.3 SG Boundary (mpsz_sf)</strong></a></li>
-  <li><a href="#convert-our-sf-data-frames-to-sps-spatial-class" id="toc-convert-our-sf-data-frames-to-sps-spatial-class" class="nav-link" data-scroll-target="#convert-our-sf-data-frames-to-sps-spatial-class"><strong>2.4 Convert our sf data frames to sp’s spatial* class</strong></a></li>
-  <li><a href="#convert-our-spatial-class-into-sp-format" id="toc-convert-our-spatial-class-into-sp-format" class="nav-link" data-scroll-target="#convert-our-spatial-class-into-sp-format"><strong>2.5 Convert our spatial* class into sp format</strong></a></li>
-  <li><a href="#convert-our-sp-format-into-ppp" id="toc-convert-our-sp-format-into-ppp" class="nav-link" data-scroll-target="#convert-our-sp-format-into-ppp"><strong>2.6 Convert our sp format into ppp</strong></a></li>
-  <li><a href="#check-for-any-duplicated-points" id="toc-check-for-any-duplicated-points" class="nav-link" data-scroll-target="#check-for-any-duplicated-points"><strong>2.7 Check for any Duplicated Points</strong></a></li>
-  <li><a href="#creating-the-owin-object" id="toc-creating-the-owin-object" class="nav-link" data-scroll-target="#creating-the-owin-object"><strong>2.8 Creating the owin object</strong></a></li>
-  <li><a href="#combining-ppp-with-owin-object" id="toc-combining-ppp-with-owin-object" class="nav-link" data-scroll-target="#combining-ppp-with-owin-object"><strong>2.9 Combining ppp with owin object</strong></a></li>
-  </ul></li>
-  <li><a href="#kernel-density-estimation" id="toc-kernel-density-estimation" class="nav-link" data-scroll-target="#kernel-density-estimation"><strong>3 Kernel Density Estimation</strong></a>
-  <ul class="collapse">
-  <li><a href="#computing-the-kernel-density-estimation-kde-of-grab-hailing-services" id="toc-computing-the-kernel-density-estimation-kde-of-grab-hailing-services" class="nav-link" data-scroll-target="#computing-the-kernel-density-estimation-kde-of-grab-hailing-services"><strong>3.1 Computing the kernel density estimation (KDE) of grab hailing services</strong></a></li>
-  <li><a href="#observations" id="toc-observations" class="nav-link" data-scroll-target="#observations"><strong>3.2 Observations</strong></a></li>
-  </ul></li>
-  <li><a href="#network-constrained-kde-netkde-analysis" id="toc-network-constrained-kde-netkde-analysis" class="nav-link" data-scroll-target="#network-constrained-kde-netkde-analysis"><strong>4 Network Constrained KDE (NetKDE) Analysis</strong></a>
-  <ul class="collapse">
-  <li><a href="#preparing-the-lixels-objects" id="toc-preparing-the-lixels-objects" class="nav-link" data-scroll-target="#preparing-the-lixels-objects"><strong>4.1 Preparing the lixels objects</strong></a></li>
-  <li><a href="#generating-line-centre-points" id="toc-generating-line-centre-points" class="nav-link" data-scroll-target="#generating-line-centre-points"><strong>4.2 Generating line centre points</strong></a></li>
-  </ul></li>
-  </ul>
-</nav>
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Take-home Exercise 1: backup</h1>
-</div>
 
 
 
-<div class="quarto-title-meta">
 
-    
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">Invalid Date</p>
-    </div>
-  </div>
-  
-    
-  </div>
-  
-
-</header>
-
-<section id="setting-the-scene" class="level2">
-<h2 class="anchored" data-anchor-id="setting-the-scene"><strong>Setting the Scene</strong></h2>
-<p>Human mobility, the movement of human beings in space and time, reflects the spatial-temporal characteristics of human behavior. With the advancement Information and Communication Technologies (ICT) especially smart phone, a large volume of data related to human mobility have been collected. By using appropriate GIS analysis methods, these data are potentially useful in supporting smart city planning and management.</p>
-<p>In Singapore, one of the important source of data related to human mobility is from <a href="https://datamall.lta.gov.sg/content/datamall/en.html">Land Transport Authority (LTA) DataMall</a>. Two data sets related to human mobility are provided by the portal, they are: Passenger Volume by Origin Destination Train Stations and Passenger Volume by Origin Destination Bus Stops. One of the limitation of these data sets is that their location are biased to either bus stops or MRT/LRT stations. In 2020, another very interesting human mobility data set called <a href="https://engineering.grab.com/grab-posisi">Grab Posisi</a> was released by GRAB, one of the largest shared taxi operator in South-east Asia. There are two data sets been released and one of them is for Singapore.</p>
-</section>
-<section id="objectives" class="level2">
-<h2 class="anchored" data-anchor-id="objectives"><strong>Objectives</strong></h2>
-<p>Geospatial analytics hold tremendous potential to address complex problems facing society. In this study, you are tasked to apply appropriate spatial point patterns analysis methods to discover the geographical and spatio-temporal distribution of Grab hailing services locations in Singapore.</p>
-</section>
-<section id="install-maptools" class="level2">
-<h2 class="anchored" data-anchor-id="install-maptools"><strong>1 Install maptools</strong></h2>
-<p><code>{r} #| eval: false  install.packages("maptools", repos = "https://packagemanager.posit.co/cran/2023-10-13")}</code></p>
-<p>Installing the required tools for the analysis (e.g.&nbsp;sf, tidyverse, maptools, etc)</p>
-<p><code>{r} pacman::p_load(maptools, sf, raster, spatstat, tmap, tidyverse, arrow, lubridate)}</code></p>
-</section>
-<section id="data-import-and-wrangling" class="level2">
-<h2 class="anchored" data-anchor-id="data-import-and-wrangling"><strong>2 Data Import and Wrangling</strong></h2>
-<p>This is where we import the data and prepare it before analysis``.</p>
-<p>Let’s use st_read() of sf package to import these three geospatial data sets into R. And we will be using other functions to prepare our data upon importing them.</p>
-<p>The 3 data are:</p>
-<ul>
-<li><p>Grab Taxi location points (<a href="https://engineering.grab.com/grab-posisi">Grab-Posisi</a>)</p></li>
-<li><p>Road layer within SG (<a href="https://download.geofabrik.de/">Geofabrik download server</a>) [Malaysia, Singapore, and Brunei coverage]</p></li>
-<li><p>SG Boundary (<a href="https://beta.data.gov.sg/collections/1749/view">data.gov.sg</a>) [Master Plan 2019 Subzone Boundary (No Sea)]</p></li>
-</ul>
-<section id="grab-taxi-lcoation-points-grab_df" class="level3">
-<h3 class="anchored" data-anchor-id="grab-taxi-lcoation-points-grab_df"><strong>2.1 Grab Taxi lcoation points (grab_df)</strong></h3>
-<p>Let’s use read_parquet() function to read the grab parquet file, and import it into grab_df</p>
-<p><code>{r} grab_df &lt;- read_parquet("data/aspatial/GrabPosisi/part-00000-8bbff892-97d2-4011-9961-703e38972569.c000.snappy - Copy.parquet")}</code></p>
-<p>Convert the timestamp for grab_df</p>
-<p><code>{r} grab_df$pingtimestamp &lt;- as_datetime(grab_df$pingtimestamp)}</code></p>
-<p>Let’s take a glimpse of our grab_df data</p>
-<p><code>{r} glimpse(grab_df)}</code></p>
-<p>Save the data into grab_rds</p>
-<p><code>{r} write_rds(grab_df, "data/rds/grab.rds")}</code></p>
-<p>Extracting trip starting locations (origin_df)</p>
-<p><code>{r} origin_df &lt;- grab_df %&gt;% group_by(trj_id) %&gt;% arrange(pingtimestamp) %&gt;% filter(row_number()==1) %&gt;% mutate(weekday = wday(pingtimestamp, label=TRUE, abbr=TRUE), start_hr = factor(hour(pingtimestamp)), day = factor(mday(pingtimestamp)))}</code></p>
-<p>Extracting trip ending locations (destination_df)</p>
-<p><code>{r} destination_df &lt;- grab_df %&gt;% group_by(trj_id) %&gt;% arrange(desc(pingtimestamp)) %&gt;% filter(row_number()==1) %&gt;% mutate(weekday = wday(pingtimestamp, label=TRUE, abbr=TRUE), end_hr = factor(hour(pingtimestamp)), day = factor(mday(pingtimestamp)))}</code></p>
-<p>Let’s save a copy of both origin_df and destination_df into the rds folder</p>
-<p><code>{r} write_rds(origin_df, "data/rds/origin_df.rds")  write_rds(destination_df, "data/rds/destination_df.rds")}</code></p>
-<p>Let’s convert the grab_df from aspatial data into geospatial data</p>
-<p><code>{r} origin_sf &lt;- st_as_sf(origin_df, coords = c("rawlng", "rawlat"), crs = 4326) %&gt;%    st_transform(crs = 3414)  destination_sf &lt;- st_as_sf(destination_df, coords = c("rawlng", "rawlat"), crs = 4326) %&gt;%    st_transform(crs = 3414)}</code></p>
-<p>Let’s check the referencing system info of this road_df</p>
-<p><code>{r} st_crs(origin_sf)}</code></p>
-<p>Since it is in SVY21 format, we will standardise the crs</p>
-<p><code>{r} origin_sf &lt;- st_transform(origin_sf, crs= 3414)  destination_sf &lt;- st_transform(destination_sf, crs= 3414)  st_crs(origin_sf)}</code></p>
-<p>Let’s visualise how grab_df looked like by using the <strong>trips’ origin</strong> locations</p>
-<p><code>{r} tmap_mode("plot")  tm_shape(origin_sf) +    tm_dots()}</code></p>
-<p>Let’s visualise how grab_df looked like by using the <strong>trips’ destination</strong> locations</p>
-<p><code>{r} tmap_mode("plot")  tm_shape(destination_sf) +    tm_dots()}</code></p>
-</section>
-<section id="road-layer-within-sg-road_sf" class="level3">
-<h3 class="anchored" data-anchor-id="road-layer-within-sg-road_sf"><strong>2.2 Road layer within SG (road_sf)</strong></h3>
-<p>Let’s use st_read() function to read the roads file, and import it into road_df</p>
-<p><code>{r} #road_sf &lt;- st_read(dsn = "data/geospatial/malaysia-singapore-brunei-latest-free.shp", layer = "gis_osm_roads_free_1")}</code></p>
-<p>Let’s check the referencing system info of this road_df</p>
-<p><code>{r} #st_crs(road_sf)}</code></p>
-<p>Since it is in WGS 84 format, we will standardise the crs</p>
-<p><code>{r} #road_sf &lt;- st_transform(road_sf, crs= 3414)  #st_crs(road_sf)}</code></p>
-</section>
-<section id="sg-boundary-mpsz_sf" class="level3">
-<h3 class="anchored" data-anchor-id="sg-boundary-mpsz_sf"><strong>2.3 SG Boundary (mpsz_sf)</strong></h3>
-<p>Let’s use st_read() function to read the Master Plan Subzone Boundary file, and import it into mpsz_sf</p>
-<p><code>{r} mpsz_sf &lt;- st_read(dsn = "data/geospatial/MPSZ-2019", layer = "MPSZ-2019")}</code></p>
-<p>Let’s check the referencing system info of this mpsz_sf</p>
-<p><code>{r} st_crs(mpsz_sf)}</code></p>
-<p>Since it is in WGS 84 format, we will standardise the crs</p>
-<p><code>{r} mpsz_sf &lt;- st_transform(mpsz_sf, crs= 3414)  st_crs(mpsz_sf)}</code></p>
-<p>Let’s plot mpsz to see how it looks like</p>
-<p><code>{r} # Set tmap mode to plotting  tmap_mode("plot")  # Plot the map  tm_shape(mpsz_sf) +    tm_borders() +    tm_layout(frame = FALSE) +    tm_basemap(server = "Stamen.TonerLite") +    tm_shape(mpsz_sf) +    tm_borders(lwd = 0.5) +    tm_layout(legend.show = FALSE)}</code></p>
-<p>Now, let’s combine both mpsz_sf and road_sf</p>
-<p><code>{r} tm_shape(mpsz_sf) +    tm_polygons() +    tm_shape(origin_sf) +    tm_dots()}</code></p>
-</section>
-<section id="convert-our-sf-data-frames-to-sps-spatial-class" class="level3">
-<h3 class="anchored" data-anchor-id="convert-our-sf-data-frames-to-sps-spatial-class"><strong>2.4 Convert our sf data frames to sp’s spatial* class</strong></h3>
-<p>Convert origin_sf to sp’s spatial* class</p>
-<p><code>{r} origin &lt;- as_Spatial(origin_sf)  mpsz &lt;- as_Spatial(mpsz_sf)}</code></p>
-</section>
-<section id="convert-our-spatial-class-into-sp-format" class="level3">
-<h3 class="anchored" data-anchor-id="convert-our-spatial-class-into-sp-format"><strong>2.5 Convert our spatial* class into sp format</strong></h3>
-<p>Convert origin and mpsz to sp format</p>
-<p><code>{r} origin_sp &lt;- as(origin, "SpatialPoints")  mpsz_sp &lt;- as(mpsz, "SpatialPolygons")}</code></p>
-</section>
-<section id="convert-our-sp-format-into-ppp" class="level3">
-<h3 class="anchored" data-anchor-id="convert-our-sp-format-into-ppp"><strong>2.6 Convert our sp format into ppp</strong></h3>
-<p>Convert origin_sp to ppp format</p>
-<p><code>{r} library(spatstat)  # Assuming origin_sp is a SpatialPoints object coords &lt;- coordinates(origin_sp)  # Create a rectangular window covering the entire extent of the points window &lt;- owin(xrange = range(coords[, 1]), yrange = range(coords[, 2]))  # Create a ppp object with the adjusted window origin_ppp &lt;- ppp(coords[, 1], coords[, 2], window = window)  origin_ppp  plot(origin_ppp)}</code></p>
-</section>
-<section id="check-for-any-duplicated-points" class="level3">
-<h3 class="anchored" data-anchor-id="check-for-any-duplicated-points"><strong>2.7 Check for any Duplicated Points</strong></h3>
-<p><code>{r} any(duplicated(origin_ppp))}</code></p>
-<p>Let’s plot the points on the map</p>
-<p><code>{r} tmap_mode('view')  tm_shape(origin) +    tm_dots(alpha=0.4, size=0.05)}</code></p>
-</section>
-<section id="creating-the-owin-object" class="level3">
-<h3 class="anchored" data-anchor-id="creating-the-owin-object"><strong>2.8 Creating the owin object</strong></h3>
-<p><code>{r} mpsz_owin &lt;- as.owin(mpsz_sp) plot(mpsz_owin)}</code></p>
-<p><code>{r} summary(mpsz_owin)}</code></p>
-</section>
-<section id="combining-ppp-with-owin-object" class="level3">
-<h3 class="anchored" data-anchor-id="combining-ppp-with-owin-object"><strong>2.9 Combining ppp with owin object</strong></h3>
-<p>Let’s combine the ppp with the newly created owin object</p>
-<p><code>{r} # Now you can use this mpsz_owin object in your ppp operation  originMPSZ_ppp &lt;- origin_ppp[mpsz_owin]  plot(originMPSZ_ppp)}</code></p>
-</section>
-</section>
-<section id="kernel-density-estimation" class="level2">
-<h2 class="anchored" data-anchor-id="kernel-density-estimation"><strong>3 Kernel Density Estimation</strong></h2>
-<section id="computing-the-kernel-density-estimation-kde-of-grab-hailing-services" class="level3">
-<h3 class="anchored" data-anchor-id="computing-the-kernel-density-estimation-kde-of-grab-hailing-services"><strong>3.1 Computing the kernel density estimation (KDE) of grab hailing services</strong></h3>
-<p>The purpose of KDE is to apply the function to each data point, and thereafter it will averages the location of that point with respect to the location of another data point, based on bandwidth of the kernel.</p>
-<p>Let’s compute the KDE</p>
-<p><code>{r} kde_originMPSZ_bw &lt;- density(originMPSZ_ppp, sigma=bw.diggle, edge=TRUE, kernel="gaussian")  plot(kde_originMPSZ_bw)}</code></p>
-<p>Since the unit of measurement is pretty small, let’s re-scale it to km.</p>
-<p><code>{r} originMPSZ_ppp.km &lt;- rescale(originMPSZ_ppp, 1000, "km") kde_originMPSZ_ppp.bw &lt;- density(originMPSZ_ppp.km, sigma=bw.diggle, edge=TRUE, kernel="gaussian")  plot(kde_originMPSZ_ppp.bw)}</code></p>
-</section>
-<section id="observations" class="level3">
-<h3 class="anchored" data-anchor-id="observations"><strong>3.2 Observations</strong></h3>
-<p>Based on the plot, we can see that:</p>
-<p>- There is a higher density in the East side, which is a small part that is in yellow. We can say that there are more trips originating from the East side.</p>
-<p>- There are other parts of the island that has mini purple dots, indicating that there is a medium density. This could show that there is a relatively normal ride demand across the island.</p>
-<p>- Apart of the above, the island is mostly in blue from the first sight. So it indicate that the ridership for grab is not really high.</p>
-</section>
-</section>
-<section id="network-constrained-kde-netkde-analysis" class="level2">
-<h2 class="anchored" data-anchor-id="network-constrained-kde-netkde-analysis"><strong>4 Network Constrained KDE (NetKDE) Analysis</strong></h2>
-<p>We will perform NetKDE to estimate the intensity of grab hailing across a map.</p>
-<section id="preparing-the-lixels-objects" class="level3">
-<h3 class="anchored" data-anchor-id="preparing-the-lixels-objects"><strong>4.1 Preparing the lixels objects</strong></h3>
-<p>SpatialLines object need to be cut into lixels with a specified minimal distance</p>
-<p>We will transform road_sf to sp first</p>
-<p><code>{r} #road &lt;- spTransform(road_sf, CRS("+init=epsg:3414"))}</code></p>
-<p><code>{r} #lixels &lt;- lixelize_lines(road_sf,  #                         700,  #                         mindist = 350)}</code></p>
-</section>
-<section id="generating-line-centre-points" class="level3">
-<h3 class="anchored" data-anchor-id="generating-line-centre-points"><strong>4.2 Generating line centre points</strong></h3>
-<p>We will create spNetwork which will be used to generate a SpatialPointsDataFrame</p>
-<p><code>{r} #samples &lt;- lines_center(lixels)}</code></p>
-
-
-</section>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

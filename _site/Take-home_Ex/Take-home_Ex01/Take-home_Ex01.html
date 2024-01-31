@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2024-01-31">
+<meta name="dcterms.date" content="2024-02-01">
 
 <title>IS415-GAA - Take-home Exercise 1: Application of Spatial Point Patterns Analysis to discover the geographical distribution of Grab hailing services in Singapore</title>
 <style>
@@ -233,6 +233,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#creating-the-owin-object" id="toc-creating-the-owin-object" class="nav-link" data-scroll-target="#creating-the-owin-object">2.7 Creating the owin object</a></li>
   <li><a href="#combining-ppp-with-owin-object" id="toc-combining-ppp-with-owin-object" class="nav-link" data-scroll-target="#combining-ppp-with-owin-object">2.8 Combining ppp with owin object</a></li>
   </ul></li>
+  <li><a href="#kernel-density-estimation" id="toc-kernel-density-estimation" class="nav-link" data-scroll-target="#kernel-density-estimation"><strong>3 Kernel Density Estimation</strong></a>
+  <ul class="collapse">
+  <li><a href="#computing-the-kernel-density-estimation-kde-of-grab-hailing-services" id="toc-computing-the-kernel-density-estimation-kde-of-grab-hailing-services" class="nav-link" data-scroll-target="#computing-the-kernel-density-estimation-kde-of-grab-hailing-services"><strong>3.1 Computing the kernel density estimation (KDE) of grab hailing services</strong></a></li>
+  <li><a href="#observations-from-kernel-density-estimation-kde-of-grab-hailing-services" id="toc-observations-from-kernel-density-estimation-kde-of-grab-hailing-services" class="nav-link" data-scroll-target="#observations-from-kernel-density-estimation-kde-of-grab-hailing-services"><strong>3.2 Observations from kernel density estimation (KDE) of grab hailing services</strong></a></li>
+  <li><a href="#zooming-into-kernel-density-estimation-kde-of-grab-hailing-services-in-the-east" id="toc-zooming-into-kernel-density-estimation-kde-of-grab-hailing-services-in-the-east" class="nav-link" data-scroll-target="#zooming-into-kernel-density-estimation-kde-of-grab-hailing-services-in-the-east"><strong>3.3 Zooming into kernel density estimation (KDE) of grab hailing services in the east</strong></a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -252,7 +258,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 31, 2024</p>
+      <p class="date">February 1, 2024</p>
     </div>
   </div>
   
@@ -278,7 +284,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Installing the required tools for the analysis (e.g.&nbsp;sf, tidyverse, maptools, etc)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(maptools, sf, raster, spatstat, tmap, tidyverse, arrow, lubridate, dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(maptools, sf, raster, spatstat, tmap, tidyverse, arrow, lubridate, dplyr, spNetwork)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="data-import-and-wrangling" class="level2">
@@ -701,7 +707,7 @@ PROJCRS["SVY21 / Singapore TM",
 <p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>Now, let’s combine both mpsz_sf and road_sf</p>
+<p>Now, let’s combine both mpsz_sf and origin_sf</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mpsz_sf) <span class="sc">+</span> </span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span> </span>
@@ -1177,8 +1183,139 @@ Fraction of frame area: 0.423</code></pre>
 <p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+</section>
+</section>
+<section id="kernel-density-estimation" class="level2">
+<h2 class="anchored" data-anchor-id="kernel-density-estimation"><strong>3 Kernel Density Estimation</strong></h2>
+<section id="computing-the-kernel-density-estimation-kde-of-grab-hailing-services" class="level3">
+<h3 class="anchored" data-anchor-id="computing-the-kernel-density-estimation-kde-of-grab-hailing-services"><strong>3.1 Computing the kernel density estimation (KDE) of grab hailing services</strong></h3>
+<p>The purpose of KDE is to apply the function to each data point, and thereafter it will averages the location of that point with respect to the location of another data point, based on bandwidth of the kernel.</p>
+<p>Let’s compute the KDE</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>kde_originMPSZ_bw <span class="ot">&lt;-</span> <span class="fu">density</span>(originMPSZ_ppp, <span class="at">sigma=</span>bw.diggle, <span class="at">edge=</span><span class="cn">TRUE</span>, <span class="at">kernel=</span><span class="st">"gaussian"</span>)  </span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(kde_originMPSZ_bw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Since the unit of measurement is pretty small, let’s re-scale it to km.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>originMPSZ_ppp.km <span class="ot">&lt;-</span> <span class="fu">rescale</span>(originMPSZ_ppp, <span class="dv">1000</span>, <span class="st">"km"</span>) </span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>kde_originMPSZ_ppp.bw <span class="ot">&lt;-</span> <span class="fu">density</span>(originMPSZ_ppp.km, <span class="at">sigma=</span>bw.diggle, <span class="at">edge=</span><span class="cn">TRUE</span>, <span class="at">kernel=</span><span class="st">"gaussian"</span>)  </span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(kde_originMPSZ_ppp.bw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="observations-from-kernel-density-estimation-kde-of-grab-hailing-services" class="level3">
+<h3 class="anchored" data-anchor-id="observations-from-kernel-density-estimation-kde-of-grab-hailing-services"><strong>3.2 Observations from kernel density estimation (KDE) of grab hailing services</strong></h3>
+<p>Based on the plot, we can see that:</p>
+<p>- There is a <strong>higher density</strong> in the <strong>East side</strong>, which is a small part that is in yellow. We can say that there are <strong>more trips originating from the East side</strong>.</p>
+<p>- There are other parts of the island that has mini purple dots, indicating that there is a medium density. This could show that there is a relatively <strong>normal ride demand across the island</strong>.</p>
+<p>- Apart of the above, the island is mostly in blue from the first sight. So it indicate that the ridership for grab is not really high.</p>
+</section>
+<section id="zooming-into-kernel-density-estimation-kde-of-grab-hailing-services-in-the-east" class="level3">
+<h3 class="anchored" data-anchor-id="zooming-into-kernel-density-estimation-kde-of-grab-hailing-services-in-the-east"><strong>3.3 Zooming into kernel density estimation (KDE) of grab hailing services in the east</strong></h3>
+<p>Let’s extract the Eastern Region area to look deeper into the high density. We will also extract the Western and Central Region areas for comparison usage.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>east <span class="ot">=</span> mpsz[mpsz<span class="sc">@</span>data<span class="sc">$</span>REGION_N <span class="sc">==</span> <span class="st">"EAST REGION"</span>,]</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>west <span class="ot">=</span> mpsz[mpsz<span class="sc">@</span>data<span class="sc">$</span>REGION_N <span class="sc">==</span> <span class="st">"WEST REGION"</span>,]</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>central <span class="ot">=</span> mpsz[mpsz<span class="sc">@</span>data<span class="sc">$</span>REGION_N <span class="sc">==</span> <span class="st">"CENTRAL REGION"</span>,]</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(east, <span class="at">main =</span> <span class="st">"East Region"</span>)</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(west, <span class="at">main =</span> <span class="st">"West Region"</span>)</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(central, <span class="at">main =</span> <span class="st">"Central Region"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Convert the Eastern Region area to generic sp format</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>east_sp <span class="ot">=</span> <span class="fu">as</span>(east, <span class="st">"SpatialPolygons"</span>)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>west_sp <span class="ot">=</span> <span class="fu">as</span>(west, <span class="st">"SpatialPolygons"</span>)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>central_sp <span class="ot">=</span> <span class="fu">as</span>(central, <span class="st">"SpatialPolygons"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Create the owin object for it</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>east_owin <span class="ot">=</span> <span class="fu">as</span>(east_sp, <span class="st">"owin"</span>)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>west_owin <span class="ot">=</span> <span class="fu">as</span>(west_sp, <span class="st">"owin"</span>)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>central_owin <span class="ot">=</span> <span class="fu">as</span>(central_sp, <span class="st">"owin"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s combine the grab points with the Eastern Region area</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>grab_east_ppp <span class="ot">=</span> origin_ppp[east_owin]</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>grab_west_ppp <span class="ot">=</span> origin_ppp[west_owin]</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>grab_central_ppp <span class="ot">=</span> origin_ppp[central_owin]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s transform the unit of measurement to km</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>grab_east_ppp.km <span class="ot">=</span> <span class="fu">rescale</span>(grab_east_ppp, <span class="dv">1000</span>, <span class="st">"km"</span>)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>grab_west_ppp.km <span class="ot">=</span> <span class="fu">rescale</span>(grab_west_ppp, <span class="dv">1000</span>, <span class="st">"km"</span>)</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>grab_central_ppp.km <span class="ot">=</span> <span class="fu">rescale</span>(grab_central_ppp, <span class="dv">1000</span>, <span class="st">"km"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="lets-plot-the-eastern-and-western-regions-area-and-compare-it" class="level4">
+<h4 class="anchored" data-anchor-id="lets-plot-the-eastern-and-western-regions-area-and-compare-it">3.3.1 Let’s plot the Eastern and Western Regions area and compare it</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(grab_east_ppp.km, <span class="at">main=</span><span class="st">"East Region"</span>)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(grab_west_ppp.km, <span class="at">main=</span><span class="st">"West Region"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Note: We can see that the western region has more grab rides, as there are more grab origin points as shown by the darker area.</p>
+<p>Let’s compare the KDE of both Eastern and Western Regions</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(grab_east_ppp.km, </span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">sigma=</span>bw.diggle, </span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">edge=</span><span class="cn">TRUE</span>, </span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">kernel=</span><span class="st">"gaussian"</span>),</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Eastern Region"</span>)</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(grab_west_ppp.km, </span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">sigma=</span>bw.diggle, </span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">edge=</span><span class="cn">TRUE</span>, </span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">kernel=</span><span class="st">"gaussian"</span>),</span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Western Region"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Even though, the KDE density of whole Singapore map indicates that there is a high density on the Eastern Region of the island.</p>
+<p>However, when we plot the Origin points of both the Eastern and Western Regions, we noticed that there are actually more grab origin points in the Western Region as oppose to the main map.</p>
+<p>When we plot the KDE density of both the Eastern and Western regions of island, we noticed that there were more points with high density in the western region. However, in the Eastern Region, we can see that there is a high density situated at one point, apart from the other tiny points of high density.</p>
+<p>Let’s zoom in and see the KDE density of the Eastern Region. It looks like the area with high density is situated at Changi Airport area.</p>
+<p>Set up our Changi Airport area</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>ChangiAirport <span class="ot">=</span> mpsz[mpsz<span class="sc">@</span>data<span class="sc">$</span>SUBZONE_N <span class="sc">==</span> <span class="st">"CHANGI AIRPORT"</span>,]</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>ChangiAirport_sp <span class="ot">=</span> <span class="fu">as</span>(ChangiAirport, <span class="st">"SpatialPolygons"</span>)</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>ChangiAirport_owin <span class="ot">=</span> <span class="fu">as</span>(ChangiAirport_sp, <span class="st">"owin"</span>)</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>ChangiAirport_ppp <span class="ot">=</span> origin_ppp[ChangiAirport_owin]</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>ChangiAirport_ppp.km <span class="ot">=</span> <span class="fu">rescale</span>(ChangiAirport_ppp, <span class="dv">1000</span>, <span class="st">"km"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s plot and compare</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(grab_east_ppp.km, </span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">sigma=</span>bw.diggle, </span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">edge=</span><span class="cn">TRUE</span>, </span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">kernel=</span><span class="st">"gaussian"</span>),</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Eastern Region"</span>)</span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(ChangiAirport_ppp.km, </span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">sigma=</span>bw.diggle, </span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">edge=</span><span class="cn">TRUE</span>, </span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">kernel=</span><span class="st">"gaussian"</span>),</span>
+<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Changi Airport"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We could see that, indeed, the line with high density is situated at Changi Airport within the Eastern Region. We can indicate that there is a significantly high volume of grab rides originating from Changi Airport.</p>
 
 
+</section>
 </section>
 </section>
 
