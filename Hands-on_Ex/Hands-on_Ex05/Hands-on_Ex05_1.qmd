@@ -1,5 +1,5 @@
 ---
-title: "Global Measures of Spatial Autocorrelation"
+title: "Hands-on-Exercise 5.1: Global Measures of Spatial Autocorrelation"
 execute:
   warning: false
 date: "`r Sys.Date()`"
