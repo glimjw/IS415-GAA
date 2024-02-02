@@ -435,5 +435,30 @@ plot(density(ChangiAirport_ppp.km,
 
 We could see that, indeed, the line with high density is situated at Changi Airport within the Eastern Region. We can indicate that there is a significantly high volume of grab rides originating from Changi Airport.
 
+## **4 Network Constrained KDE (NetKDE) Analysis**
 
+We will perform NetKDE to estimate the intensity of grab hailing across a map.
 
+### **4.1 Preparing the area for analysis**
+
+We will filter the specific portion that we want to look into. In this case, we will filter the Changi Airport portion of the whole Singapore island. As we know that Changi Airport is located along the Airport Boulevard, we will filter it out using that name.
+
+```{r}
+road_sg_sf_transformed <- st_transform(road_sg_sf, CRS=3414)
+#filter Changi Airport (Airport Boulevard) from road_sg_sf
+filtered_airport_boulevard <- road_sg_sf_transformed %>%
+  filter(tolower(name) == "airport boulevard")
+```
+
+Let's plot filtered_airport_boulevard
+
+```{r}
+# Plot the filtered Airport Boulevard
+tmap_mode('view')
+tm_shape(filtered_airport_boulevard) +
+  tm_lines() +
+  tm_shape(origin_sf) + 
+  tm_dots()
+```
+
+ssss
