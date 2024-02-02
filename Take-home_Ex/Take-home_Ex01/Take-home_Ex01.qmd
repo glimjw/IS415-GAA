@@ -295,9 +295,9 @@ originMPSZ_ppp <- origin_ppp[mpsz_owin]
 plot(originMPSZ_ppp)
 ```
 
-## **3 Kernel Density Estimation**
+## 3 Kernel Density Estimation
 
-### **3.1 Computing the kernel density estimation (KDE) of grab hailing services**
+### 3.1 Computing the kernel density estimation (KDE) of grab hailing services
 
 The purpose of KDE is to apply the function to each data point, and thereafter it will averages the location of that point with respect to the location of another data point, based on bandwidth of the kernel.
 
@@ -316,7 +316,7 @@ kde_originMPSZ_ppp.bw <- density(originMPSZ_ppp.km, sigma=bw.diggle, edge=TRUE, 
 plot(kde_originMPSZ_ppp.bw)
 ```
 
-### **3.2 Observations from kernel density estimation (KDE) of grab hailing services**
+### 3.2 Observations from kernel density estimation (KDE) of grab hailing services
 
 Based on the plot, we can see that:
 
@@ -326,7 +326,7 @@ Based on the plot, we can see that:
 
 \- Apart of the above, the island is mostly in blue from the first sight. So it indicate that the ridership for grab is not really high.
 
-### **3.3 Zooming into kernel density estimation (KDE) of grab hailing services in the east**
+### 3.3 Zooming into kernel density estimation (KDE) of grab hailing services in the east
 
 Let's extract the Eastern Region area to look deeper into the high density. We will also extract the Western and Central Region areas for comparison usage.
 
@@ -435,11 +435,11 @@ plot(density(ChangiAirport_ppp.km,
 
 We could see that, indeed, the line with high density is situated at Changi Airport within the Eastern Region. We can indicate that there is a significantly high volume of grab rides originating from Changi Airport.
 
-## **4 Network Constrained KDE (NetKDE) Analysis**
+## 4 Network Constrained KDE (NetKDE) Analysis
 
 We will perform NetKDE to estimate the intensity of grab hailing across a map.
 
-### **4.1 Preparing the area for analysis**
+### 4.1 Preparing the area for analysis
 
 We will filter the specific portion that we want to look into. In this case, we will filter the Changi Airport portion of the whole Singapore island. As we know that Changi Airport is located along the Airport Boulevard, we will filter it out using that name.
 
@@ -461,4 +461,40 @@ tm_shape(filtered_airport_boulevard) +
   tm_dots()
 ```
 
-ssss
+### 4.2 Preparing the lixels objects
+
+Let's prepare the lixels objects. We will set the lixel length to 700m and minimum length of lixel to 350m.
+
+```{r}
+lixels <- lixelize_lines(filtered_airport_boulevard, 
+                         700, 
+                         mindist = 350)
+```
+
+Let's generate the centre points
+
+```{r}
+samples <- lines_center(lixels)
+```
+
+#### 4.3 Perform NetKDE
+
+Let's compute the NetKDE
+```{r}
+densities <- nkde(filtered_airport_boulevard, 
+                  events = origin_sf,
+                  w = rep(1,nrow(origin_sf)),
+                  samples = samples,
+                  kernel_name = "quartic",
+                  bw = 300, 
+                  div= "bw", 
+                  method = "simple", 
+                  digits = 1, 
+                  tol = 1,
+                  grid_shape = c(1,1), 
+                  max_depth = 8,
+                  agg = 5, #we aggregate events within a 5m radius (faster calculation)
+                  sparse = TRUE,
+                  verbose = FALSE)
+```
+
