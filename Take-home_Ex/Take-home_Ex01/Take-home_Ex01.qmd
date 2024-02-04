@@ -479,6 +479,20 @@ samples <- lines_center(lixels)
 
 #### 4.3 Perform NetKDE
 
+```{r}
+
+# Define the bounding box for Singapore
+singapore_bbox <- st_bbox(c(xmin = 103, xmax = 104, ymin = 1.15, ymax = 1.47), crs = 4326)
+
+# Crop roads within the bounding box
+origin_sg_sf <- st_crop(road_sf, st_as_sfc(st_bbox(singapore_bbox)))
+
+# Print the resulting dataset
+print(road_sg_sf)
+
+```
+
+
 Let's compute the NetKDE
 ```{r}
 densities <- nkde(filtered_airport_boulevard, 
