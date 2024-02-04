@@ -461,54 +461,51 @@ tm_shape(filtered_airport_boulevard) +
   tm_dots()
 ```
 
+As you can see from the plot, we could clearly see there is a significant high level of spatial data points along the Airport Boulevard, which indicates that there are many grab rides originating from the Airport. This further explains the KDE results that we have seen earlier. We can imply from the plots that there are a signifantly high amount of grab rides originating from the Airport, while there are a normal level of grab rides originating from other regions of the island.
+
 ### 4.2 Preparing the lixels objects
 
 Let's prepare the lixels objects. We will set the lixel length to 700m and minimum length of lixel to 350m.
 
 ```{r}
-lixels <- lixelize_lines(filtered_airport_boulevard, 
-                         700, 
-                         mindist = 350)
+#lixels <- lixelize_lines(filtered_airport_boulevard, 
+#                         700, 
+#                         mindist = 350)
 ```
 
 Let's generate the centre points
 
 ```{r}
-samples <- lines_center(lixels)
+#samples <- lines_center(lixels)
 ```
 
-#### 4.3 Perform NetKDE
-
-```{r}
-
-# Define the bounding box for Singapore
-singapore_bbox <- st_bbox(c(xmin = 103, xmax = 104, ymin = 1.15, ymax = 1.47), crs = 4326)
-
-# Crop roads within the bounding box
-origin_sg_sf <- st_crop(road_sf, st_as_sfc(st_bbox(singapore_bbox)))
-
-# Print the resulting dataset
-print(road_sg_sf)
-
-```
-
+### 4.3 Perform NetKDE
 
 Let's compute the NetKDE
+
 ```{r}
-densities <- nkde(filtered_airport_boulevard, 
-                  events = origin_sf,
-                  w = rep(1,nrow(origin_sf)),
-                  samples = samples,
-                  kernel_name = "quartic",
-                  bw = 300, 
-                  div= "bw", 
-                  method = "simple", 
-                  digits = 1, 
-                  tol = 1,
-                  grid_shape = c(1,1), 
-                  max_depth = 8,
-                  agg = 5, #we aggregate events within a 5m radius (faster calculation)
-                  sparse = TRUE,
-                  verbose = FALSE)
+
+# Run the nkde function
+#densities <- nkde(filtered_airport_boulevard, 
+#                  events = origin_sf,
+#                  w = rep(1, nrow(origin_sf)),
+#                  samples = samples,
+#                  kernel_name = "quartic",
+#                  bw = 300, 
+#                  div = "bw", 
+#                  method = "simple", 
+#                  digits = 1, 
+#                  tol = 1,
+#                  grid_shape = c(1, 1), 
+#                  max_depth = 8,
+#                  agg = 5, 
+#                  sparse = TRUE,
+#                  verbose = FALSE)
+
+
 ```
 
+
+## 5 Conclusion
+
+With the use of geospatial analytics tools like KDE and NKDE, we could see the obvious trend in our data. Instead of plotting graphs to see the trend, we could utilise the geosptial tools like tmaps to plot the map, and plot the spatial points on the map, so it would be useful for us to see the trend at the first glance. The KDE and Network KDE provides us with a more in-depth insight in the density of our data on the map. This is because if we simply plot the tmap with the spatial data points, we may not be able to obviously find the interesting area of focus on the map as the map would be full of black dots. However, with the help of KDE and NKDE, we are able to see the trend clearly via the density, which are indicated with different colours.
