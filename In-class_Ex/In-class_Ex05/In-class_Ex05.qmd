@@ -1,0 +1,109 @@
+---
+title: "In-class Exercise 5"
+author: "Gerald Lim"
+date: "`r Sys.Date()`"
+format: 
+  html: 
+    code-fold: true
+    code-summary: "Show the code"
+    toc-depth: 4
+execute:
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+editor: visual
+---
+
+Installing and Loading the R packages
+
+-   Packages are similar for take-home ex 2
+
+```{r}
+pacman::p_load(sf, sfdep, tmap, tidyverse)
+```
+
+import the hunan and hunan 2012 data
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+hunan <- st_read(dsn = "data/geospatial", 
+                 layer = "Hunan")
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+hunan2012 <- read_csv("data/aspatial/Hunan_2012.csv")
+```
+
+Combine using left join
+
+-   choose 7 and 15 cos we need the gdp
+
+```{r}
+hunan_GDPPC <- left_join(hunan, hunan2012) %>%
+  select(1:4, 7, 15)
+```
+
+Plotting the Chorepleth map
+
+```{r}
+tmap_mode("plot")
+tm_shape(hunan_GDPPC) +
+  tm_fill("GDPPC",
+          style = "quantile",
+          palette = "Blues",
+          title = "GDPPC") +
+  tm_layout(main.title = "Distribution of GDP per capita by county, Hunan Province",
+            main.title.position = "center",
+            main.title.size = 1.2,
+            legend.height = 0.45,
+            legend.width = 0.35,
+            frame = TRUE) +
+  tm_borders(alpha = 0.5) +
+  # tm_compass(type = "Bstar", size = 2) +  # Comment or remove this line
+  tm_scale_bar() +
+  tm_grid(alpha = 0.2)
+```
+
+Deriving contiguity weights: Queen's method
+
+```{r}
+wm_q <- hunan_GDPPC %>%
+  mutate(nb = st_contiguity(geometry),
+         wt = st_weights(nb, style = "W"),
+         .before = 1)
+```
+
+```{r}
+wm_q
+```
+
+Computing Global Moran' I
+
+```{r}
+moranI <- global_moran(wm_q$GDPPC,
+                       wm_q$nb,
+                       wm_q$wt)
+glimpse(moranI)
+```
+
+test the moran' I
+
+```{r}
+global_moran_test(wm_q$GDPPC,
+                  wm_q$nb,
+                  wm_q$wt)
+```
+
+run simulation on Moran I (99 means run 100 times cos it starts with 0)
+
+```{r}
+global_moran_perm(wm_q$GDPPC,
+                  wm_q$nb,
+                  wm_q$wt,
+                  nsim=99)
+```
