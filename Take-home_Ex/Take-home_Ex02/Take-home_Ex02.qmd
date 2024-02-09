@@ -1,0 +1,11 @@
+---
+title: "Take-home Exercise 2: Application of Spatial and Spatio-temporal Analysis Methods to Discover the Distribution of Dengue Fever in Tainan City, Taiwan"
+author: "Gerald Lim"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+execute:
+  warning: false
+  freeze: false
+---

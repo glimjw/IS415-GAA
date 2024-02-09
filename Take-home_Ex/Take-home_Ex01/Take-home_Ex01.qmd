@@ -445,68 +445,9 @@ We will perform NetKDE to estimate the intensity of grab hailing across a map.
 
 We will filter the specific portion that we want to look into. In this case, we will filter the Changi Airport portion of the whole Singapore island. As we know that Changi Airport is located along the Airport Boulevard, we will filter it out using that name.
 
-```{r}
-road_sg_sf_transformed <- st_transform(road_sg_sf, CRS=3414)
-#filter Changi Airport (Airport Boulevard) from road_sg_sf
-filtered_airport_boulevard <- road_sg_sf_transformed %>%
-  filter(tolower(name) == "airport boulevard")
-```
-
-Let's plot filtered_airport_boulevard
-
-```{r}
-# Plot the filtered Airport Boulevard
-tmap_mode('view')
-tm_shape(filtered_airport_boulevard) +
-  tm_lines() +
-  tm_shape(origin_sf) + 
-  tm_dots()
-```
+...
 
 As you can see from the plot, we could clearly see there is a significant high level of spatial data points along the Airport Boulevard, which indicates that there are many grab rides originating from the Airport. This further explains the KDE results that we have seen earlier. We can imply from the plots that there are a signifantly high amount of grab rides originating from the Airport, while there are a normal level of grab rides originating from other regions of the island.
-
-### 4.2 Preparing the lixels objects
-
-Let's prepare the lixels objects. We will set the lixel length to 700m and minimum length of lixel to 350m.
-
-```{r}
-#lixels <- lixelize_lines(filtered_airport_boulevard, 
-#                         700, 
-#                         mindist = 350)
-```
-
-Let's generate the centre points
-
-```{r}
-#samples <- lines_center(lixels)
-```
-
-### 4.3 Perform NetKDE
-
-Let's compute the NetKDE
-
-```{r}
-
-# Run the nkde function
-#densities <- nkde(filtered_airport_boulevard, 
-#                  events = origin_sf,
-#                  w = rep(1, nrow(origin_sf)),
-#                  samples = samples,
-#                  kernel_name = "quartic",
-#                  bw = 300, 
-#                  div = "bw", 
-#                  method = "simple", 
-#                  digits = 1, 
-#                  tol = 1,
-#                  grid_shape = c(1, 1), 
-#                  max_depth = 8,
-#                  agg = 5, 
-#                  sparse = TRUE,
-#                  verbose = FALSE)
-
-
-```
-
 
 ## 5 Conclusion
 
