@@ -16,7 +16,6 @@ editor: visual
 # Getting Started
 
 ::: callout-note
-
 ### Before we start, create the folder and file
 
 -   create a folder called In-class_Ex02.
@@ -25,12 +24,7 @@ editor: visual
 
 Write a code check to load the R packages into R environment
 
-The follwing R-packages will be used:
-- Arrow
-- Lubridate
-- Tidyverse
-- tmap
-- sf
+The follwing R-packages will be used: - Arrow - Lubridate - Tidyverse - tmap - sf
 
 ```{R}
 pacman::p_load(arrow, lubridate, tidyverse, sf, tmap)
@@ -43,8 +37,8 @@ pacman::p_load(arrow, lubridate, tidyverse, sf, tmap)
 df <- read_parquet("../../data/GrabPosisi/part-00000-8bbff892-97d2-4011-9961-703e38972569.c000.snappy - Copy.parquet")
 ```
 
-Convert the data type of pingtimestamp from character to date-time
-(to make sure the data are of the correct format)
+Convert the data type of pingtimestamp from character to date-time (to make sure the data are of the correct format)
+
 ```{r}
 #| eval: false
 df$pingtimestamp <- as_datetime(df$pingtimestamp)
@@ -52,9 +46,9 @@ df$pingtimestamp <- as_datetime(df$pingtimestamp)
 
 ## Extracting trip starting locations
 
-- Extracting trips' origin locations
-- Derive three new columns (i.e. variables) for weekday, starting hour and day of the month
-- Name the output tibble data.frame origin.df
+-   Extracting trips' origin locations
+-   Derive three new columns (i.e. variables) for weekday, starting hour and day of the month
+-   Name the output tibble data.frame origin.df
 
 ```{r}
 #| eval: false
@@ -68,8 +62,8 @@ origin_df <- df %>%
          start_hr = factor(hour(pingtimestamp)),
          day = factor(mday(pingtimestamp)))
 ```
-** the wday/label/abbr/etc are part of the Lubridate function
-** factor will change the data to ordinal scale - an order (if not it would be just recognise the data as pure numbers instead of hour/min/etc)
+
+\*\* the wday/label/abbr/etc are part of the Lubridate function \*\* factor will change the data to ordinal scale - an order (if not it would be just recognise the data as pure numbers instead of hour/min/etc)
 
 ## Extracting trip ending locations
 
@@ -87,9 +81,11 @@ destination_df <- df %>%
          start_hr = factor(hour(pingtimestamp)),
          day = factor(mday(pingtimestamp)))
 ```
-** sort the timestamp backwards (using desc) to get the last timestamp of a trip (trj_id)
+
+\*\* sort the timestamp backwards (using desc) to get the last timestamp of a trip (trj_id)
 
 To reuse the tables, we need to create rds
+
 ```{r}
 #| echo: false
 #| eval: false
@@ -98,10 +94,10 @@ write_rds(destination_df, "data/rds/destination_df.rds")
 ```
 
 ## Import data (to use the rds)
+
 ```{r}
 origin_df <- read_rds("data/rds/origin_df.rds")
 destination_df <- read_rds("data/rds/destination_df.rds")
 ```
 
 ### Visualising frequency distribution
-

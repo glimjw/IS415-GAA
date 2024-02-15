@@ -1,0 +1,12 @@
+name: ChoroplethMapper
+title: ChoroplethMapper
+username: geraldlimjw
+account: geraldlimjw
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 11223778
+bundleId: 8254870
+url: https://geraldlimjw.shinyapps.io/ChoroplethMapper/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
