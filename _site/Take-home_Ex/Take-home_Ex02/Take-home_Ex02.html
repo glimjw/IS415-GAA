@@ -428,6 +428,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>filtered_dengue_sf <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"data/rds/filtered_dengue_sf.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+<p>Let’s take a look at our filtered_dengue_sf dataset :)</p>
+<p>I have included the 居住縣市: County, 居住鄉鎮: Town and 居住村里: Village into the data set for easier future reference.</p>
+<p><img src="images/clipboard-4041983692.png" class="img-fluid"></p>
 </section>
 <section id="performing-left-join-to-combine-both-data-sets" class="level3">
 <h3 class="anchored" data-anchor-id="performing-left-join-to-combine-both-data-sets">2.3 Performing Left-Join to combine both data sets</h3>
@@ -441,8 +444,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#                           select(發病日, 最小統計區中心點X, 最小統計區中心點Y))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Looking at our filtered_dengue_sf dataset, we can see that there is a long list of repetitive rows of data indicating each onset dates with their specific county, town and village names.</p>
-<p><img src="images/clipboard-2652456873.png" class="img-fluid" width="493"></p>
 <p>We can perform as count function to consolidate the number of onset cases based on the specific county, town and village names.</p>
 <div class="cell">
 <details>

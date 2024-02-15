@@ -102,6 +102,7 @@ write_rds(filtered_taiwan_village_sf, "data/rds/filtered_taiwan_village_sf.rds")
 ```
 
 Import the filtered_taiwan_village_sf rds data
+
 ```{r}
 filtered_taiwan_village_sf <- read_rds("data/rds/filtered_taiwan_village_sf.rds")
 ```
@@ -169,9 +170,16 @@ write_rds(filtered_dengue_sf, "data/rds/filtered_dengue_sf.rds")
 ```
 
 Import the filtered_taiwan_village_sf rds data
+
 ```{r}
 filtered_dengue_sf <- read_rds("data/rds/filtered_dengue_sf.rds")
 ```
+
+Let's take a look at our filtered_dengue_sf dataset :)
+
+I have included the 居住縣市: County, 居住鄉鎮: Town and 居住村里: Village into the data set for easier future reference.
+
+![](images/clipboard-4041983692.png)
 
 ### 2.3 Performing Left-Join to combine both data sets
 
@@ -184,10 +192,6 @@ Let's perform a left-join to combine the variables in filtered_taiwan_village_sf
 #                           select(發病日, 最小統計區中心點X, 最小統計區中心點Y))
 
 ```
-
-Looking at our filtered_dengue_sf dataset, we can see that there is a long list of repetitive rows of data indicating each onset dates with their specific county, town and village names.
-
-![](images/clipboard-2652456873.png){width="493"}
 
 We can perform as count function to consolidate the number of onset cases based on the specific county, town and village names.
 
