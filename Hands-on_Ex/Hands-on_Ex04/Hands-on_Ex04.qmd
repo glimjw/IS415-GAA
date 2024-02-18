@@ -1,5 +1,7 @@
 ---
 title: "Hands-on-Exercise 4: Spatial Weights and Applications"
+author: "Gerald Lim"
+
 execute:
   warning: false
 date: "`r Sys.Date()`"

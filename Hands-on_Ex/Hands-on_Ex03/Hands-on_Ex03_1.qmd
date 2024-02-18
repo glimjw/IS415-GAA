@@ -1,7 +1,10 @@
 ---
 title: "Hands-on-Exercise 3.1: 1st Order Spatial Point Patterns Analysis Methods"
+author: "Gerald Lim"
+
 execute:
   warning: false
+  freeze: false
 date: "`r Sys.Date()`"
 ---
 

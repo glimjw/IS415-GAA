@@ -1,5 +1,7 @@
 ---
 title: "Hands-on-Exercise 1: Geospatial Data Wrangling with R"
+author: "Gerald Lim"
+
 execute:
   warning: false
 date: "`r Sys.Date()`"

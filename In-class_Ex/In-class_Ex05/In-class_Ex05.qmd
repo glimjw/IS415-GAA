@@ -1,5 +1,7 @@
 ---
 title: "In-class Exercise 5"
+author: "Gerald Lim"
+
 date: "`r Sys.Date()`"
 format: 
   html: 

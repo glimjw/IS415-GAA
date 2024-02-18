@@ -1,5 +1,7 @@
 ---
 title: "R for Geospatial Data Science"
+author: "Gerald Lim"
+
 date: "`r Sys.Date()`"
 format: 
   html: 

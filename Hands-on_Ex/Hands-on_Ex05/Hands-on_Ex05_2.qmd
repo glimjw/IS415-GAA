@@ -1,5 +1,6 @@
 ---
 title: "Hands-on-Exercise 5.2: Local Measures of Spatial Autocorrelation"
+author: "Gerald Lim"
 execute:
   warning: false
 date: "`r Sys.Date()`"
