@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Gerald Lim">
-<meta name="dcterms.date" content="2024-02-15">
+<meta name="dcterms.date" content="2024-02-18">
 
 <title>IS415-GAA - Take-home Exercise 2: Application of Spatial and Spatio-temporal Analysis Methods to Discover the Distribution of Dengue Fever in Tainan City, Taiwan</title>
 <style>
@@ -154,6 +154,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html" rel="" target="">
  <span class="dropdown-text">Hands-on Exercise 6</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 7</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 8</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 9</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 10</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 11</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -180,6 +200,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li>
     <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex05/In-class_Ex05.html" rel="" target="">
  <span class="dropdown-text">In-class Exercise 5</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex06/In-class_Ex06.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 6</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex07/In-class_Ex07.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 7</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex08/In-class_Ex08.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 8</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex09/In-class_Ex09.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 9</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex10/In-class_Ex10.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 10</span></a>
   </li>  
     </ul>
   </li>
@@ -233,11 +273,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#install-maptools" id="toc-install-maptools" class="nav-link" data-scroll-target="#install-maptools">1 Install maptools</a></li>
   <li><a href="#data-import-and-wrangling" id="toc-data-import-and-wrangling" class="nav-link" data-scroll-target="#data-import-and-wrangling">2 Data Import and Wrangling</a>
   <ul>
-  <li><a href="#taiwan-village-data-taiwan_village_sf" id="toc-taiwan-village-data-taiwan_village_sf" class="nav-link" data-scroll-target="#taiwan-village-data-taiwan_village_sf">2.1 Taiwan Village Data (taiwan_village_sf)</a></li>
-  <li><a href="#dengue-data-dengue_sf" id="toc-dengue-data-dengue_sf" class="nav-link" data-scroll-target="#dengue-data-dengue_sf">2.2 Dengue Data (dengue_sf)</a></li>
-  <li><a href="#performing-left-join-to-combine-both-data-sets" id="toc-performing-left-join-to-combine-both-data-sets" class="nav-link" data-scroll-target="#performing-left-join-to-combine-both-data-sets">2.3 Performing Left-Join to combine both data sets</a></li>
-  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
+  <li><a href="#taiwan-village-data-taiwan_village_sf" id="toc-taiwan-village-data-taiwan_village_sf" class="nav-link" data-scroll-target="#taiwan-village-data-taiwan_village_sf">2.1 Taiwan Village Data (taiwan_village_sf)</a>
+  <ul class="collapse">
+  <li><a href="#import-the-csv-data-tainan_village.shp" id="toc-import-the-csv-data-tainan_village.shp" class="nav-link" data-scroll-target="#import-the-csv-data-tainan_village.shp">2.1.1 Import the csv data (TAINAN_VILLAGE.shp)</a></li>
+  <li><a href="#filtering-the-taiwan_village_sf." id="toc-filtering-the-taiwan_village_sf." class="nav-link" data-scroll-target="#filtering-the-taiwan_village_sf.">2.1.2 Filtering the taiwan_village_sf.</a></li>
+  <li><a href="#saving-it-to-rds" id="toc-saving-it-to-rds" class="nav-link" data-scroll-target="#saving-it-to-rds">2.1.3 Saving it to RDS</a></li>
+  <li><a href="#visualise-the-dataset-by-plotting-it" id="toc-visualise-the-dataset-by-plotting-it" class="nav-link" data-scroll-target="#visualise-the-dataset-by-plotting-it">2.1.4 Visualise the dataset by plotting it</a></li>
   </ul></li>
+  <li><a href="#dengue-data-dengue_sf" id="toc-dengue-data-dengue_sf" class="nav-link" data-scroll-target="#dengue-data-dengue_sf">2.2 Dengue Data (dengue_sf)</a>
+  <ul class="collapse">
+  <li><a href="#import-the-csv-data-dengue_daily.csv" id="toc-import-the-csv-data-dengue_daily.csv" class="nav-link" data-scroll-target="#import-the-csv-data-dengue_daily.csv">2.2.1 Import the csv data (Dengue_Daily.csv)</a></li>
+  <li><a href="#filtering-the-dengue_sf" id="toc-filtering-the-dengue_sf" class="nav-link" data-scroll-target="#filtering-the-dengue_sf">2.2.2 Filtering the dengue_sf</a></li>
+  <li><a href="#saving-it-to-rds-1" id="toc-saving-it-to-rds-1" class="nav-link" data-scroll-target="#saving-it-to-rds-1">2.2.3 Saving it to RDS</a></li>
+  </ul></li>
+  <li><a href="#performing-left-join-to-combine-both-data-sets" id="toc-performing-left-join-to-combine-both-data-sets" class="nav-link" data-scroll-target="#performing-left-join-to-combine-both-data-sets">2.3 Performing Left-Join to combine both data sets</a>
+  <ul class="collapse">
+  <li><a href="#left-join-operation-and-outcome" id="toc-left-join-operation-and-outcome" class="nav-link" data-scroll-target="#left-join-operation-and-outcome">2.3.1 Left-Join Operation and Outcome</a></li>
+  <li><a href="#dealing-with-null-values" id="toc-dealing-with-null-values" class="nav-link" data-scroll-target="#dealing-with-null-values">2.3.2 Dealing with Null values</a></li>
+  <li><a href="#saving-it-to-rds-2" id="toc-saving-it-to-rds-2" class="nav-link" data-scroll-target="#saving-it-to-rds-2">2.3.3 Saving it to RDS</a></li>
+  </ul></li>
+  <li><a href="#analyzing-the-taiwan_village_dengue-dataset" id="toc-analyzing-the-taiwan_village_dengue-dataset" class="nav-link" data-scroll-target="#analyzing-the-taiwan_village_dengue-dataset">2.4 Analyzing the taiwan_village_dengue dataset</a>
+  <ul class="collapse">
+  <li><a href="#analyse-number-of-cases-per-day" id="toc-analyse-number-of-cases-per-day" class="nav-link" data-scroll-target="#analyse-number-of-cases-per-day">2.4.1 Analyse number of cases per day</a></li>
+  <li><a href="#analyse-number-of-cases-per-week" id="toc-analyse-number-of-cases-per-week" class="nav-link" data-scroll-target="#analyse-number-of-cases-per-week">2.4.2 Analyse number of cases per week</a></li>
+  <li><a href="#analyse-number-of-cases-per-week-in-each-village" id="toc-analyse-number-of-cases-per-week-in-each-village" class="nav-link" data-scroll-target="#analyse-number-of-cases-per-week-in-each-village">2.4.3 Analyse number of cases per week in each village</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#global-spatial-autocorrelation-analysis-by-using-sfdep-methods" id="toc-global-spatial-autocorrelation-analysis-by-using-sfdep-methods" class="nav-link" data-scroll-target="#global-spatial-autocorrelation-analysis-by-using-sfdep-methods">3 Global spatial autocorrelation analysis by using sfdep methods</a></li>
+  <li><a href="#local-spatial-autocorrelation-analysis-by-using-sfdep-methods" id="toc-local-spatial-autocorrelation-analysis-by-using-sfdep-methods" class="nav-link" data-scroll-target="#local-spatial-autocorrelation-analysis-by-using-sfdep-methods">4 Local spatial autocorrelation analysis by using sfdep methods</a></li>
+  <li><a href="#analyising-emerging-hotspot-analysis-by-using-sfdep-methods" id="toc-analyising-emerging-hotspot-analysis-by-using-sfdep-methods" class="nav-link" data-scroll-target="#analyising-emerging-hotspot-analysis-by-using-sfdep-methods">5 Analyising emerging hotspot analysis by using sfdep methods</a></li>
   </ul>
 </nav>
     </div>
@@ -263,7 +327,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 15, 2024</p>
+      <p class="date">February 18, 2024</p>
     </div>
   </div>
   
@@ -298,7 +362,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(maptools, sf, raster, spatstat, tmap, tidyverse, arrow, lubridate, dplyr, spNetwork)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(maptools, sf, raster, spatstat, tmap, tidyverse, arrow, lubridate, dplyr, spNetwork, spacetime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -318,6 +382,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <section id="taiwan-village-data-taiwan_village_sf" class="level3">
 <h3 class="anchored" data-anchor-id="taiwan-village-data-taiwan_village_sf">2.1 Taiwan Village Data (taiwan_village_sf)</h3>
+<section id="import-the-csv-data-tainan_village.shp" class="level4">
+<h4 class="anchored" data-anchor-id="import-the-csv-data-tainan_village.shp">2.1.1 Import the csv data (TAINAN_VILLAGE.shp)</h4>
 <p>Firstly, we will import the data for the Taiwan Village Data</p>
 <div class="cell">
 <details>
@@ -332,13 +398,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(taiwan_village_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+</section>
+<section id="filtering-the-taiwan_village_sf." class="level4">
+<h4 class="anchored" data-anchor-id="filtering-the-taiwan_village_sf.">2.1.2 Filtering the taiwan_village_sf.</h4>
 <p>Currently, we have 649 rows of data in taiwan_village_sf.</p>
 <p><img src="images/clipboard-933829746.png" class="img-fluid"></p>
 <p>Therefore, we have to filter the taiwan_village_sf for village level of D01, D02, D04, D06, D07, D08, D32, and D39 of the Tainan City, Taiwan</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>taiwan_village_sf <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(taiwan_village_sf, <span class="at">CRS=</span><span class="dv">3414</span>)</span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#taiwan_village_sf &lt;- st_transform(taiwan_village_sf, CRS=3414) - not needed</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#filter the specific town ID from taiwan_village_sf</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>filtered_taiwan_village_sf <span class="ot">&lt;-</span> taiwan_village_sf <span class="sc">%&gt;%</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(TOWNID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"D01"</span>, <span class="st">"D02"</span>, <span class="st">"D04"</span>, <span class="st">"D06"</span>, <span class="st">"D07"</span>, <span class="st">"D08"</span>, <span class="st">"D32"</span>, <span class="st">"D39"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -346,6 +415,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Now, filtered_taiwan_village_sf will consist of 258 rows of data. This will help to reduce the amount of data that is needed to be processed in the later parts.</p>
 <p><img src="images/clipboard-1325127262.png" class="img-fluid"></p>
+</section>
+<section id="saving-it-to-rds" class="level4">
+<h4 class="anchored" data-anchor-id="saving-it-to-rds">2.1.3 Saving it to RDS</h4>
 <p>Since we’re happy with the dataset for filtered_taiwan_village_sf, let’s save it to a rds so that it would be easier for us to retrieve it in the future</p>
 <div class="cell">
 <details>
@@ -360,6 +432,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>filtered_taiwan_village_sf <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"data/rds/filtered_taiwan_village_sf.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+</section>
+<section id="visualise-the-dataset-by-plotting-it" class="level4">
+<h4 class="anchored" data-anchor-id="visualise-the-dataset-by-plotting-it">2.1.4 Visualise the dataset by plotting it</h4>
 <p>Let’s visualise how filtered_taiwan_village_sf looks like when we plot it</p>
 <div class="cell">
 <details>
@@ -373,8 +448,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
+</section>
 <section id="dengue-data-dengue_sf" class="level3">
 <h3 class="anchored" data-anchor-id="dengue-data-dengue_sf">2.2 Dengue Data (dengue_sf)</h3>
+<section id="import-the-csv-data-dengue_daily.csv" class="level4">
+<h4 class="anchored" data-anchor-id="import-the-csv-data-dengue_daily.csv">2.2.1 Import the csv data (Dengue_Daily.csv)</h4>
 <p>Firstly, we will import the data for the Dengue Data</p>
 <div class="cell">
 <details>
@@ -384,6 +462,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>As dengue_sf consists of 106861 rows of data, with 26 types of variables, as shown below. Therefore we need to filter it</p>
 <p><img src="images/clipboard-342559558.png" class="img-fluid"></p>
+</section>
+<section id="filtering-the-dengue_sf" class="level4">
+<h4 class="anchored" data-anchor-id="filtering-the-dengue_sf">2.2.2 Filtering the dengue_sf</h4>
 <p>Let’s filter dengue_sf for fever cases that are confined to epidemiology week 31-50 of 2023, as well as the selected variables which we will be working with (發病日: Onset date, 居住縣市: County, 居住鄉鎮: Town, 居住村里: Village, 最小統計區中心點X: x-coordinate, 最小統計區中心點Y: y-coordinate)</p>
 <div class="cell">
 <details>
@@ -404,7 +485,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(filtered_dengue_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Since the X and Y coordinates are in string format, we need to convert it to numeric. This is the same for onset date where we need to convert it to date format.</p>
+<p>Let’s transform some of our variables and prepare it for the left-join operation in step 2.3</p>
+<ul>
+<li>Since the X and Y coordinates are in string format, we need to convert it to numeric.</li>
+<li>This is the same for onset date where we need to convert it to date format</li>
+</ul>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -414,54 +499,224 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>filtered_dengue_sf<span class="sc">$</span>最小統計區中心點Y <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(filtered_dengue_sf<span class="sc">$</span>最小統計區中心點Y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+<p>Let’s create 3 different variables that stores the week number, month and day respectively. This is to facilitate our research and analysis in the later parts of this take-home exercise.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract week number, month, and day separately</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>filtered_dengue_sf<span class="sc">$</span>week_number <span class="ot">&lt;-</span> <span class="fu">format</span>(filtered_dengue_sf<span class="sc">$</span>發病日, <span class="st">"%U"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>filtered_dengue_sf<span class="sc">$</span>month <span class="ot">&lt;-</span> <span class="fu">format</span>(filtered_dengue_sf<span class="sc">$</span>發病日, <span class="st">"%m"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>filtered_dengue_sf<span class="sc">$</span>day <span class="ot">&lt;-</span> <span class="fu">format</span>(filtered_dengue_sf<span class="sc">$</span>發病日, <span class="st">"%d"</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the first few rows of the modified dataset</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(filtered_dengue_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>However, in our dengue dataset, we have noticed that there are rows of data with no village name. As our research is focused mainly on the village level, we will remove the rows with village name = “None”.</p>
+<p><img src="images/clipboard-459349656.png" class="img-fluid" width="612"></p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove rows with village name = "None"</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>filtered_dengue_sf <span class="ot">&lt;-</span> filtered_dengue_sf <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(居住村里 <span class="sc">!=</span> <span class="st">"None"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="saving-it-to-rds-1" class="level4">
+<h4 class="anchored" data-anchor-id="saving-it-to-rds-1">2.2.3 Saving it to RDS</h4>
 <p>Since we’re happy with the dataset for filtered_taiwan_village_sf, let’s save it to a rds so that it would be easier for us to retrieve it in the future</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(filtered_dengue_sf, <span class="st">"data/rds/filtered_dengue_sf.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(filtered_dengue_sf, <span class="st">"data/rds/filtered_dengue_sf.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Import the filtered_taiwan_village_sf rds data</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>filtered_dengue_sf <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"data/rds/filtered_dengue_sf.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>filtered_dengue_sf <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"data/rds/filtered_dengue_sf.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Let’s take a look at our filtered_dengue_sf dataset :)</p>
-<p>I have included the 居住縣市: County, 居住鄉鎮: Town and 居住村里: Village into the data set for easier future reference.</p>
-<p><img src="images/clipboard-4041983692.png" class="img-fluid"></p>
+<ul>
+<li>I have included the 居住縣市 (County), 居住鄉鎮 (Town) and 居住村里 (Village) into the data set for easier future reference.</li>
+</ul>
+<p><img src="images/clipboard-2567583851.png" class="img-fluid" width="829"></p>
+</section>
 </section>
 <section id="performing-left-join-to-combine-both-data-sets" class="level3">
 <h3 class="anchored" data-anchor-id="performing-left-join-to-combine-both-data-sets">2.3 Performing Left-Join to combine both data sets</h3>
 <p>Let’s perform a left-join to combine the variables in filtered_taiwan_village_sf and filtered_dengue_sf.</p>
+<p>Our goal is to perform left-join to the filtered_dengue_sf and supplement it with the specific geospatial and relevant variable. We will be operate the left-join operation based on the Village Name of both dataset as we want to retrieve the distinct geospatial infromation from filtered_taiwan_village_sf for each dengue cases.</p>
+<section id="left-join-operation-and-outcome" class="level4">
+<h4 class="anchored" data-anchor-id="left-join-operation-and-outcome">2.3.1 Left-Join Operation and Outcome</h4>
+<p>The left-join dataset would be named taiwan_village_dengue</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#taiwan_village_dengue &lt;- left_join(filtered_taiwan_village_sf, </span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#                           filtered_dengue_sf, </span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                           by = c("COUNTYNAME" = "居住縣市", "TOWNNAME" = #"居住鄉鎮", "VILLNAME" = "居住村里"),</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#                           select(發病日, 最小統計區中心點X, 最小統計區中心點Y))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Left join based on 居住村里 and VILLNAME values</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>taiwan_village_dengue <span class="ot">&lt;-</span> <span class="fu">left_join</span>(filtered_dengue_sf, filtered_taiwan_village_sf,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"居住村里"</span> <span class="ot">=</span> <span class="st">"VILLNAME"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>We can perform as count function to consolidate the number of onset cases based on the specific county, town and village names.</p>
+<p>After performing the left-join operation, the taiwan_village_dengue dataset seems to have “NA” values. This is due to the fact that the village name (居住村里) value in the filtered_dengue_sf is not found in the list of village name (VILLNAME) in filtered_taiwan_village_sf.</p>
+</section>
+<section id="dealing-with-null-values" class="level4">
+<h4 class="anchored" data-anchor-id="dealing-with-null-values">2.3.2 Dealing with Null values</h4>
+<p>Apparently, the “NA” values were due to the fact that the cases were captured in other counties, apart from the Tainan City, of which one of the NA data were in Yunlin County. As we have already filtered the filtered_taiwan_village_sf to only keep data pertaining to the counties of Tainan City, the left-join would result in cases that fall in county outside of Tainan city to be “NA”.</p>
+<p>Therefore, we have to remove the “NA” values as we would not be focusing on cases which are not within Tainan City.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#onset_case_counts &lt;- filtered_dengue_sf %&gt;%</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#  group_by(發病日, 居住縣市, 居住鄉鎮, 居住村里) %&gt;%</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  summarize(case_count = n())</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove rows with village name = "None"</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>taiwan_village_dengue <span class="ot">&lt;-</span> taiwan_village_dengue <span class="sc">%&gt;%</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(VILLCODE <span class="sc">!=</span> <span class="st">"NA"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+<p>Now, we have 17732 rows of data for the cases within the counties of Tainan City, and within the weeks which we are focusing on.</p>
+<p><img src="images/clipboard-3514699035.png" class="img-fluid"></p>
+</section>
+<section id="saving-it-to-rds-2" class="level4">
+<h4 class="anchored" data-anchor-id="saving-it-to-rds-2">2.3.3 Saving it to RDS</h4>
+<p>Since we are happy with our finalised taiwan_village_dengue dataset, let’s keep it in our rds for easy reference in the future</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(taiwan_village_dengue, <span class="st">"data/rds/taiwan_village_dengue.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Import the filtered_taiwan_village_sf rds data</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>taiwan_village_dengue <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"data/rds/taiwan_village_dengue.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Let’s take a look at our taiwan_village_dengue dataset :)</p>
+<p><img src="images/clipboard-1302527813.png" width="690" height="55"></p>
+</section>
+</section>
+<section id="analyzing-the-taiwan_village_dengue-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="analyzing-the-taiwan_village_dengue-dataset">2.4 Analyzing the taiwan_village_dengue dataset</h3>
+<section id="analyse-number-of-cases-per-day" class="level4">
+<h4 class="anchored" data-anchor-id="analyse-number-of-cases-per-day">2.4.1 Analyse number of cases per day</h4>
+<section id="sorting-and-counting-the-cases" class="level5">
+<h5 class="anchored" data-anchor-id="sorting-and-counting-the-cases">2.4.1.1 Sorting and Counting the cases</h5>
+<p>Let’s create a table to view the <strong>number of cases per day</strong>. We will be using groupy() to sort the dataset, and n() to count the cases.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>daily_dengue_numbers <span class="ot">&lt;-</span> taiwan_village_dengue <span class="sc">%&gt;%</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(發病日) <span class="sc">%&gt;%</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">num_cases =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>We can see the total number of cases for each day without looking through the original dataset. (this is just a snippet of the first 5 rows of the dataset)</p>
+<p><img src="images/clipboard-3714759818.png" class="img-fluid"></p>
+</section>
+<section id="saving-it-to-rds-3" class="level5">
+<h5 class="anchored" data-anchor-id="saving-it-to-rds-3">2.4.1.2 Saving it to RDS</h5>
+<p>Since we are happy with our finalised daily_dengue_numbers dataset, let’s keep it in our rds for easy reference in the future</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(daily_dengue_numbers, <span class="st">"data/rds/daily_dengue_numbers.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Import the daily_dengue_numbers rds data</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>daily_dengue_numbers <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"data/rds/daily_dengue_numbers.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="analyse-number-of-cases-per-week" class="level4">
+<h4 class="anchored" data-anchor-id="analyse-number-of-cases-per-week">2.4.2 Analyse number of cases per week</h4>
+<section id="sorting-and-counting-the-cases-1" class="level5">
+<h5 class="anchored" data-anchor-id="sorting-and-counting-the-cases-1">2.4.2.1 Sorting and Counting the cases</h5>
+<p>Let’s create a table to view the <strong>number of cases per week</strong>. We will be using groupy() to sort the dataset, and n() to count the cases.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>weekly_dengue_numbers <span class="ot">&lt;-</span> taiwan_village_dengue <span class="sc">%&gt;%</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(week_number) <span class="sc">%&gt;%</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">num_cases =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>We can see the total number of cases for each week without looking through the original dataset. (this is just a snippet of the first 5 rows of the dataset)</p>
+<p><img src="images/clipboard-2948600151.png" class="img-fluid"></p>
+</section>
+<section id="saving-it-to-rds-4" class="level5">
+<h5 class="anchored" data-anchor-id="saving-it-to-rds-4">2.4.2.2 Saving it to RDS</h5>
+<p>Since we are happy with our finalised weekly_dengue_numbers dataset, let’s keep it in our rds for easy reference in the future</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(weekly_dengue_numbers, <span class="st">"data/rds/weekly_dengue_numbers.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Import the weekly_dengue_numbers rds data</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>weekly_dengue_numbers <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"data/rds/weekly_dengue_numbers.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="analyse-number-of-cases-per-week-in-each-village" class="level4">
+<h4 class="anchored" data-anchor-id="analyse-number-of-cases-per-week-in-each-village">2.4.3 Analyse number of cases per week in each village</h4>
+<section id="sorting-and-counting-the-cases-2" class="level5">
+<h5 class="anchored" data-anchor-id="sorting-and-counting-the-cases-2">2.4.3.1 Sorting and Counting the cases</h5>
+<p>Finally, for our research focus, let’s create a table to view the <strong>number of cases per week in each village</strong>. We will be using groupy() to sort the dataset, and n() to count the cases.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>weekly_dengue_numbers_in_each_village <span class="ot">&lt;-</span> taiwan_village_dengue <span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(week_number, 居住村里) <span class="sc">%&gt;%</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">num_cases =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>We can see the total number of cases for each week for each village, without looking through the original dataset. (this is just a snippet of the first 5 rows of the dataset)</p>
+<p><img src="images/clipboard-4087894640.png" class="img-fluid"></p>
+</section>
+<section id="saving-it-to-rds-5" class="level5">
+<h5 class="anchored" data-anchor-id="saving-it-to-rds-5">2.4.2.3 Saving it to RDS</h5>
+<p>Since we are happy with our finalised weekly_dengue_numbers_in_each_village dataset, let’s keep it in our rds for easy reference in the future</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(weekly_dengue_numbers_in_each_village, <span class="st">"data/rds/weekly_dengue_numbers_in_each_village.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Import the weekly_dengue_numbers_in_each_village rds data</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>weekly_dengue_numbers_in_each_village <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"data/rds/weekly_dengue_numbers_in_each_village.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+</section>
+</section>
+<section id="global-spatial-autocorrelation-analysis-by-using-sfdep-methods" class="level2">
+<h2 class="anchored" data-anchor-id="global-spatial-autocorrelation-analysis-by-using-sfdep-methods">3 Global spatial autocorrelation analysis by using sfdep methods</h2>
 <p>Let’s save the sf as a df in the rds folder (for future reference)</p>
 <p>Let’s import the rds for this exercise</p>
 <p><code>{r} taiwan_village_df &lt;- read_rds("data/rds/taiwan_village_df.rds")}</code></p>
 </section>
-<section id="section" class="level3">
-<h3 class="anchored" data-anchor-id="section"></h3>
-
-
+<section id="local-spatial-autocorrelation-analysis-by-using-sfdep-methods" class="level2">
+<h2 class="anchored" data-anchor-id="local-spatial-autocorrelation-analysis-by-using-sfdep-methods">4 Local spatial autocorrelation analysis by using sfdep methods</h2>
 </section>
+<section id="analyising-emerging-hotspot-analysis-by-using-sfdep-methods" class="level2">
+<h2 class="anchored" data-anchor-id="analyising-emerging-hotspot-analysis-by-using-sfdep-methods">5 Analyising emerging hotspot analysis by using sfdep methods</h2>
+
+
 </section>
 
 </main> <!-- /main -->

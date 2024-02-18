@@ -82,6 +82,10 @@ hunan <- st_read(dsn = "data/geospatial",
                  layer = "Hunan")
 ```
 
+```{r}
+st_crs(hunan)
+```
+
 ### **9.3.2 Import csv file into r environment**
 
 Next, we will import *Hunan_2012.csv* into R by using [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html) of **readr** package. The output is R data frame class.
