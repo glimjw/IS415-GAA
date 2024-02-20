@@ -15,7 +15,7 @@ execute:
   freeze: false
 ---
 
-## **DISCLAIMERS:**
+## **DISCLAIMER (Read this before you scroll down):**
 
 1.  **Some parts of this document have hidden codes that are kept PRIVATE for now. They contain confidential codes. I will ONLY show these hidden codes on 1 March 2024 (week 9).**
 
@@ -405,7 +405,10 @@ Let's take a look at our taiwan_village_dengue dataset :)
 
 ![](images/clipboard-1302527813.png){width="690" height="55"}
 
+Let's plot the
+
 ```{r}
+#| echo: false
 tmap_mode("plot")
 tm_shape(taiwan_village_dengue) +
   tm_fill("Num_Cases",

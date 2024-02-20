@@ -6,8 +6,20 @@ title: "About"
 
 ##### I am a 3rd year IS student, Majoring in Business Analytics and Digital Business. My passion lies in harnessing the power of data analysis and visualization to make impactful business decisions using technology.
 
-##### In IS415, I am excited to learn how Geospatial Analytics is able to generate insightful analysis, which will diversify my knowledge in data analytics. This will also value add to my major with an alternative source of data analysis.
+##### In IS415 Geospatial Analytics and Applications, I am excited to learn how Geospatial Analytics is able to generate insightful analysis, which will diversify my knowledge in data analytics. This will also value add to my major with an alternative source of data analysis.
 
 ## About Site
 
 ##### This is where I will be uploading my [Hands-on]{.underline}, [In-class]{.underline} and [Take-home]{.underline} exercises, where I explore R programming language and build on my competencies in data analytics.
+
+### **DISCLAIMER:**
+
+1.  The codes and works on this page belong to me, Gerald Lim. They are for my learning purposes and meant for showcasing my work for my IS415 journey.
+
+2.  Please DO NOT copy or share any codes without seeking permission, and to uphold academic integrity.
+
+3.  Constructive feedback is welcomed, but any misuse or misrepresentation of these materials, including mocking or using them to pass judgment, is strictly prohibited (let's be real, everyone is in this module to learn).
+
+4.  By accessing this page, you agree to respect Gerald Lim's ownership of the provided materials and to use them responsibly and ethically.
+
+    Thank you for your understanding and cooperation.
