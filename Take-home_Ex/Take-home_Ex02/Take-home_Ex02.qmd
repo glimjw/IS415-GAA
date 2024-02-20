@@ -15,6 +15,14 @@ execute:
   freeze: false
 ---
 
+## **DISCLAIMERS:**
+
+1.  **Some parts of this document have hidden codes that are kept PRIVATE for now. They contain confidential codes. I will ONLY show these hidden codes on 1 March 2024 (week 9).**
+
+2.  **I will ONLY provide explanations for the exercise right now, and it is subjected to change during the duration of this exercise.**
+
+3.  **It is important to be honest and fair in our work, and respect the privacy of the work of others, so as to uphold academic integrity throughout the duration of this take-home exercise.**
+
 ## **Setting the Scene**
 
 Dengue Hemorrhagic Fever (in short dengue fever) is one of the most widespread mosquito-borne diseases in the most tropical and subtropical regions. It is an acute disease caused by dengue virus infection which is transmitted by female Aedes aegypti and Aedes albopictus mosquitoes. In 2015, Taiwan had recorded the most severe dengue fever outbreak with more than 43,000 dengue cases and 228 deaths. Since then, the annual reported dengue fever cases were maintained at the level of not more than 200 cases. However, in 2023, Taiwan recorded 26703 dengue fever cases. Figure below reveals that more than 25,000 cases were reported at Tainan City.
@@ -42,11 +50,11 @@ Installing the required tools for the analysis (e.g. sf, tidyverse, maptools, et
 pacman::p_load(maptools, sf, raster, spatstat, tmap, tidyverse, arrow, lubridate, dplyr, spNetwork, spacetime)
 ```
 
-## 2 Data Import and Wrangling
+## 2 Data Import, Wrangling and Analysis
 
-This is where we import the data and prepare it before analysis\`\`.
+This is where we import the data and prepare it before analysis.
 
-Let's use st_read() of sf package to import these two geospatial data sets into R. And we will be using other functions to prepare our data upon importing them.
+Let's use st_read() of sf package to import these two geospatial data sets into R. And we will be using other functions to prepare our data upon importing them. Moreover, we will also perform some simple operation on the datasets to gather some basic analysis.
 
 The 2 data sets are:
 
@@ -87,6 +95,7 @@ Currently, we have 649 rows of data in taiwan_village_sf.
 Therefore, we have to filter the taiwan_village_sf for village level of D01, D02, D04, D06, D07, D08, D32, and D39 of the Tainan City, Taiwan
 
 ```{r}
+#| echo: false
 #| eval: false
 #taiwan_village_sf <- st_transform(taiwan_village_sf, CRS=3414) - not needed
 #filter the specific town ID from taiwan_village_sf
@@ -103,6 +112,7 @@ Now, filtered_taiwan_village_sf will consist of 258 rows of data. This will help
 Since we're happy with the dataset for filtered_taiwan_village_sf, let's save it to a rds so that it would be easier for us to retrieve it in the future
 
 ```{r}
+#| echo: false
 #| eval: false
 write_rds(filtered_taiwan_village_sf, "data/rds/filtered_taiwan_village_sf.rds")
 ```
@@ -110,6 +120,7 @@ write_rds(filtered_taiwan_village_sf, "data/rds/filtered_taiwan_village_sf.rds")
 Import the filtered_taiwan_village_sf rds data
 
 ```{r}
+#| echo: false
 filtered_taiwan_village_sf <- read_rds("data/rds/filtered_taiwan_village_sf.rds")
 ```
 
@@ -118,6 +129,7 @@ filtered_taiwan_village_sf <- read_rds("data/rds/filtered_taiwan_village_sf.rds"
 Let's visualise how filtered_taiwan_village_sf looks like when we plot it
 
 ```{r}
+#| echo: false
 tmap_mode("plot") 
 tm_shape(filtered_taiwan_village_sf) + 
   tm_dots()
@@ -143,6 +155,7 @@ As dengue_sf consists of 106861 rows of data, with 26 types of variables, as sho
 Let's filter dengue_sf for fever cases that are confined to epidemiology week 31-50 of 2023, as well as the selected variables which we will be working with (發病日: Onset date, 居住縣市: County, 居住鄉鎮: Town, 居住村里: Village, 最小統計區中心點X: x-coordinate, 最小統計區中心點Y: y-coordinate)
 
 ```{r}
+#| echo: false
 #| eval: false
 
 # Filter the dataset for fever cases confined to epidemiology week 31-50, 2023
@@ -160,6 +173,7 @@ After filtering dengue_sf, and storing it in filtered_dengue_sf, the amount of d
 Let's check the data type of each variable before we proceed to performing left-join
 
 ```{r}
+#| echo: false
 #| eval: false
 str(filtered_dengue_sf)
 ```
@@ -170,6 +184,7 @@ Let's transform some of our variables and prepare it for the left-join operation
 -   This is the same for onset date where we need to convert it to date format
 
 ```{r}
+#| echo: false
 #| eval: false
 # Convert the columns to numeric
 filtered_dengue_sf$發病日 <- as.Date(filtered_dengue_sf$發病日)
@@ -180,9 +195,10 @@ filtered_dengue_sf$最小統計區中心點Y <- as.numeric(filtered_dengue_sf$�
 Let's create 3 different variables that stores the week number, month and day respectively. This is to facilitate our research and analysis in the later parts of this take-home exercise.
 
 ```{r}
+#| echo: false
 #| eval: false
 # Extract week number, month, and day separately
-filtered_dengue_sf$week_number <- format(filtered_dengue_sf$發病日, "%U")
+filtered_dengue_sf$epi_week_num <- format(filtered_dengue_sf$發病日, "%U")
 filtered_dengue_sf$month <- format(filtered_dengue_sf$發病日, "%m")
 filtered_dengue_sf$day <- format(filtered_dengue_sf$發病日, "%d")
 
@@ -195,62 +211,172 @@ However, in our dengue dataset, we have noticed that there are rows of data with
 ![](images/clipboard-459349656.png){width="612"}
 
 ```{r}
+#| echo: false
 #| eval: false
 # Remove rows with village name = "None"
 filtered_dengue_sf <- filtered_dengue_sf %>%
   filter(居住村里 != "None")
 ```
 
-#### 2.2.3 Saving it to RDS
+#### 2.2.3 Analyse filtered_dengue_sf dataset
 
-Since we're happy with the dataset for filtered_taiwan_village_sf, let's save it to a rds so that it would be easier for us to retrieve it in the future
+Since we have the finalised filtered_dengue_sf, it is important for us to create a new table to store the number of cases, grouped by the **day** and **village**. We will store it in cases_by_day_village dataset.
 
 ```{r}
+#| echo: false
+#| eval: false
+
+# Assuming your dataframe is called filtered_dengue_sf
+
+# Step 1: Group by day and village, then count the number of cases
+cases_by_day_village <- filtered_dengue_sf %>%
+  group_by(發病日, 居住村里) %>%
+  summarise(num_cases = n())
+
+# Step 2: Optionally, you can rename the columns for clarity
+names(cases_by_day_village) <- c("Date", "Village", "Num_Cases")
+
+# Step 3: View the resulting dataframe
+head(cases_by_day_village)
+```
+
+In addition to the cases_by_day_village dataset, it would be useful for us to create a new table to store the number of cases, grouped by the **week** and **village**. We will store it in cases_by_week_village dataset.
+
+```{r}
+#| echo: false
+#| eval: false
+
+# Assuming your dataframe is called filtered_dengue_sf
+
+# Step 1: Group by day and village, then count the number of cases
+cases_by_week_village <- filtered_dengue_sf %>%
+  group_by(epi_week_num, 居住村里) %>%
+  summarise(num_cases = n())
+
+# Step 2: Optionally, you can rename the columns for clarity
+names(cases_by_week_village) <- c("epi_week_num", "Village", "Num_Cases")
+
+# Step 3: View the resulting dataframe
+head(cases_by_week_village)
+```
+
+To get the number of cases in througout Tainan city during the whole epidemiology week 31-50, it would be useful for us to create a new table to store the number of cases for each village. We will store it in cases_by_village dataset.
+
+```{r}
+#| echo: false
+#| eval: false
+
+# Assuming your dataframe is called filtered_dengue_sf
+
+# Step 1: Group by day and village, then count the number of cases
+cases_by_village  <- filtered_dengue_sf %>%
+  group_by(居住村里) %>%
+  summarise(num_cases = n())
+
+# Step 2: Optionally, you can rename the columns for clarity
+names(cases_by_village) <- c("village", "Num_Cases")
+
+# Step 3: View the resulting dataframe
+head(cases_by_village)
+```
+
+To get the number of cases in a week througout Tainan city, it would be useful for us to create a new table to store the number of cases, grouped by the **week** alone. We will store it in cases_by_week dataset.
+
+```{r}
+#| echo: false
+#| eval: false
+
+# Assuming your dataframe is called filtered_dengue_sf
+
+# Step 1: Group by day and village, then count the number of cases
+cases_by_week  <- filtered_dengue_sf %>%
+  group_by(epi_week_num) %>%
+  summarise(num_cases = n())
+
+# Step 2: Optionally, you can rename the columns for clarity
+names(cases_by_week) <- c("epi_week_num", "Num_Cases")
+
+# Step 3: View the resulting dataframe
+head(cases_by_week)
+```
+
+Now, we have found valuable analysis from our dataset, let's move on to the next section where we keep them in rds form.
+
+#### 2.2.4 Saving it to RDS
+
+Since we're happy with the dataset for filtered_taiwan_village_sf, and datasets from our analysis in 2.2.3, let's save it to a rds so that it would be easier for us to retrieve it in the future
+
+```{r}
+#| echo: false
 #| eval: false
 write_rds(filtered_dengue_sf, "data/rds/filtered_dengue_sf.rds")
+write_rds(cases_by_day_village, "data/rds/cases_by_day_village.rds")
+write_rds(cases_by_week_village, "data/rds/cases_by_week_village.rds")
+write_rds(cases_by_week, "data/rds/cases_by_week.rds")
+write_rds(cases_by_village, "data/rds/cases_by_village.rds")
 ```
 
 Import the filtered_taiwan_village_sf rds data
 
 ```{r}
+#| echo: false
 filtered_dengue_sf <- read_rds("data/rds/filtered_dengue_sf.rds")
+cases_by_day_village <- read_rds("data/rds/cases_by_day_village.rds")
+cases_by_week_village <- read_rds("data/rds/cases_by_week_village.rds")
+cases_by_week <- read_rds("data/rds/cases_by_week.rds")
+cases_by_village <- read_rds("data/rds/cases_by_village.rds")
 ```
 
-Let's take a look at our filtered_dengue_sf dataset :)
+Let's take a look at our Dengue datasets in 2.2 :)
+
+**filtered_dengue_sf**
 
 -   I have included the 居住縣市 (County), 居住鄉鎮 (Town) and 居住村里 (Village) into the data set for easier future reference.
 
 ![](images/clipboard-2567583851.png){width="829"}
 
+cases_by_day_village, cases_by_week_village, cases_by_week
+
+knitr::include_graphics(c("images/clipboard-643780030.png", "images/clipboard-2120919932.png"))
+
 ### 2.3 Performing Left-Join to combine both data sets
 
 Let's perform a left-join to combine the variables in filtered_taiwan_village_sf and filtered_dengue_sf.
 
-Our goal is to perform left-join to the filtered_dengue_sf and supplement it with the specific geospatial and relevant variable. We will be operate the left-join operation based on the Village Name of both dataset as we want to retrieve the distinct geospatial infromation from filtered_taiwan_village_sf for each dengue cases.
+Our goal is to perform left-join to the cases_by_week_village and supplement it with the specific geospatial and relevant variable. We will be operate the left-join operation based on the Village Name of both dataset as we want to retrieve the distinct geospatial infromation from filtered_taiwan_village_sf for each dengue cases.
+
+The reason for using cases_by_week_village is because we are focusing on the number of cases in each village on a weekly basis.
 
 #### 2.3.1 Left-Join Operation and Outcome
 
 The left-join dataset would be named taiwan_village_dengue
 
 ```{r}
+#| echo: false
 #| eval: false 
 # Left join based on 居住村里 and VILLNAME values
-taiwan_village_dengue <- left_join(filtered_dengue_sf, filtered_taiwan_village_sf,
-                                    by = c("居住村里" = "VILLNAME"))
+taiwan_village_dengue <- left_join(filtered_taiwan_village_sf, cases_by_village,
+                                    by = c("VILLNAME" = "village"))
 ```
 
 After performing the left-join operation, the taiwan_village_dengue dataset seems to have "NA" values. This is due to the fact that the village name (居住村里) value in the filtered_dengue_sf is not found in the list of village name (VILLNAME) in filtered_taiwan_village_sf.
 
-#### 2.3.2 Dealing with Null values
+```{r}
+#| eval: false 
+st_crs(taiwan_village_dengue)
+```
+
+#### 2.3.2 Dealing with Null (NA) values
 
 Apparently, the "NA" values were due to the fact that the cases were captured in other counties, apart from the Tainan City, of which one of the NA data were in Yunlin County. As we have already filtered the filtered_taiwan_village_sf to only keep data pertaining to the counties of Tainan City, the left-join would result in cases that fall in county outside of Tainan city to be "NA".
 
 Therefore, we have to remove the "NA" values as we would not be focusing on cases which are not within Tainan City.
 
 ```{r}
+#| echo: false
 #| eval: false
 # Remove rows with village name = "None"
-taiwan_village_dengue <- taiwan_village_dengue %>%
+taiwan_village_dengue_1 <- taiwan_village_dengue_1 %>%
   filter(VILLCODE != "NA")
 ```
 
@@ -263,6 +389,7 @@ Now, we have 17732 rows of data for the cases within the counties of Tainan City
 Since we are happy with our finalised taiwan_village_dengue dataset, let's keep it in our rds for easy reference in the future
 
 ```{r}
+#| echo: false
 #| eval: false 
 write_rds(taiwan_village_dengue, "data/rds/taiwan_village_dengue.rds")
 ```
@@ -270,6 +397,7 @@ write_rds(taiwan_village_dengue, "data/rds/taiwan_village_dengue.rds")
 Import the filtered_taiwan_village_sf rds data
 
 ```{r}
+#| echo: false
 taiwan_village_dengue <- read_rds("data/rds/taiwan_village_dengue.rds")
 ```
 
@@ -277,18 +405,35 @@ Let's take a look at our taiwan_village_dengue dataset :)
 
 ![](images/clipboard-1302527813.png){width="690" height="55"}
 
-### 2.4 Analyzing the taiwan_village_dengue dataset
+```{r}
+tmap_mode("plot")
+tm_shape(taiwan_village_dengue) +
+  tm_fill("Num_Cases",
+          style = "quantile",
+          palette = "Blues",
+          title = "Num_cases") +
+  tm_layout(main.title = "Distribution of dengue cases in Tainan City",
+            main.title.position = "center",
+            main.title.size = 1.2,
+            legend.height = 0.45,
+            legend.width = 0.35,
+            frame = TRUE) +
+  tm_borders(alpha = 0.5) +
+  # tm_compass(type = "Bstar", size = 2) +  # Comment or remove this line
+  tm_scale_bar() +
+  tm_grid(alpha = 0.2)
+```
 
+### 2.4 Analysing the taiwan_village_dengue dataset
 
 #### 2.4.1 Analyse number of cases per day
 
+**Sorting and Counting the cases**
 
-##### 2.4.1.1 Sorting and Counting the cases
-
-Let's create a table to view the **number of cases per day**.
-We will be using groupy() to sort the dataset, and n() to count the cases.
+Let's create a table to view the **number of cases per day**. We will be using groupy() to sort the dataset, and n() to count the cases.
 
 ```{r}
+#| echo: false
 #| eval: false  
 daily_dengue_numbers <- taiwan_village_dengue %>%
   group_by(發病日) %>%
@@ -299,11 +444,12 @@ We can see the total number of cases for each day without looking through the or
 
 ![](images/clipboard-3714759818.png)
 
-##### 2.4.1.2 Saving it to RDS
+**Saving it to RDS**
 
 Since we are happy with our finalised daily_dengue_numbers dataset, let's keep it in our rds for easy reference in the future
 
 ```{r}
+#| echo: false
 #| eval: false  
 write_rds(daily_dengue_numbers, "data/rds/daily_dengue_numbers.rds")
 ```
@@ -311,18 +457,18 @@ write_rds(daily_dengue_numbers, "data/rds/daily_dengue_numbers.rds")
 Import the daily_dengue_numbers rds data
 
 ```{r}
+#| echo: false
 daily_dengue_numbers <- read_rds("data/rds/daily_dengue_numbers.rds")
 ```
 
 #### 2.4.2 Analyse number of cases per week
 
+**Sorting and Counting the cases**
 
-##### 2.4.2.1 Sorting and Counting the cases
-
-Let's create a table to view the **number of cases per week**.
-We will be using groupy() to sort the dataset, and n() to count the cases.
+Let's create a table to view the **number of cases per week**. We will be using groupy() to sort the dataset, and n() to count the cases.
 
 ```{r}
+#| echo: false
 #| eval: false  
 weekly_dengue_numbers <- taiwan_village_dengue %>%
   group_by(week_number) %>%
@@ -333,11 +479,12 @@ We can see the total number of cases for each week without looking through the o
 
 ![](images/clipboard-2948600151.png)
 
-##### 2.4.2.2 Saving it to RDS
+**Saving it to RDS**
 
 Since we are happy with our finalised weekly_dengue_numbers dataset, let's keep it in our rds for easy reference in the future
 
 ```{r}
+#| echo: false
 #| eval: false  
 write_rds(weekly_dengue_numbers, "data/rds/weekly_dengue_numbers.rds")
 ```
@@ -345,17 +492,18 @@ write_rds(weekly_dengue_numbers, "data/rds/weekly_dengue_numbers.rds")
 Import the weekly_dengue_numbers rds data
 
 ```{r}
+#| echo: false
 weekly_dengue_numbers <- read_rds("data/rds/weekly_dengue_numbers.rds")
 ```
 
 #### 2.4.3 Analyse number of cases per week in each village
 
-##### 2.4.3.1 Sorting and Counting the cases
+**Sorting and Counting the cases**
 
-Finally, for our research focus, let's create a table to view the **number of cases per week in each village**.
-We will be using groupy() to sort the dataset, and n() to count the cases.
+Finally, for our research focus, let's create a table to view the **number of cases per week in each village**. We will be using groupy() to sort the dataset, and n() to count the cases.
 
 ```{r}
+#| echo: false
 #| eval: false  
 weekly_dengue_numbers_in_each_village <- taiwan_village_dengue %>%
   group_by(week_number, 居住村里) %>%
@@ -366,11 +514,12 @@ We can see the total number of cases for each week for each village, without loo
 
 ![](images/clipboard-4087894640.png)
 
-##### 2.4.2.3 Saving it to RDS
+**Saving it to RDS**
 
 Since we are happy with our finalised weekly_dengue_numbers_in_each_village dataset, let's keep it in our rds for easy reference in the future
 
 ```{r}
+#| echo: false
 #| eval: false  
 write_rds(weekly_dengue_numbers_in_each_village, "data/rds/weekly_dengue_numbers_in_each_village.rds")
 ```
@@ -378,6 +527,7 @@ write_rds(weekly_dengue_numbers_in_each_village, "data/rds/weekly_dengue_numbers
 Import the weekly_dengue_numbers_in_each_village rds data
 
 ```{r}
+#| echo: false
 weekly_dengue_numbers_in_each_village <- read_rds("data/rds/weekly_dengue_numbers_in_each_village.rds")
 ```
 

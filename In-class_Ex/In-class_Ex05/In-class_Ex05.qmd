@@ -43,6 +43,10 @@ hunan_GDPPC <- left_join(hunan, hunan2012) %>%
   select(1:4, 7, 15)
 ```
 
+```{r}
+st_crs(hunan_GDPPC)
+```
+
 Plotting the Chorepleth map
 
 ```{r}
