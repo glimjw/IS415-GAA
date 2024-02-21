@@ -12,14 +12,14 @@ title: "About"
 
 ##### This is where I will be uploading my [Hands-on]{.underline}, [In-class]{.underline} and [Take-home]{.underline} exercises, where I explore R programming language and build on my competencies in data analytics.
 
-### **DISCLAIMER:**
+## Disclaimer
 
-1.  The codes and works on this page belong to me, Gerald Lim. They are for my learning purposes and meant for showcasing my work for my IS415 journey.
+1.  **The codes and works on this page belong to me, Gerald Lim. They are for my learning purposes, and are meant for showcasing my work for my IS415 journey.**
 
-2.  Please DO NOT copy or share any codes without seeking permission, and to uphold academic integrity.
+2.  **Please DO NOT copy or share any codes without seeking permission, and to uphold academic integrity.**
 
-3.  Constructive feedback is welcomed, but any misuse or misrepresentation of these materials, including mocking or using them to pass judgment, is strictly prohibited (let's be real, everyone is in this module to learn).
+3.  **Constructive feedback is welcomed, but any misuse or misrepresentation of these materials, including mocking or using them to pass judgment, is strictly prohibited (let's be real, everyone is in this module to learn).**
 
-4.  By accessing this page, you agree to respect Gerald Lim's ownership of the provided materials and to use them responsibly and ethically.
+4.  **By accessing this page, you agree to respect Gerald Lim's ownership of the works on this site.**
 
-    Thank you for your understanding and cooperation.
+**Thank you for your understanding and cooperation.**

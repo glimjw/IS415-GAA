@@ -4,7 +4,7 @@
     "href": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html",
     "title": "Take-home Exercise 2: Application of Spatial and Spatio-temporal Analysis Methods to Discover the Distribution of Dengue Fever in Tainan City, Taiwan",
     "section": "",
-    "text": "Some parts of this document have hidden codes that are kept PRIVATE for now. They contain confidential codes. I will ONLY show these hidden codes on 1 March 2024 (week 9).\nI will ONLY provide explanations for the exercise right now, and it is subjected to change during the duration of this exercise.\nIt is important to be honest and fair in our work, and respect the privacy of the work of others, so as to uphold academic integrity throughout the duration of this take-home exercise."
+    "text": "Some parts of this document have hidden codes that are kept PRIVATE for now. They contain confidential codes which I will ONLY be disclosing them on 1 March 2024 (week 9).\nI will ONLY provide explanations for the exercise right now, and it is subjected to change during the duration of this exercise.\nIt is important to be honest and fair in our work, and respect the privacy of the work of others, so as to uphold academic integrity throughout the duration of this take-home exercise."
   },
   {
     "objectID": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#setting-the-scene",
@@ -515,13 +515,27 @@
     "href": "about.html#about-site",
     "title": "About",
     "section": "About Site",
-    "text": "About Site\n\nThis is where I will be uploading my Hands-on, In-class and Take-home exercises, where I explore R programming language and build on my competencies in data analytics.\n\n\nDISCLAIMER:\n\nThe codes and works on this page belong to me, Gerald Lim. They are for my learning purposes and meant for showcasing my work for my IS415 journey.\nPlease DO NOT copy or share any codes without seeking permission, and to uphold academic integrity.\nConstructive feedback is welcomed, but any misuse or misrepresentation of these materials, including mocking or using them to pass judgment, is strictly prohibited (let’s be real, everyone is in this module to learn).\nBy accessing this page, you agree to respect Gerald Lim’s ownership of the provided materials and to use them responsibly and ethically.\nThank you for your understanding and cooperation."
+    "text": "About Site\n\nThis is where I will be uploading my Hands-on, In-class and Take-home exercises, where I explore R programming language and build on my competencies in data analytics."
   },
   {
     "objectID": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#disclaimer-read-this-before-you-scroll-down",
     "href": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#disclaimer-read-this-before-you-scroll-down",
     "title": "Take-home Exercise 2: Application of Spatial and Spatio-temporal Analysis Methods to Discover the Distribution of Dengue Fever in Tainan City, Taiwan",
     "section": "",
-    "text": "Some parts of this document have hidden codes that are kept PRIVATE for now. They contain confidential codes. I will ONLY show these hidden codes on 1 March 2024 (week 9).\nI will ONLY provide explanations for the exercise right now, and it is subjected to change during the duration of this exercise.\nIt is important to be honest and fair in our work, and respect the privacy of the work of others, so as to uphold academic integrity throughout the duration of this take-home exercise."
+    "text": "Some parts of this document have hidden codes that are kept PRIVATE for now. They contain confidential codes which I will ONLY be disclosing them on 1 March 2024 (week 9).\nI will ONLY provide explanations for the exercise right now, and it is subjected to change during the duration of this exercise.\nIt is important to be honest and fair in our work, and respect the privacy of the work of others, so as to uphold academic integrity throughout the duration of this take-home exercise."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "IS415-GAA",
+    "section": "",
+    "text": "Welcome to IS415 Geospatial Analytics and Applications\nI am Gerald Lim and this is the course website of IS415 where I will be uploading my work. You will find my course work on this website too."
+  },
+  {
+    "objectID": "about.html#disclaimer",
+    "href": "about.html#disclaimer",
+    "title": "About",
+    "section": "Disclaimer",
+    "text": "Disclaimer\n\nThe codes and works on this page belong to me, Gerald Lim. They are for my learning purposes, and are meant for showcasing my work for my IS415 journey.\nPlease DO NOT copy or share any codes without seeking permission, and to uphold academic integrity.\nConstructive feedback is welcomed, but any misuse or misrepresentation of these materials, including mocking or using them to pass judgment, is strictly prohibited (let’s be real, everyone is in this module to learn).\nBy accessing this page, you agree to respect Gerald Lim’s ownership of the works on this site.\n\nThank you for your understanding and cooperation."
   }
 ]
