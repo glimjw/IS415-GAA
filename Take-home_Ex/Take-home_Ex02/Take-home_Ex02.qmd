@@ -10,6 +10,7 @@ format:
 output:
   html_document:
     toc: true
+    code_echo: false
 execute:
   warning: false
   freeze: false
@@ -47,7 +48,7 @@ install.packages("maptools", repos = "https://packagemanager.posit.co/cran/2023-
 Installing the required tools for the analysis (e.g. sf, tidyverse, maptools, etc)
 
 ```{r}
-pacman::p_load(maptools, sf, raster, spatstat, tmap, tidyverse, arrow, lubridate, dplyr, spNetwork, spacetime)
+pacman::p_load(maptools, sf, raster, spatstat, tmap, tidyverse, arrow, lubridate, dplyr, spNetwork, spacetime, spdep, sfdep)
 ```
 
 ## 2 Data Import, Wrangling and Analysis
@@ -206,7 +207,7 @@ filtered_dengue_sf$day <- format(filtered_dengue_sf$發病日, "%d")
 head(filtered_dengue_sf)
 ```
 
-However, in our dengue dataset, we have noticed that there are rows of data with no village name. As our research is focused mainly on the village level, we will remove the rows with village name = "None".
+However, in our dengue dataset, we have noticed that there are rows of data with no village name. As our research is focused mainly on the village level, we will remove the rows with village name = "None". \[SKIP FIRST\]
 
 ![](images/clipboard-459349656.png){width="612"}
 
@@ -218,76 +219,76 @@ filtered_dengue_sf <- filtered_dengue_sf %>%
   filter(居住村里 != "None")
 ```
 
-#### 2.2.3 Analyse filtered_dengue_sf dataset
+#### 2.2.3 Basic Analysis of filtered_dengue_sf dataset
 
 Since we have the finalised filtered_dengue_sf, it is important for us to create a new table to store the number of cases, grouped by the **day** and **village**. We will store it in cases_by_day_village dataset.
 
 ```{r}
 #| echo: false
 #| eval: false
-
-# Assuming your dataframe is called filtered_dengue_sf
-
 # Step 1: Group by day and village, then count the number of cases
 cases_by_day_village <- filtered_dengue_sf %>%
-  group_by(發病日, 居住村里) %>%
+  group_by(發病日, 居住村里, 最小統計區中心點X, 最小統計區中心點Y) %>%
   summarise(num_cases = n())
 
 # Step 2: Optionally, you can rename the columns for clarity
-names(cases_by_day_village) <- c("Date", "Village", "Num_Cases")
+names(cases_by_day_village) <- c("Date", "Village", "XCoordinate", "YCoordinate", "Num_Cases")
 
 # Step 3: View the resulting dataframe
 head(cases_by_day_village)
 ```
 
-In addition to the cases_by_day_village dataset, it would be useful for us to create a new table to store the number of cases, grouped by the **week** and **village**. We will store it in cases_by_week_village dataset.
+A snippet of the resulting dataset for **cases_by_day_village** looks like this:
+
+![](images/clipboard-3333388626.png){width="450"}
+
+In addition to the cases_by_day_village dataset, it would be useful for us to create a new table to store the number of cases, grouped by the **week** and **village**. We will store it in **cases_by_week_village** dataset.
 
 ```{r}
 #| echo: false
 #| eval: false
-
-# Assuming your dataframe is called filtered_dengue_sf
-
 # Step 1: Group by day and village, then count the number of cases
 cases_by_week_village <- filtered_dengue_sf %>%
-  group_by(epi_week_num, 居住村里) %>%
+  group_by(epi_week_num, 居住村里, 最小統計區中心點X, 最小統計區中心點Y) %>%
   summarise(num_cases = n())
 
 # Step 2: Optionally, you can rename the columns for clarity
-names(cases_by_week_village) <- c("epi_week_num", "Village", "Num_Cases")
+names(cases_by_week_village) <- c("epi_week_num", "Village", "XCoordinate", "YCoordinate", "Num_Cases")
 
 # Step 3: View the resulting dataframe
 head(cases_by_week_village)
 ```
 
-To get the number of cases in througout Tainan city during the whole epidemiology week 31-50, it would be useful for us to create a new table to store the number of cases for each village. We will store it in cases_by_village dataset.
+A snippet of the resulting dataset for **cases_by_week_village** looks like this:
+
+![](images/clipboard-2633481134.png){width="537"}
+
+To get the number of cases in througout Tainan city during the whole epidemiology week 31-50, it would be useful for us to create a new table to store the number of cases for each village. We will store it in **cases_by_village** dataset.
 
 ```{r}
 #| echo: false
 #| eval: false
-
-# Assuming your dataframe is called filtered_dengue_sf
-
 # Step 1: Group by day and village, then count the number of cases
 cases_by_village  <- filtered_dengue_sf %>%
-  group_by(居住村里) %>%
+  group_by(居住村里, 最小統計區中心點X, 最小統計區中心點Y) %>%
   summarise(num_cases = n())
 
 # Step 2: Optionally, you can rename the columns for clarity
-names(cases_by_village) <- c("village", "Num_Cases")
+names(cases_by_village) <- c("village", "XCoordinate", "YCoordinate", "Num_Cases")
 
 # Step 3: View the resulting dataframe
 head(cases_by_village)
 ```
 
-To get the number of cases in a week througout Tainan city, it would be useful for us to create a new table to store the number of cases, grouped by the **week** alone. We will store it in cases_by_week dataset.
+A snippet of the resulting dataset for **cases_by_village** looks like this:
+
+![](images/clipboard-483203027.png){width="433"}
+
+To get the number of cases in a week througout Tainan city, it would be useful for us to create a new table to store the number of cases, grouped by the **week** alone. We will store it in **cases_by_week** dataset.
 
 ```{r}
 #| echo: false
 #| eval: false
-
-# Assuming your dataframe is called filtered_dengue_sf
-
 # Step 1: Group by day and village, then count the number of cases
 cases_by_week  <- filtered_dengue_sf %>%
   group_by(epi_week_num) %>%
@@ -299,6 +300,10 @@ names(cases_by_week) <- c("epi_week_num", "Num_Cases")
 # Step 3: View the resulting dataframe
 head(cases_by_week)
 ```
+
+A snippet of the resulting dataset for **cases_by_week** looks like this:
+
+![](images/clipboard-941645063.png)
 
 Now, we have found valuable analysis from our dataset, let's move on to the next section where we keep them in rds form.
 
@@ -327,7 +332,7 @@ cases_by_week <- read_rds("data/rds/cases_by_week.rds")
 cases_by_village <- read_rds("data/rds/cases_by_village.rds")
 ```
 
-Let's take a look at our Dengue datasets in 2.2 :)
+Let's take a look at our Dengue datasets in 2.2 before we move on to 2.3 :)
 
 **filtered_dengue_sf**
 
@@ -335,56 +340,72 @@ Let's take a look at our Dengue datasets in 2.2 :)
 
 ![](images/clipboard-2567583851.png){width="829"}
 
-cases_by_day_village, cases_by_week_village, cases_by_week
+### 2.3 Performing Join operation to combine both data sets
 
-knitr::include_graphics(c("images/clipboard-643780030.png", "images/clipboard-2120919932.png"))
+Let's perform a join operation to combine the variables in filtered_taiwan_village_sf and filtered_dengue_sf.
 
-### 2.3 Performing Left-Join to combine both data sets
-
-Let's perform a left-join to combine the variables in filtered_taiwan_village_sf and filtered_dengue_sf.
-
-Our goal is to perform left-join to the cases_by_week_village and supplement it with the specific geospatial and relevant variable. We will be operate the left-join operation based on the Village Name of both dataset as we want to retrieve the distinct geospatial infromation from filtered_taiwan_village_sf for each dengue cases.
+Our goal is to perform the join operation to the **cases_by_week_village** and supplement it with the specific geospatial and relevant variable. We will be operating the join operation based on the Village Name of both dataset as we want to retrieve the distinct geospatial infromation from **filtered_taiwan_village_sf** for each dengue cases.
 
 The reason for using cases_by_week_village is because we are focusing on the number of cases in each village on a weekly basis.
 
 #### 2.3.1 Left-Join Operation and Outcome
 
-The left-join dataset would be named taiwan_village_dengue
+Before we perform the left-join operation, we can see that the cases_by_village is not a spatial data. As for filtered_taiwan_village_sf, we have already checked the data type of the file is already in spatial data type (TWD97).
+
+```{r}
+st_crs(cases_by_week_village)
+```
+
+Therefore we have to convert the cases_by_village dataset into a spatial data.
+
+Before we transform it into a spatial data, we have to vet through our data in cases_by_village and case_by_village dataset. There are rows where there are "NA" values for the village name, X and Y coordinates, which could potentially cause issues in the future analysis.
+
+![](images/clipboard-977836271.png)
+
+And we have to clean up the NA values before proceeding to case_by_village into a spatial data.
+
+One option that we could remove the NA values which could potentially create problems in our future analysis, and they wouldn't provide us with accurate analysis. On the other hand, if we were to adopt the other option which is to find the mean / median of the x and y coordinates for the missing values, it would also affect the accuracy of our analysis.
 
 ```{r}
 #| echo: false
-#| eval: false 
-# Left join based on 居住村里 and VILLNAME values
-taiwan_village_dengue <- left_join(filtered_taiwan_village_sf, cases_by_village,
-                                    by = c("VILLNAME" = "village"))
+# Convert cases_by_village to sf object
+cases_by_week_village <- cases_by_week_village[complete.cases(cases_by_week_village[, c("XCoordinate", "YCoordinate")]), ]
+```
+
+Now that we have cleared the NA values, let's transform the case_by_village dataset into a sf
+
+```{r}
+#| echo: false
+cases_by_week_village_sf <- st_as_sf(cases_by_week_village, coords = c("XCoordinate", "YCoordinate"))
+```
+
+```{r}
+#| echo: false
+st_crs(cases_by_week_village_sf) <- st_crs(4326)
+```
+
+```{r}
+#| echo: false
+cases_by_week_village_sf <- st_transform(cases_by_week_village_sf, crs = st_crs(filtered_taiwan_village_sf))
+```
+
+The join dataset would be named taiwan_village_dengue
+
+```{r}
+#| echo: false
+# Perform left join based on X and Y coordinates
+# Perform spatial join
+taiwan_village_dengue <- st_join(filtered_taiwan_village_sf, cases_by_week_village_sf, join = st_intersects)
 ```
 
 After performing the left-join operation, the taiwan_village_dengue dataset seems to have "NA" values. This is due to the fact that the village name (居住村里) value in the filtered_dengue_sf is not found in the list of village name (VILLNAME) in filtered_taiwan_village_sf.
 
 ```{r}
-#| eval: false 
+#| echo: false
 st_crs(taiwan_village_dengue)
 ```
 
-#### 2.3.2 Dealing with Null (NA) values
-
-Apparently, the "NA" values were due to the fact that the cases were captured in other counties, apart from the Tainan City, of which one of the NA data were in Yunlin County. As we have already filtered the filtered_taiwan_village_sf to only keep data pertaining to the counties of Tainan City, the left-join would result in cases that fall in county outside of Tainan city to be "NA".
-
-Therefore, we have to remove the "NA" values as we would not be focusing on cases which are not within Tainan City.
-
-```{r}
-#| echo: false
-#| eval: false
-# Remove rows with village name = "None"
-taiwan_village_dengue_1 <- taiwan_village_dengue_1 %>%
-  filter(VILLCODE != "NA")
-```
-
-Now, we have 17732 rows of data for the cases within the counties of Tainan City, and within the weeks which we are focusing on.
-
-![](images/clipboard-3514699035.png)
-
-#### 2.3.3 Saving it to RDS
+#### 2.3.2 Saving it to RDS
 
 Since we are happy with our finalised taiwan_village_dengue dataset, let's keep it in our rds for easy reference in the future
 
@@ -403,18 +424,26 @@ taiwan_village_dengue <- read_rds("data/rds/taiwan_village_dengue.rds")
 
 Let's take a look at our taiwan_village_dengue dataset :)
 
-![](images/clipboard-1302527813.png){width="690" height="55"}
+![](images/clipboard-585552616.png)
 
-Let's plot the
+Let's plot **taiwan_village_dengue** and see how it looks like.
+
+We will create an "**agg_data**" dataset to count the number of cases in each village, and thereafter plot it on tmap, so that we can easily identify which village has a higher number of cases on the map.
 
 ```{r}
 #| echo: false
+# Aggregate cases for each village
+agg_data <- taiwan_village_dengue %>%
+  group_by(VILLNAME) %>%
+  summarise(total_cases = sum(Num_Cases))
+
+# Plot aggregated data
 tmap_mode("plot")
-tm_shape(taiwan_village_dengue) +
-  tm_fill("Num_Cases",
+tm_shape(agg_data) +
+  tm_fill(col = "total_cases",
           style = "quantile",
           palette = "Blues",
-          title = "Num_cases") +
+          title = "Total Number of Cases") +
   tm_layout(main.title = "Distribution of dengue cases in Tainan City",
             main.title.position = "center",
             main.title.size = 1.2,
@@ -422,132 +451,168 @@ tm_shape(taiwan_village_dengue) +
             legend.width = 0.35,
             frame = TRUE) +
   tm_borders(alpha = 0.5) +
-  # tm_compass(type = "Bstar", size = 2) +  # Comment or remove this line
   tm_scale_bar() +
   tm_grid(alpha = 0.2)
 ```
 
-### 2.4 Analysing the taiwan_village_dengue dataset
+Based on the map, we can see that there are some villages that have a significantly higher number of cases. If we look at our **agg_data** dataset, we can see that these are the villages with the highest number of cases.
 
-#### 2.4.1 Analyse number of cases per day
-
-**Sorting and Counting the cases**
-
-Let's create a table to view the **number of cases per day**. We will be using groupy() to sort the dataset, and n() to count the cases.
-
-```{r}
-#| echo: false
-#| eval: false  
-daily_dengue_numbers <- taiwan_village_dengue %>%
-  group_by(發病日) %>%
-  summarise(num_cases = n())
-```
-
-We can see the total number of cases for each day without looking through the original dataset. (this is just a snippet of the first 5 rows of the dataset)
-
-![](images/clipboard-3714759818.png)
-
-**Saving it to RDS**
-
-Since we are happy with our finalised daily_dengue_numbers dataset, let's keep it in our rds for easy reference in the future
-
-```{r}
-#| echo: false
-#| eval: false  
-write_rds(daily_dengue_numbers, "data/rds/daily_dengue_numbers.rds")
-```
-
-Import the daily_dengue_numbers rds data
-
-```{r}
-#| echo: false
-daily_dengue_numbers <- read_rds("data/rds/daily_dengue_numbers.rds")
-```
-
-#### 2.4.2 Analyse number of cases per week
-
-**Sorting and Counting the cases**
-
-Let's create a table to view the **number of cases per week**. We will be using groupy() to sort the dataset, and n() to count the cases.
-
-```{r}
-#| echo: false
-#| eval: false  
-weekly_dengue_numbers <- taiwan_village_dengue %>%
-  group_by(week_number) %>%
-  summarise(num_cases = n())
-```
-
-We can see the total number of cases for each week without looking through the original dataset. (this is just a snippet of the first 5 rows of the dataset)
-
-![](images/clipboard-2948600151.png)
-
-**Saving it to RDS**
-
-Since we are happy with our finalised weekly_dengue_numbers dataset, let's keep it in our rds for easy reference in the future
-
-```{r}
-#| echo: false
-#| eval: false  
-write_rds(weekly_dengue_numbers, "data/rds/weekly_dengue_numbers.rds")
-```
-
-Import the weekly_dengue_numbers rds data
-
-```{r}
-#| echo: false
-weekly_dengue_numbers <- read_rds("data/rds/weekly_dengue_numbers.rds")
-```
-
-#### 2.4.3 Analyse number of cases per week in each village
-
-**Sorting and Counting the cases**
-
-Finally, for our research focus, let's create a table to view the **number of cases per week in each village**. We will be using groupy() to sort the dataset, and n() to count the cases.
-
-```{r}
-#| echo: false
-#| eval: false  
-weekly_dengue_numbers_in_each_village <- taiwan_village_dengue %>%
-  group_by(week_number, 居住村里) %>%
-  summarise(num_cases = n())
-```
-
-We can see the total number of cases for each week for each village, without looking through the original dataset. (this is just a snippet of the first 5 rows of the dataset)
-
-![](images/clipboard-4087894640.png)
-
-**Saving it to RDS**
-
-Since we are happy with our finalised weekly_dengue_numbers_in_each_village dataset, let's keep it in our rds for easy reference in the future
-
-```{r}
-#| echo: false
-#| eval: false  
-write_rds(weekly_dengue_numbers_in_each_village, "data/rds/weekly_dengue_numbers_in_each_village.rds")
-```
-
-Import the weekly_dengue_numbers_in_each_village rds data
-
-```{r}
-#| echo: false
-weekly_dengue_numbers_in_each_village <- read_rds("data/rds/weekly_dengue_numbers_in_each_village.rds")
-```
+![](images/clipboard-2228245534.png){width="428"}
 
 ## 3 Global spatial autocorrelation analysis by using sfdep methods
 
-Let's save the sf as a df in the rds folder (for future reference)
+### 3.1 Visualizing taiwan_village_dengue
+
+Let's visualize taiwan_village_dengue before we move on to performing global spatial autocorrelation analysis
 
 ```{r}
 #| echo: false 
-#| eval: false 
+equal <- tm_shape(taiwan_village_dengue) +
+  tm_fill("Num_Cases",
+          n = 5,
+          style = "equal") +
+  tm_borders(alpha = 0.5) +
+  tm_layout(main.title = "Equal interval classification")
 
-#write_rds(taiwan_village_sf, "data/rds/taiwan_village_df.rds")
+quantile <- tm_shape(taiwan_village_dengue) +
+  tm_fill("Num_Cases",
+          n = 5,
+          style = "quantile") +
+  tm_borders(alpha = 0.5) +
+  tm_layout(main.title = "Equal quantile classification")
+
+tmap_arrange(equal, 
+             quantile, 
+             asp=1, 
+             ncol=2)
 ```
 
-Let's import the rds for this exercise
+### 3.2 Global Measures of Spatial Autocorrelation
 
-`{r} taiwan_village_df <- read_rds("data/rds/taiwan_village_df.rds")}`
+We will be performing Global Measures of Spatial Autocorrelation in this section.
+
+#### 3.2.1 Computing Contiguity Spatial Weights
+
+Before we can perform the global spatial autocorrelation analysis, we need to construct the spatial weights of the study area. The spatial weights is used to define the neighbourhood relationships between the geographical units.
+
+The code calculates a spatial weights matrix using the queen contiguity criterion for the villages in Taiwan represented by polygons in the taiwan_village_dengue dataset, and then provides a summary of this matrix.
+
+```{r}
+#| echo: false
+wm_q <- poly2nb(taiwan_village_dengue, 
+                queen=TRUE)
+summary(wm_q)
+```
+
+The summary report above shows that there are 13711area units in Tainan City. The observations are:
+
+-   There are 129 **most connected area unit** which has 1056 neighbors
+
+-   There are 4 **least connected area units** with only 15 neighbors
+
+#### 3.2.2 Row-standardised weights matrix
+
+Let's assign weights to each neighboring polygon before we move on to performing our Maron's I test.
+
+```{r}
+#| echo: false
+rswm_q <- nb2listw(wm_q, 
+                   style="W", 
+                   zero.policy = TRUE)
+rswm_q
+```
+
+### 3.3 Global Measures of Spatial Autocorrelation: Moran’s I
+
+#### 3.3.1 Moran's I Test
+
+We will be using Moran's I statistics to test our taiwan_village_dengue dataset.
+
+```{r}
+#| echo: false
+moran.test(taiwan_village_dengue$Num_Cases, 
+           listw=rswm_q, 
+           zero.policy = TRUE, 
+           na.action=na.omit)
+```
+
+Based on the output, the Moran I statistic standard deviate measures the degree of spatial autocorrelation in the variable, Num_cases, in the taiwan_viilage_dengue dataset. In this case, it is 47.203, which indicates a high level of spatial autocorrelation.
+
+In addition, the p-value is very low, at less than 2.2e-16, which indicates that the the spatial correlation is statistically significant. This rejects the null hypothesis that there is no spatial autocorrelation in the data.
+
+Based on the above explanation, it suggests that the areas with high number of dengue cases tend to be clustered together geographically.
+
+#### 3.3.2 Monte Carlo Moran's I
+
+Let's perform simulation on our Moran's I test
+
+```{r}
+#| echo: false
+set.seed(1234)
+bperm= moran.mc(taiwan_village_dengue$Num_Cases, 
+                listw=rswm_q, 
+                nsim=999, 
+                zero.policy = TRUE, 
+                na.action=na.omit)
+bperm
+```
+
+The result indicates that the spatial autocorrelation is statistically significant with the p-value of 0.001.
+
+#### 3.3.3 Visualising Monte Carlo Moran's I
+
+Let's display our findings in a histogram so that we can visualise it better
+
+Firstly, we can get a statistical summary of the Monte Carlo Moran's I output
+
+```{r}
+#| echo: false
+summary(bperm$res[1:999])
+```
+
+Now, we can plot the histogram
+
+```{r}
+hist(bperm$res, 
+     freq=TRUE, 
+     breaks=150, 
+     xlab="Simulated Moran's I",
+     xlim=c(-0.002, 0.002))
+abline(v=0, 
+       col="red") 
+```
+
+### 3.4 Global Measures of Spatial Autocorrelation: Geary's C
+
+Since we have performed the Moran's I test before this step, we have seen the spatial clustering and dispersion in our dataset, particularly the number of dengue cases in each village.
+
+#### 3.4.1 Geary's C Test
+
+Geary's C test compares the average squared differences in attribute values between neighboring locations to the overall variance in attribute values across all locations.
+
+Now, we will perform Geary's C test to dive into the differences in attribute values between the neighboring observations.
+
+```{r}
+geary.test(taiwan_village_dengue$Num_Cases, listw=rswm_q)
+```
+
+As we can observe from the result, the Geary's C statistic, at 9.809458e-01 or 0.9809458 being below 1.000, indicates that there are clustering in the spatial pattern.
+
+addtion, the p-value is very small, at 7.772e-05, which indicates a strong rejection to the null hypothesis of no spatial autocorrelation. This means that there is a significant spatial autocorrelation in the distribution of Number of Dengue cases across the villages.
+
+Therefore, a low variance, of 2.537989e-05, indicates that the Geary' C statistic is relatively stable. The observations of the output also indicates that the Number of Dengue cases across the villages, are more similar to their neighbors.
+
+#### 3.4.2 Monte Carlo Geary's C Test
+
+Let's perform simulation on our Geary's C Test
+
+```{r}
+set.seed(1234)
+bperm1=geary.mc(taiwan_village_dengue$Num_Cases, 
+               listw=rswm_q, 
+               nsim=999)
+bperm1
+```
 
 ## 4 Local spatial autocorrelation analysis by using sfdep methods
 
