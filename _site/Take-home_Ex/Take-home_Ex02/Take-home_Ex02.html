@@ -294,24 +294,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#saving-it-to-rds-2" id="toc-saving-it-to-rds-2" class="nav-link" data-scroll-target="#saving-it-to-rds-2">2.3.2 Saving it to RDS</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#global-spatial-autocorrelation-analysis-by-using-sfdep-methods" id="toc-global-spatial-autocorrelation-analysis-by-using-sfdep-methods" class="nav-link" data-scroll-target="#global-spatial-autocorrelation-analysis-by-using-sfdep-methods">3 Global spatial autocorrelation analysis by using sfdep methods</a>
+  <li><a href="#global-spatial-autocorrelation-analysis-by-using-sfdep-methods" id="toc-global-spatial-autocorrelation-analysis-by-using-sfdep-methods" class="nav-link" data-scroll-target="#global-spatial-autocorrelation-analysis-by-using-sfdep-methods">3 Global Spatial Autocorrelation Analysis by using sfdep methods</a>
   <ul>
   <li><a href="#visualizing-taiwan_village_dengue" id="toc-visualizing-taiwan_village_dengue" class="nav-link" data-scroll-target="#visualizing-taiwan_village_dengue">3.1 Visualizing taiwan_village_dengue</a></li>
   <li><a href="#global-measures-of-spatial-autocorrelation" id="toc-global-measures-of-spatial-autocorrelation" class="nav-link" data-scroll-target="#global-measures-of-spatial-autocorrelation">3.2 Global Measures of Spatial Autocorrelation</a>
   <ul class="collapse">
   <li><a href="#computing-contiguity-spatial-weights" id="toc-computing-contiguity-spatial-weights" class="nav-link" data-scroll-target="#computing-contiguity-spatial-weights">3.2.1 Computing Contiguity Spatial Weights</a></li>
-  <li><a href="#row-standardised-weights-matrix" id="toc-row-standardised-weights-matrix" class="nav-link" data-scroll-target="#row-standardised-weights-matrix">3.2.2 Row-standardised weights matrix</a></li>
   </ul></li>
-  <li><a href="#global-measures-of-spatial-autocorrelation-morans-i-and-gearys-c" id="toc-global-measures-of-spatial-autocorrelation-morans-i-and-gearys-c" class="nav-link" data-scroll-target="#global-measures-of-spatial-autocorrelation-morans-i-and-gearys-c">3.3 Global Measures of Spatial Autocorrelation: Moran’s I and Geary’s C</a>
+  <li><a href="#global-measures-of-spatial-autocorrelation-morans-i" id="toc-global-measures-of-spatial-autocorrelation-morans-i" class="nav-link" data-scroll-target="#global-measures-of-spatial-autocorrelation-morans-i">3.3 Global Measures of Spatial Autocorrelation: Moran’s I</a>
   <ul class="collapse">
-  <li><a href="#morans-i-test" id="toc-morans-i-test" class="nav-link" data-scroll-target="#morans-i-test">3.3.1 Moran’s I Test</a></li>
-  <li><a href="#monte-carlo-morans-i" id="toc-monte-carlo-morans-i" class="nav-link" data-scroll-target="#monte-carlo-morans-i">3.3.2 Monte Carlo Moran’s I</a></li>
-  <li><a href="#visualising-monte-carlo-morans-i" id="toc-visualising-monte-carlo-morans-i" class="nav-link" data-scroll-target="#visualising-monte-carlo-morans-i">3.3.3 Visualising Monte Carlo Moran’s I</a></li>
-  <li><a href="#gearys-c-test" id="toc-gearys-c-test" class="nav-link" data-scroll-target="#gearys-c-test">3.3.4 Geary’s C Test</a></li>
+  <li><a href="#compute-global-morans-i" id="toc-compute-global-morans-i" class="nav-link" data-scroll-target="#compute-global-morans-i">3.3.1 Compute Global Moran’s I</a></li>
+  <li><a href="#global-morans-i-test" id="toc-global-morans-i-test" class="nav-link" data-scroll-target="#global-morans-i-test">3.3.2 Global Moran’s I Test</a></li>
+  <li><a href="#computing-global-monte-carlo-morans-i" id="toc-computing-global-monte-carlo-morans-i" class="nav-link" data-scroll-target="#computing-global-monte-carlo-morans-i">3.3.3 Computing Global Monte Carlo Moran’s I</a></li>
+  <li><a href="#visualising-global-monte-carlo-morans-i" id="toc-visualising-global-monte-carlo-morans-i" class="nav-link" data-scroll-target="#visualising-global-monte-carlo-morans-i">3.3.4 Visualising Global Monte Carlo Moran’s I</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#local-spatial-autocorrelation-analysis-by-using-sfdep-methods" id="toc-local-spatial-autocorrelation-analysis-by-using-sfdep-methods" class="nav-link" data-scroll-target="#local-spatial-autocorrelation-analysis-by-using-sfdep-methods">4 Local spatial autocorrelation analysis by using sfdep methods</a></li>
-  <li><a href="#analyising-emerging-hotspot-analysis-by-using-sfdep-methods" id="toc-analyising-emerging-hotspot-analysis-by-using-sfdep-methods" class="nav-link" data-scroll-target="#analyising-emerging-hotspot-analysis-by-using-sfdep-methods">5 Analyising emerging hotspot analysis by using sfdep methods</a></li>
+  <li><a href="#local-spatial-autocorrelation-analysis-by-using-sfdep-methods" id="toc-local-spatial-autocorrelation-analysis-by-using-sfdep-methods" class="nav-link" data-scroll-target="#local-spatial-autocorrelation-analysis-by-using-sfdep-methods">4 Local Spatial Autocorrelation Analysis by using sfdep methods</a>
+  <ul>
+  <li><a href="#compute-local-morans-i" id="toc-compute-local-morans-i" class="nav-link" data-scroll-target="#compute-local-morans-i">4.1 Compute Local Moran’s I</a></li>
+  <li><a href="#visualising-local-morans-i-and-p-value" id="toc-visualising-local-morans-i-and-p-value" class="nav-link" data-scroll-target="#visualising-local-morans-i-and-p-value">4.2 Visualising local Moran’s I and p-value</a></li>
+  <li><a href="#visualising-lisa-map" id="toc-visualising-lisa-map" class="nav-link" data-scroll-target="#visualising-lisa-map">4.3 <strong>Visualising LISA map</strong></a></li>
+  <li><a href="#conclusion-for-local-spatial-autocorrelation" id="toc-conclusion-for-local-spatial-autocorrelation" class="nav-link" data-scroll-target="#conclusion-for-local-spatial-autocorrelation">4.4 Conclusion for Local Spatial Autocorrelation</a></li>
+  </ul></li>
+  <li><a href="#analyising-emerging-hotspot-analysis-by-using-sfdep-methods" id="toc-analyising-emerging-hotspot-analysis-by-using-sfdep-methods" class="nav-link" data-scroll-target="#analyising-emerging-hotspot-analysis-by-using-sfdep-methods">5 Analyising Emerging Hotspot Analysis by using sfdep methods</a></li>
   </ul>
 </nav>
     </div>
@@ -475,9 +480,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Since we have the finalised filtered_dengue_sf, it is important for us to create a new table to store the number of cases, grouped by the <strong>day</strong> and <strong>village</strong>. We will store it in cases_by_day_village dataset.</p>
 <p>A snippet of the resulting dataset for <strong>cases_by_day_village</strong> looks like this:</p>
 <p><img src="images/clipboard-3333388626.png" class="img-fluid" width="450"></p>
-<p>In addition to the cases_by_day_village dataset, it would be useful for us to create a new table to store the number of cases, grouped by the <strong>week</strong> and <strong>village</strong>. We will store it in <strong>cases_by_week_village</strong> dataset.</p>
+<p>In addition to the cases_by_day_village dataset, it would be useful for us to create a new table to store the total number of cases, grouped by the <strong>week</strong> and <strong>village</strong>. We will store it in <strong>cases_by_week_village</strong> dataset.</p>
 <p>A snippet of the resulting dataset for <strong>cases_by_week_village</strong> looks like this:</p>
-<p><img src="images/clipboard-2633481134.png" class="img-fluid" width="537"></p>
+<ul>
+<li>We kept the X and Y coordinates so that we can convert it into a spatial dataset in the future.</li>
+</ul>
+<p><img src="images/clipboard-1288846011.png" class="img-fluid"></p>
 <p>To get the number of cases in througout Tainan city during the whole epidemiology week 31-50, it would be useful for us to create a new table to store the number of cases for each village. We will store it in <strong>cases_by_village</strong> dataset.</p>
 <p>A snippet of the resulting dataset for <strong>cases_by_village</strong> looks like this:</p>
 <p><img src="images/clipboard-483203027.png" class="img-fluid" width="433"></p>
@@ -515,10 +523,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Coordinate Reference System: NA</code></pre>
 </div>
 </div>
-<p>Therefore we have to convert the cases_by_village dataset into a spatial data.</p>
-<p>Before we transform it into a spatial data, we have to vet through our data in cases_by_village and case_by_village dataset. There are rows where there are “NA” values for the village name, X and Y coordinates, which could potentially cause issues in the future analysis.</p>
+<p>Therefore we have to convert the cases_by_week_village dataset into a spatial data.</p>
+<p>Before we transform it into a spatial data, we have to vet through our data in cases_by_week_village dataset. There are rows where there are “NA” values for the village name, X and Y coordinates, which could potentially cause issues in the future analysis.</p>
 <p><img src="images/clipboard-977836271.png" class="img-fluid"></p>
-<p>And we have to clean up the NA values before proceeding to case_by_village into a spatial data.</p>
+<p>And we have to clean up the NA values before proceeding to cases_by_week_village into a spatial data.</p>
 <p>One option that we could remove the NA values which could potentially create problems in our future analysis, and they wouldn’t provide us with accurate analysis. On the other hand, if we were to adopt the other option which is to find the mean / median of the x and y coordinates for the missing values, it would also affect the accuracy of our analysis.</p>
 <p>Now that we have cleared the NA values, let’s transform the case_by_village dataset into a sf</p>
 <p>The join dataset would be named taiwan_village_dengue</p>
@@ -548,33 +556,43 @@ GEOGCRS["TWD97",
     ID["EPSG",3824]]</code></pre>
 </div>
 </div>
+<p>Let’s take a look at our newly joined dataset.</p>
+<p><img src="images/clipboard-291429429.png" class="img-fluid"></p>
+<p>We have noticed that there are “NA” values in the Num_Cases column of the newly joined dateset.</p>
+<p><img src="images/clipboard-49182639.png" class="img-fluid" width="464"></p>
+<p>So, we have to remove it before going to the next step. We will remove the rows with has “NA” values in the epi_week_num column.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>taiwan_village_dengue <span class="ot">&lt;-</span> taiwan_village_dengue[<span class="sc">!</span><span class="fu">is.na</span>(taiwan_village_dengue<span class="sc">$</span>Num_Cases), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
 </section>
 <section id="saving-it-to-rds-2" class="level4">
 <h4 class="anchored" data-anchor-id="saving-it-to-rds-2">2.3.2 Saving it to RDS</h4>
 <p>Since we are happy with our finalised taiwan_village_dengue dataset, let’s keep it in our rds for easy reference in the future</p>
 <p>Import the filtered_taiwan_village_sf rds data</p>
 <p>Let’s take a look at our taiwan_village_dengue dataset :)</p>
-<p><img src="images/clipboard-585552616.png" class="img-fluid"></p>
+<p><img src="images/clipboard-1066673433.png" class="img-fluid"></p>
 <p>Let’s plot <strong>taiwan_village_dengue</strong> and see how it looks like.</p>
-<p>We will create an “<strong>agg_data</strong>” dataset to count the number of cases in each village, and thereafter plot it on tmap, so that we can easily identify which village has a higher number of cases on the map.</p>
+<p>We will create an “<strong>total_cases_by_village</strong>” dataset to count the number of cases in each village, and thereafter plot it on tmap, so that we can easily identify which village has a higher number of cases on the map.</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="Take-home_Ex02_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid" width="672"></p>
+<p><img src="Take-home_Ex02_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>Based on the map, we can see that there are some villages that have a significantly higher number of cases. If we look at our <strong>agg_data</strong> dataset, we can see that these are the villages with the highest number of cases.</p>
-<p><img src="images/clipboard-2228245534.png" class="img-fluid" width="428"></p>
+<p>Based on the map, we can see that there are some villages that have a significantly higher number of cases. If we look at our <strong>total_cases_by_village</strong> dataset, we can see that these are the villages with the highest number of cases.</p>
 </section>
 </section>
 </section>
 <section id="global-spatial-autocorrelation-analysis-by-using-sfdep-methods" class="level2">
-<h2 class="anchored" data-anchor-id="global-spatial-autocorrelation-analysis-by-using-sfdep-methods">3 Global spatial autocorrelation analysis by using sfdep methods</h2>
+<h2 class="anchored" data-anchor-id="global-spatial-autocorrelation-analysis-by-using-sfdep-methods">3 Global Spatial Autocorrelation Analysis by using sfdep methods</h2>
 <section id="visualizing-taiwan_village_dengue" class="level3">
 <h3 class="anchored" data-anchor-id="visualizing-taiwan_village_dengue">3.1 Visualizing taiwan_village_dengue</h3>
 <p>Let’s visualize taiwan_village_dengue before we move on to performing global spatial autocorrelation analysis</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="Take-home_Ex02_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid" width="672"></p>
+<p><img src="Take-home_Ex02_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
@@ -584,173 +602,202 @@ GEOGCRS["TWD97",
 <section id="computing-contiguity-spatial-weights" class="level4">
 <h4 class="anchored" data-anchor-id="computing-contiguity-spatial-weights">3.2.1 Computing Contiguity Spatial Weights</h4>
 <p>Before we can perform the global spatial autocorrelation analysis, we need to construct the spatial weights of the study area. The spatial weights is used to define the neighbourhood relationships between the geographical units.</p>
+<p>We have to prepare our dataset before computing the spatial weights</p>
 <p>The code calculates a spatial weights matrix using the queen contiguity criterion for the villages in Taiwan represented by polygons in the taiwan_village_dengue dataset, and then provides a summary of this matrix.</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Neighbour list object:
-Number of regions: 13712 
-Number of nonzero links: 6686482 
-Percentage nonzero weights: 3.556281 
-Average number of links: 487.6373 
-Link number distribution:
-
-  16   17   19   20   25   26   27   32   38   45   51   55   57   62   64   69 
-   4    2    2    1   10    2   10    1    3    3   11   32   18   12   31   25 
-  71   80   82   83   91   93   98  100  105  106  110  111  112  113  115  119 
-   9   16   12   13   29   12    4    9   15   16    3   22    8   30   17   28 
- 122  124  127  128  131  137  139  143  149  156  163  164  167  172  180  183 
-  17   45   23   32   15    7   36   24   12   28   20   20   55   25   14   25 
- 184  188  189  193  198  200  204  212  218  224  226  227  228  229  236  237 
-  14   18   30   16   61   52   10   21   60   25   16   31   32   60   68   29 
- 246  249  250  252  254  257  263  273  274  284  285  286  290  296  297  299 
- 119   17   54   26  115   60   48   84   61   45   67   29   28   46  104   15 
- 301  307  310  312  314  318  322  323  328  329  336  342  343  348  350  352 
-  58   35   60   67   67  210   92   24  105  108   46   79   20   10  179   68 
- 357  358  365  372  375  384  385  386  388  390  394  397  399  401  402  404 
-  38  137   98   56   38  121   48   63   74  139  103   51   18   63   35  131 
- 407  412  413  416  419  420  426  431  432  433  434  435  436  443  445  446 
- 143   65  110  116  124  141   65   72   74   31   34   73   32  187   72   69 
- 453  454  457  459  462  465  467  468  470  473  477  481  487  495  497  501 
-  55   78  134   67   47   86  170   41   99   67   45   61   45  119   91   53 
- 502  503  507  508  509  511  512  515  526  527  528  529  530  536  538  541 
-  99  126   50   66  133   55  117  102   11   83   54  108  125  122  191  202 
- 542  550  554  558  561  568  571  576  577  585  591  593  594  595  596  603 
-  43   47   91   47   77   96   48   69   92   38   55   57   42  114  112   80 
- 608  610  616  622  623  631  636  639  640  652  655  657  658  664  673  679 
-  20  113  123  245  138   97  133   68   72  105  105   53   74  130   58  144 
- 702  707  714  729  731  732  752  768  773  779  794  799  840  868  877  879 
-  67   66   91   70   80   49   92   43   86   71   74   97   60  107  111   84 
- 894  899  905  919 1056 
- 179  102  117  131  129 
-4 least connected regions:
-160 160.1 160.2 160.3 with 16 links
-129 most connected regions:
-36 36.1 36.2 36.3 36.4 36.5 36.6 36.7 36.8 36.9 36.10 36.11 36.12 36.13 36.14 36.15 36.16 36.17 36.18 36.19 36.20 36.21 36.22 36.23 36.24 36.25 36.26 36.27 36.28 36.29 36.30 36.31 36.32 36.33 36.34 36.35 36.36 36.37 36.38 36.39 36.40 36.41 36.42 36.43 36.44 36.45 36.46 36.47 36.48 36.49 36.50 36.51 36.52 36.53 36.54 36.55 36.56 36.57 36.58 36.59 36.60 36.61 36.62 36.63 36.64 36.65 36.66 36.67 36.68 36.69 36.70 36.71 36.72 36.73 36.74 36.75 36.76 36.77 36.78 36.79 36.80 36.81 36.82 36.83 36.84 36.85 36.86 36.87 36.88 36.89 36.90 36.91 36.92 36.93 36.94 36.95 36.96 36.97 36.98 36.99 36.100 36.101 36.102 36.103 36.104 36.105 36.106 36.107 36.108 36.109 36.110 36.111 36.112 36.113 36.114 36.115 36.116 36.117 36.118 36.119 36.120 36.121 36.122 36.123 36.124 36.125 36.126 36.127 36.128 with 1056 links</code></pre>
+<pre><code>Simple feature collection with 2902 features and 16 fields
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: 120.0627 ymin: 22.89401 xmax: 120.2925 ymax: 23.09144
+Geodetic CRS:  TWD97
+First 10 features:
+                                                                                                                                                                                                                                                                                                                                                nb
+1                                                                                                                                                                                                                                                                                    2, 33, 34, 35, 36, 37, 38, 1542, 1543, 2080, 2081, 2082, 2083
+1.1                                                                                                                                                                                                                                                                                  1, 33, 34, 35, 36, 37, 38, 1542, 1543, 2080, 2081, 2082, 2083
+2   4, 5, 6, 7, 1652, 1653, 1654, 1655, 1656, 1657, 1658, 1659, 1660, 1661, 1662, 1663, 1664, 1665, 1666, 1667, 1668, 1669, 1670, 1685, 1686, 1687, 1688, 1689, 1690, 1691, 1797, 1798, 1799, 1800, 1801, 1802, 1803, 1804, 1805, 1806, 1807, 1808, 2160, 2161, 2162, 2163, 2502, 2503, 2504, 2505, 2506, 2507, 2508, 2509, 2510, 2511, 2512, 2513
+2.1 3, 5, 6, 7, 1652, 1653, 1654, 1655, 1656, 1657, 1658, 1659, 1660, 1661, 1662, 1663, 1664, 1665, 1666, 1667, 1668, 1669, 1670, 1685, 1686, 1687, 1688, 1689, 1690, 1691, 1797, 1798, 1799, 1800, 1801, 1802, 1803, 1804, 1805, 1806, 1807, 1808, 2160, 2161, 2162, 2163, 2502, 2503, 2504, 2505, 2506, 2507, 2508, 2509, 2510, 2511, 2512, 2513
+2.2 3, 4, 6, 7, 1652, 1653, 1654, 1655, 1656, 1657, 1658, 1659, 1660, 1661, 1662, 1663, 1664, 1665, 1666, 1667, 1668, 1669, 1670, 1685, 1686, 1687, 1688, 1689, 1690, 1691, 1797, 1798, 1799, 1800, 1801, 1802, 1803, 1804, 1805, 1806, 1807, 1808, 2160, 2161, 2162, 2163, 2502, 2503, 2504, 2505, 2506, 2507, 2508, 2509, 2510, 2511, 2512, 2513
+2.3 3, 4, 5, 7, 1652, 1653, 1654, 1655, 1656, 1657, 1658, 1659, 1660, 1661, 1662, 1663, 1664, 1665, 1666, 1667, 1668, 1669, 1670, 1685, 1686, 1687, 1688, 1689, 1690, 1691, 1797, 1798, 1799, 1800, 1801, 1802, 1803, 1804, 1805, 1806, 1807, 1808, 2160, 2161, 2162, 2163, 2502, 2503, 2504, 2505, 2506, 2507, 2508, 2509, 2510, 2511, 2512, 2513
+2.4 3, 4, 5, 6, 1652, 1653, 1654, 1655, 1656, 1657, 1658, 1659, 1660, 1661, 1662, 1663, 1664, 1665, 1666, 1667, 1668, 1669, 1670, 1685, 1686, 1687, 1688, 1689, 1690, 1691, 1797, 1798, 1799, 1800, 1801, 1802, 1803, 1804, 1805, 1806, 1807, 1808, 2160, 2161, 2162, 2163, 2502, 2503, 2504, 2505, 2506, 2507, 2508, 2509, 2510, 2511, 2512, 2513
+3                  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 901, 902, 903, 904, 905, 906, 907, 908, 909, 910, 911, 912, 913, 914, 915, 916, 917, 918, 919, 920, 921, 922, 923, 924, 925, 926, 927, 928, 929, 930, 931, 932, 2164, 2169, 2170, 2316, 2317, 2318, 2319, 2320, 2321, 2322, 2323, 2324, 2325, 2326, 2327, 2328, 2329, 2330, 2331
+3.1                8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 901, 902, 903, 904, 905, 906, 907, 908, 909, 910, 911, 912, 913, 914, 915, 916, 917, 918, 919, 920, 921, 922, 923, 924, 925, 926, 927, 928, 929, 930, 931, 932, 2164, 2169, 2170, 2316, 2317, 2318, 2319, 2320, 2321, 2322, 2323, 2324, 2325, 2326, 2327, 2328, 2329, 2330, 2331
+3.2                 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 901, 902, 903, 904, 905, 906, 907, 908, 909, 910, 911, 912, 913, 914, 915, 916, 917, 918, 919, 920, 921, 922, 923, 924, 925, 926, 927, 928, 929, 930, 931, 932, 2164, 2169, 2170, 2316, 2317, 2318, 2319, 2320, 2321, 2322, 2323, 2324, 2325, 2326, 2327, 2328, 2329, 2330, 2331
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    wt
+1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           0.07692308, 0.07692308, 0.07692308, 0.07692308, 0.07692308, 0.07692308, 0.07692308, 0.07692308, 0.07692308, 0.07692308, 0.07692308, 0.07692308, 0.07692308
+1.1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         0.07692308, 0.07692308, 0.07692308, 0.07692308, 0.07692308, 0.07692308, 0.07692308, 0.07692308, 0.07692308, 0.07692308, 0.07692308, 0.07692308, 0.07692308
+2                                                               0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138
+2.1                                                             0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138
+2.2                                                             0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138
+2.3                                                             0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138
+2.4                                                             0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138, 0.01724138
+3   0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302
+3.1 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302
+3.2 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302, 0.01587302
+       VILLCODE COUNTYNAME TOWNNAME VILLNAME      VILLENG COUNTYID COUNTYCODE
+1   67000350032     臺南市   安南區   青草里 Qingcao Vil.        D      67000
+1.1 67000350032     臺南市   安南區   青草里 Qingcao Vil.        D      67000
+2   67000270011     臺南市   仁德區   保安里  Bao'an Vil.        D      67000
+2.1 67000270011     臺南市   仁德區   保安里  Bao'an Vil.        D      67000
+2.2 67000270011     臺南市   仁德區   保安里  Bao'an Vil.        D      67000
+2.3 67000270011     臺南市   仁德區   保安里  Bao'an Vil.        D      67000
+2.4 67000270011     臺南市   仁德區   保安里  Bao'an Vil.        D      67000
+3   67000370005     臺南市   中西區   赤嵌里 Chihkan Vil.        D      67000
+3.1 67000370005     臺南市   中西區   赤嵌里 Chihkan Vil.        D      67000
+3.2 67000370005     臺南市   中西區   赤嵌里 Chihkan Vil.        D      67000
+    TOWNID TOWNCODE NOTE epi_week_num Village Num_Cases
+1      D06 67000350 &lt;NA&gt;           37  青草里         1
+1.1    D06 67000350 &lt;NA&gt;           41  青草里         1
+2      D32 67000270 &lt;NA&gt;           31  保安里         1
+2.1    D32 67000270 &lt;NA&gt;           37  保安里         3
+2.2    D32 67000270 &lt;NA&gt;           41  保安里         5
+2.3    D32 67000270 &lt;NA&gt;           41  安康里        12
+2.4    D32 67000270 &lt;NA&gt;           45  安東里         7
+3      D08 67000370 &lt;NA&gt;           35  赤嵌里         4
+3.1    D08 67000370 &lt;NA&gt;           36  赤嵌里         1
+3.2    D08 67000370 &lt;NA&gt;           37  赤嵌里         4
+                          geometry spatial_weights
+1   POLYGON ((120.1176 23.08387...             Inf
+1.1 POLYGON ((120.1176 23.08387...             Inf
+2   POLYGON ((120.2304 22.93544...      0.01851852
+2.1 POLYGON ((120.2304 22.93544...      0.01851852
+2.2 POLYGON ((120.2304 22.93544...      0.01851852
+2.3 POLYGON ((120.2304 22.93544...      0.01851852
+2.4 POLYGON ((120.2304 22.93544...      0.01851852
+3   POLYGON ((120.2012 22.99966...      0.01960784
+3.1 POLYGON ((120.2012 22.99966...      0.01960784
+3.2 POLYGON ((120.2012 22.99966...      0.01960784</code></pre>
 </div>
 </div>
-<p>The summary report above shows that there are 13711area units in Tainan City. The observations are:</p>
-<ul>
-<li><p>There are 129 <strong>most connected area unit</strong> which has 1056 neighbors</p></li>
-<li><p>There are 4 <strong>least connected area units</strong> with only 15 neighbors</p></li>
-</ul>
 </section>
-<section id="row-standardised-weights-matrix" class="level4">
-<h4 class="anchored" data-anchor-id="row-standardised-weights-matrix">3.2.2 Row-standardised weights matrix</h4>
-<p>Let’s assign weights to each neighboring polygon before we move on to performing our Maron’s I test.</p>
+</section>
+<section id="global-measures-of-spatial-autocorrelation-morans-i" class="level3">
+<h3 class="anchored" data-anchor-id="global-measures-of-spatial-autocorrelation-morans-i">3.3 Global Measures of Spatial Autocorrelation: Moran’s I</h3>
+<section id="compute-global-morans-i" class="level4">
+<h4 class="anchored" data-anchor-id="compute-global-morans-i">3.3.1 Compute Global Moran’s I</h4>
+<p>We will compute the Global Moran’s I value</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Characteristics of weights list object:
-Neighbour list object:
-Number of regions: 13712 
-Number of nonzero links: 6686482 
-Percentage nonzero weights: 3.556281 
-Average number of links: 487.6373 
-
-Weights style: W 
-Weights constants summary:
-      n        nn    S0       S1       S2
-W 13712 188018944 13712 71.85066 55847.45</code></pre>
+<pre><code>List of 2
+ $ I: num 0.073
+ $ K: num 225</code></pre>
 </div>
 </div>
 </section>
-</section>
-<section id="global-measures-of-spatial-autocorrelation-morans-i-and-gearys-c" class="level3">
-<h3 class="anchored" data-anchor-id="global-measures-of-spatial-autocorrelation-morans-i-and-gearys-c">3.3 Global Measures of Spatial Autocorrelation: Moran’s I and Geary’s C</h3>
-<section id="morans-i-test" class="level4">
-<h4 class="anchored" data-anchor-id="morans-i-test">3.3.1 Moran’s I Test</h4>
+<section id="global-morans-i-test" class="level4">
+<h4 class="anchored" data-anchor-id="global-morans-i-test">3.3.2 Global Moran’s I Test</h4>
 <p>We will be using Moran’s I statistics to test our taiwan_village_dengue dataset.</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Moran I test under randomisation
 
-data:  taiwan_village_dengue$Num_Cases  
-weights: rswm_q 
-omitted: 9195   
+data:  x  
+weights: listw    
 
-Moran I statistic standard deviate = 47.203, p-value &lt; 2.2e-16
+Moran I statistic standard deviate = 25.476, p-value &lt; 2.2e-16
 alternative hypothesis: greater
 sample estimates:
 Moran I statistic       Expectation          Variance 
-     2.866868e-02     -7.293946e-05      3.707573e-07 </code></pre>
+     7.304100e-02     -3.447087e-04      8.297563e-06 </code></pre>
 </div>
 </div>
-<p>Based on the output, the Moran I statistic standard deviate measures the degree of spatial autocorrelation in the variable, Num_cases, in the taiwan_viilage_dengue dataset. In this case, it is 47.203, which indicates a high level of spatial autocorrelation.</p>
-<p>In addition, the p-value is low, at less than 2.2e-16, which indicates that the the spatial correlation is statistically significant. This rejects the null hypothesis that there is no spatial autocorrelation in the data.</p>
+<p>Based on the output, the Moran I statistic standard deviate measures the degree of spatial autocorrelation in the variable, Num_cases, in the taiwan_viilage_dengue dataset. In this case, it is 25.476, which indicates a high level of spatial autocorrelation.</p>
+<p>In addition, the p-value is very low, at less than 2.2e-16, which indicates that the the <strong>spatial correlation is statistically significant</strong>. This rejects the null hypothesis that there is no spatial autocorrelation in the data.</p>
+<p>The Moran I statistic of 0.073 also indicates that there is a positive spatial autocorrelation.</p>
 <p>Based on the above explanation, it suggests that the areas with high number of dengue cases tend to be clustered together geographically.</p>
 </section>
-<section id="monte-carlo-morans-i" class="level4">
-<h4 class="anchored" data-anchor-id="monte-carlo-morans-i">3.3.2 Monte Carlo Moran’s I</h4>
+<section id="computing-global-monte-carlo-morans-i" class="level4">
+<h4 class="anchored" data-anchor-id="computing-global-monte-carlo-morans-i">3.3.3 Computing Global Monte Carlo Moran’s I</h4>
 <p>Let’s perform simulation on our Moran’s I test</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>bperm<span class="ot">=</span> <span class="fu">moran.mc</span>(taiwan_village_dengue<span class="sc">$</span>Num_Cases, </span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">listw=</span>rswm_q, </span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">nsim=</span><span class="dv">999</span>, </span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">zero.policy =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">na.action=</span>na.omit)</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>bperm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Monte-Carlo simulation of Moran I
 
-data:  taiwan_village_dengue$Num_Cases 
-weights: rswm_q 
-omitted: 9195 
+data:  x 
+weights: listw  
 number of simulations + 1: 1000 
 
-statistic = 0.028669, observed rank = 1000, p-value = 0.001
-alternative hypothesis: greater</code></pre>
+statistic = 0.073041, observed rank = 1000, p-value &lt; 2.2e-16
+alternative hypothesis: two.sided</code></pre>
 </div>
 </div>
-<p>The result indicates that the spatial autocorrelation is statistically significant with the p-value of 0.001.</p>
+<p>The result indicates that the spatial autocorrelation is statistically significant with the p-value of less than 0.01.</p>
 </section>
-<section id="visualising-monte-carlo-morans-i" class="level4">
-<h4 class="anchored" data-anchor-id="visualising-monte-carlo-morans-i">3.3.3 Visualising Monte Carlo Moran’s I</h4>
+<section id="visualising-global-monte-carlo-morans-i" class="level4">
+<h4 class="anchored" data-anchor-id="visualising-global-monte-carlo-morans-i">3.3.4 Visualising Global Monte Carlo Moran’s I</h4>
 <p>Let’s display our findings in a histogram so that we can visualise it better</p>
 <p>Firstly, we can get a statistical summary of the Monte Carlo Moran’s I output</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(bperm<span class="sc">$</span>res[<span class="dv">1</span><span class="sc">:</span><span class="dv">999</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>      Min.    1st Qu.     Median       Mean    3rd Qu.       Max. 
--1.716e-03 -5.032e-04 -9.828e-05 -5.830e-05  3.200e-04  2.120e-03 </code></pre>
+-0.0066688 -0.0022801 -0.0005763 -0.0002545  0.0013864  0.0144195 </code></pre>
 </div>
 </div>
 <p>Now, we can plot the histogram</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(bperm<span class="sc">$</span>res, </span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">freq=</span><span class="cn">TRUE</span>, </span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">breaks=</span><span class="dv">150</span>, </span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"Simulated Moran's I"</span>,</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.002</span>, <span class="fl">0.002</span>))</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="dv">0</span>, </span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span><span class="st">"red"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output-display">
-<p><img src="Take-home_Ex02_files/figure-html/unnamed-chunk-37-1.png" class="img-fluid" width="672"></p>
+<p><img src="Take-home_Ex02_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-</section>
-<section id="gearys-c-test" class="level4">
-<h4 class="anchored" data-anchor-id="gearys-c-test">3.3.4 Geary’s C Test</h4>
-<p>Since we have performed the Moran’s I test before this step, we have seen the spatial clustering and dispersion in our dataset, particularly the number of dengue cases in each village.</p>
-<p>Now, we will perform Geary’s C test to dive into the differences in attribute values between the neighboring observations.</p>
 </section>
 </section>
 </section>
 <section id="local-spatial-autocorrelation-analysis-by-using-sfdep-methods" class="level2">
-<h2 class="anchored" data-anchor-id="local-spatial-autocorrelation-analysis-by-using-sfdep-methods">4 Local spatial autocorrelation analysis by using sfdep methods</h2>
+<h2 class="anchored" data-anchor-id="local-spatial-autocorrelation-analysis-by-using-sfdep-methods">4 Local Spatial Autocorrelation Analysis by using sfdep methods</h2>
+<section id="compute-local-morans-i" class="level3">
+<h3 class="anchored" data-anchor-id="compute-local-morans-i">4.1 Compute Local Moran’s I</h3>
+<p>We will compute the Local Moran’s I value</p>
+<p>The above code would create a new sf file called “lisa” which stores the important information for the local moran’s I values (such as ii, eii, var_ii, etc)</p>
+<p><img src="images/clipboard-3086410928.png" class="img-fluid"></p>
+</section>
+<section id="visualising-local-morans-i-and-p-value" class="level3">
+<h3 class="anchored" data-anchor-id="visualising-local-morans-i-and-p-value">4.2 Visualising local Moran’s I and p-value</h3>
+<p>For effective comparison, it will be better for us to plot both maps next to each other as shown below.</p>
+<p>We will create a choropeth map by using the values in the “ii” field in lisa sf for the local Moran’s I, and the values in the “p_ii_sim” field in lisa sf for the p-value.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="Take-home_Ex02_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="visualising-lisa-map" class="level3">
+<h3 class="anchored" data-anchor-id="visualising-lisa-map">4.3 <strong>Visualising LISA map</strong></h3>
+<p>We will plot the LISA map to check for any kinds of outliers and clusters. It is done by combining the Local Moran’s I of the different areas and their respective p-values.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="Take-home_Ex02_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Based on the above map, and comparing it with our initial distribution map (below), we can observe that:</p>
+<p><img src="images/clipboard-3680948792.png" class="img-fluid" width="451"></p>
+<ul>
+<li><p>Areas highlighted in red as classified as <strong>High-High Clusters (red)</strong>, where there are a high number of dengue cases, and it could also indicate that it is surrounded by areas with high dengue case counts. Comparing it to our initial distribution map that we plot in the beginning (in our join-operation), we can see that the areas with higher dengue cases are situated in area where it is highlighted in a darker shade of blue (ranging from 76.2 to 616.0 cases)</p>
+<ul>
+<li>This means that local authorities should focus on the public health efforts in these areas as they are more prone to an outbreak or transmission.</li>
+</ul></li>
+<li><p>Areas highlighted in red as classified as <strong>Low-Low Clusters (green)</strong>, where there are a lower number of dengue cases, and it could also indicate that it is surrounded by areas with low dengue case counts. Comparing to the initial distribution map (shown before this), we can see that the Low-Low Clusters are mostly situated at areas where there are lower number of cases (below 47.8)</p>
+<ul>
+<li>This means that public health efforts in these areas are well-maintained and there may be prevention measures in place when there is an outbreak or transmission.</li>
+</ul></li>
+<li><p>For both types of outliers, the High-Low (highlighted in yellow) and Low-High (highlighted in purple) outlier areas, they are a high and low number of cases respectively. However, they are surrounded by areas where there is a low or high number of cases respectively, which is contradictory to the actual situation in their areas.</p>
+<ul>
+<li><p>For High-Low outlier areas, it means that local authorities should seriously look into these areas as they are more prone to an outbreak or transmission, even though they are surrounded by areas with low case counts.</p></li>
+<li><p>For Low-High outlier areas, it means that the area is well-prepared with preventive measures when there is an outbreak or transmission. This means that it is worth looking into the preventive strategies that they have in-place, which could be adopted by the areas with high case counts in the future.</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="conclusion-for-local-spatial-autocorrelation" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion-for-local-spatial-autocorrelation">4.4 Conclusion for Local Spatial Autocorrelation</h3>
+<ul>
+<li><p>It is interesting to gain more insights into the different areas by filtering the areas based on the Moran’s I test and p-value, which has significantly helped in identifying clusters which have a high or low number of cases.</p></li>
+<li><p>It is also able to identify outlier areas which is interesting to dive into as it provides shows which area is more prone to an outbreak, or area where preventive measures are in-place, despite being surrounded by areas which has a different case counts.</p></li>
+</ul>
+</section>
 </section>
 <section id="analyising-emerging-hotspot-analysis-by-using-sfdep-methods" class="level2">
-<h2 class="anchored" data-anchor-id="analyising-emerging-hotspot-analysis-by-using-sfdep-methods">5 Analyising emerging hotspot analysis by using sfdep methods</h2>
+<h2 class="anchored" data-anchor-id="analyising-emerging-hotspot-analysis-by-using-sfdep-methods">5 Analyising Emerging Hotspot Analysis by using sfdep methods</h2>
 
 
 </section>

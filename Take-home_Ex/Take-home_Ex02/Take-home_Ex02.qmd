@@ -242,18 +242,20 @@ A snippet of the resulting dataset for **cases_by_day_village** looks like this:
 
 ![](images/clipboard-3333388626.png){width="450"}
 
-In addition to the cases_by_day_village dataset, it would be useful for us to create a new table to store the number of cases, grouped by the **week** and **village**. We will store it in **cases_by_week_village** dataset.
+In addition to the cases_by_day_village dataset, it would be useful for us to create a new table to store the total number of cases, grouped by the **week** and **village**. We will store it in **cases_by_week_village** dataset.
 
 ```{r}
 #| echo: false
 #| eval: false
-# Step 1: Group by day and village, then count the number of cases
+# Step 1: Group by week and village, then count the number of cases and retain X and Y coordinates
 cases_by_week_village <- filtered_dengue_sf %>%
-  group_by(epi_week_num, 居住村里, 最小統計區中心點X, 最小統計區中心點Y) %>%
-  summarise(num_cases = n())
+  group_by(epi_week_num, 居住村里) %>%
+  summarise(Num_Cases = n(),
+            XCoordinate = mean(最小統計區中心點X),
+            YCoordinate = mean(最小統計區中心點Y))
 
 # Step 2: Optionally, you can rename the columns for clarity
-names(cases_by_week_village) <- c("epi_week_num", "Village", "XCoordinate", "YCoordinate", "Num_Cases")
+names(cases_by_week_village) <- c("epi_week_num", "Village", "Num_Cases", "XCoordinate", "YCoordinate")
 
 # Step 3: View the resulting dataframe
 head(cases_by_week_village)
@@ -261,7 +263,9 @@ head(cases_by_week_village)
 
 A snippet of the resulting dataset for **cases_by_week_village** looks like this:
 
-![](images/clipboard-2633481134.png){width="537"}
+-   We kept the X and Y coordinates so that we can convert it into a spatial dataset in the future.
+
+![](images/clipboard-1288846011.png)
 
 To get the number of cases in througout Tainan city during the whole epidemiology week 31-50, it would be useful for us to create a new table to store the number of cases for each village. We will store it in **cases_by_village** dataset.
 
@@ -356,13 +360,13 @@ Before we perform the left-join operation, we can see that the cases_by_village 
 st_crs(cases_by_week_village)
 ```
 
-Therefore we have to convert the cases_by_village dataset into a spatial data.
+Therefore we have to convert the cases_by_week_village dataset into a spatial data.
 
-Before we transform it into a spatial data, we have to vet through our data in cases_by_village and case_by_village dataset. There are rows where there are "NA" values for the village name, X and Y coordinates, which could potentially cause issues in the future analysis.
+Before we transform it into a spatial data, we have to vet through our data in cases_by_week_village dataset. There are rows where there are "NA" values for the village name, X and Y coordinates, which could potentially cause issues in the future analysis.
 
 ![](images/clipboard-977836271.png)
 
-And we have to clean up the NA values before proceeding to case_by_village into a spatial data.
+And we have to clean up the NA values before proceeding to cases_by_week_village into a spatial data.
 
 One option that we could remove the NA values which could potentially create problems in our future analysis, and they wouldn't provide us with accurate analysis. On the other hand, if we were to adopt the other option which is to find the mean / median of the x and y coordinates for the missing values, it would also affect the accuracy of our analysis.
 
@@ -405,6 +409,20 @@ After performing the left-join operation, the taiwan_village_dengue dataset seem
 st_crs(taiwan_village_dengue)
 ```
 
+Let's take a look at our newly joined dataset.
+
+![](images/clipboard-291429429.png)
+
+We have noticed that there are "NA" values in the Num_Cases column of the newly joined dateset.
+
+![](images/clipboard-49182639.png){width="464"}
+
+So, we have to remove it before going to the next step. We will remove the rows with has "NA" values in the epi_week_num column.
+
+```{r}
+taiwan_village_dengue <- taiwan_village_dengue[!is.na(taiwan_village_dengue$Num_Cases), ]
+```
+
 #### 2.3.2 Saving it to RDS
 
 Since we are happy with our finalised taiwan_village_dengue dataset, let's keep it in our rds for easy reference in the future
@@ -424,23 +442,24 @@ taiwan_village_dengue <- read_rds("data/rds/taiwan_village_dengue.rds")
 
 Let's take a look at our taiwan_village_dengue dataset :)
 
-![](images/clipboard-585552616.png)
+![](images/clipboard-1066673433.png)
 
 Let's plot **taiwan_village_dengue** and see how it looks like.
 
-We will create an "**agg_data**" dataset to count the number of cases in each village, and thereafter plot it on tmap, so that we can easily identify which village has a higher number of cases on the map.
+We will create an "**total_cases_by_village**" dataset to count the number of cases in each village, and thereafter plot it on tmap, so that we can easily identify which village has a higher number of cases on the map.
 
 ```{r}
 #| echo: false
-# Aggregate cases for each village
-agg_data <- taiwan_village_dengue %>%
-  group_by(VILLNAME) %>%
-  summarise(total_cases = sum(Num_Cases))
 
-# Plot aggregated data
+# Aggregate the data to get the total number of cases for each village
+total_cases_by_village <- taiwan_village_dengue %>%
+  group_by(VILLNAME) %>%
+  summarise(Total_Num_Cases = sum(Num_Cases))
+
+# Plot the total number of cases using tmap
 tmap_mode("plot")
-tm_shape(agg_data) +
-  tm_fill(col = "total_cases",
+tm_shape(total_cases_by_village) +
+  tm_fill(col = "Total_Num_Cases",
           style = "quantile",
           palette = "Blues",
           title = "Total Number of Cases") +
@@ -455,11 +474,9 @@ tm_shape(agg_data) +
   tm_grid(alpha = 0.2)
 ```
 
-Based on the map, we can see that there are some villages that have a significantly higher number of cases. If we look at our **agg_data** dataset, we can see that these are the villages with the highest number of cases.
+Based on the map, we can see that there are some villages that have a significantly higher number of cases. If we look at our **total_cases_by_village** dataset, we can see that these are the villages with the highest number of cases.
 
-![](images/clipboard-2228245534.png){width="428"}
-
-## 3 Global spatial autocorrelation analysis by using sfdep methods
+## 3 Global Spatial Autocorrelation Analysis by using sfdep methods
 
 ### 3.1 Visualizing taiwan_village_dengue
 
@@ -495,71 +512,94 @@ We will be performing Global Measures of Spatial Autocorrelation in this section
 
 Before we can perform the global spatial autocorrelation analysis, we need to construct the spatial weights of the study area. The spatial weights is used to define the neighbourhood relationships between the geographical units.
 
+We have to prepare our dataset before computing the spatial weights
+
+```{r}
+#| echo: false
+
+# Convert geometry to simple feature collection
+taiwan_village_dengue_sf <- st_as_sf(taiwan_village_dengue)
+
+# Find neighboring features (e.g., using contiguity)
+neighbors <- st_touches(taiwan_village_dengue_sf)
+
+# Compute spatial weights
+spatial_weights <- lapply(neighbors, function(neighbor) {
+  # Calculate weight based on some criteria (e.g., contiguity, distance)
+  weight <- 1 / length(neighbor)
+  # Return the weight
+  return(weight)
+})
+
+# Assign spatial weights to the original dataset
+taiwan_village_dengue$spatial_weights <- spatial_weights
+```
+
 The code calculates a spatial weights matrix using the queen contiguity criterion for the villages in Taiwan represented by polygons in the taiwan_village_dengue dataset, and then provides a summary of this matrix.
 
 ```{r}
 #| echo: false
-wm_q <- poly2nb(taiwan_village_dengue, 
-                queen=TRUE)
-summary(wm_q)
-```
+# Create wm_q with spatial weights
+wm_q <- taiwan_village_dengue %>%
+  mutate(nb = st_contiguity(geometry),
+         wt = st_weights(nb, style = "W"),
+         .before = 1)
 
-The summary report above shows that there are 13711area units in Tainan City. The observations are:
-
--   There are 129 **most connected area unit** which has 1056 neighbors
-
--   There are 4 **least connected area units** with only 15 neighbors
-
-#### 3.2.2 Row-standardised weights matrix
-
-Let's assign weights to each neighboring polygon before we move on to performing our Maron's I test.
-
-```{r}
-#| echo: false
-rswm_q <- nb2listw(wm_q, 
-                   style="W", 
-                   zero.policy = TRUE)
-rswm_q
+wm_q
 ```
 
 ### 3.3 Global Measures of Spatial Autocorrelation: Moran’s I
 
-#### 3.3.1 Moran's I Test
+#### 3.3.1 Compute Global Moran's I
+
+We will compute the Global Moran's I value
+
+```{r}
+#| echo: false
+moranI <- global_moran(wm_q$Num_Cases,
+                       wm_q$nb,
+                       wm_q$wt)
+glimpse(moranI)
+```
+
+#### 3.3.2 Global Moran's I Test
 
 We will be using Moran's I statistics to test our taiwan_village_dengue dataset.
 
 ```{r}
 #| echo: false
-moran.test(taiwan_village_dengue$Num_Cases, 
-           listw=rswm_q, 
-           zero.policy = TRUE, 
-           na.action=na.omit)
+global_moran_test(wm_q$Num_Cases,
+                       wm_q$nb,
+                       wm_q$wt)
 ```
 
-Based on the output, the Moran I statistic standard deviate measures the degree of spatial autocorrelation in the variable, Num_cases, in the taiwan_viilage_dengue dataset. In this case, it is 47.203, which indicates a high level of spatial autocorrelation.
+Based on the output, the Moran I statistic standard deviate measures the degree of spatial autocorrelation in the variable, Num_cases, in the taiwan_viilage_dengue dataset. In this case, it is 25.476, which indicates a high level of spatial autocorrelation.
 
-In addition, the p-value is very low, at less than 2.2e-16, which indicates that the the spatial correlation is statistically significant. This rejects the null hypothesis that there is no spatial autocorrelation in the data.
+In addition, the p-value is very low, at less than 2.2e-16, which indicates that the the **spatial correlation is statistically significant**. This rejects the null hypothesis that there is no spatial autocorrelation in the data.
+
+The Moran I statistic of 0.073 also indicates that there is a positive spatial autocorrelation.
 
 Based on the above explanation, it suggests that the areas with high number of dengue cases tend to be clustered together geographically.
 
-#### 3.3.2 Monte Carlo Moran's I
+#### 3.3.3 Computing Global Monte Carlo Moran’s I
 
 Let's perform simulation on our Moran's I test
 
 ```{r}
 #| echo: false
 set.seed(1234)
-bperm= moran.mc(taiwan_village_dengue$Num_Cases, 
-                listw=rswm_q, 
-                nsim=999, 
-                zero.policy = TRUE, 
-                na.action=na.omit)
-bperm
+# Compute Monte Carlo Moran's I
+global_moran_perm <- global_moran_perm(wm_q$Num_Cases,  # Variable of interest
+                             wm_q$nb,        # Neighbour list object
+                             wm_q$wt,        # Spatial weights object
+                             nsim = 999)      # Number of permutations
+
+global_moran_perm
 ```
 
-The result indicates that the spatial autocorrelation is statistically significant with the p-value of 0.001.
+The result indicates that the spatial autocorrelation is statistically significant with the p-value of less than 0.01.
 
-#### 3.3.3 Visualising Monte Carlo Moran's I
+#### 3.3.4 Visualising Global Monte Carlo Moran’s I
 
 Let's display our findings in a histogram so that we can visualise it better
 
@@ -567,79 +607,109 @@ Firstly, we can get a statistical summary of the Monte Carlo Moran's I output
 
 ```{r}
 #| echo: false
-summary(bperm$res[1:999])
+summary(global_moran_perm$res[1:999])
 ```
 
 Now, we can plot the histogram
 
 ```{r}
 #| echo: false
-hist(bperm$res, 
+hist(global_moran_perm$res, 
      freq=TRUE, 
-     breaks=150, 
+     breaks=50, 
      xlab="Simulated Moran's I",
-     xlim=c(-0.002, 0.002))
+     xlim=c(-0.008,0.01))
 abline(v=0, 
        col="red") 
 ```
 
-### 3.4 Global Measures of Spatial Autocorrelation: Geary's C
+## 4 Local Spatial Autocorrelation Analysis by using sfdep methods
 
-Since we have performed the Moran's I test before this step, we have seen the spatial clustering and dispersion in our dataset, particularly the number of dengue cases in each village.
+### 4.1 Compute Local Moran's I
 
-#### 3.4.1 Geary's C Test
-
-Geary's C test compares the average squared differences in attribute values between neighboring locations to the overall variance in attribute values across all locations.
-
-Now, we will perform Geary's C test to dive into the differences in attribute values between the neighboring observations.
+We will compute the Local Moran's I value
 
 ```{r}
 #| echo: false
-geary.test(taiwan_village_dengue$Num_Cases, listw=rswm_q)
+lisa <- wm_q %>% 
+  mutate(local_moran = local_moran(
+    Num_Cases, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_moran)
 ```
 
-As we can observe from the result, the Geary's C statistic, at 9.809458e-01 or 0.9809458 being below 1.000, indicates that there are clustering in the spatial pattern.
+The above code would create a new sf file called "lisa" which stores the important information for the local moran's I values (such as ii, eii, var_ii, etc)
 
-addtion, the p-value is very small, at 7.772e-05, which indicates a strong rejection to the null hypothesis of no spatial autocorrelation. This means that there is a significant spatial autocorrelation in the distribution of Number of Dengue cases across the villages.
+![](images/clipboard-3086410928.png)
 
-Therefore, a low variance, of 2.537989e-05, indicates that the Geary' C statistic is relatively stable. The observations of the output also indicates that the Number of Dengue cases across the villages, are more similar to their neighbors.
+### 4.2 Visualising local Moran's I and p-value
 
-#### 3.4.2 Monte Carlo Geary's C Test
+For effective comparison, it will be better for us to plot both maps next to each other as shown below.
 
-Let's perform simulation on our Geary's C Test
+We will create a choropeth map by using the values in the "ii" field in lisa sf for the local Moran's I, and the values in the "p_ii_sim" field in lisa sf for the p-value.
 
 ```{r}
 #| echo: false
-set.seed(1234)
-bperm1=geary.mc(taiwan_village_dengue$Num_Cases, 
-               listw=rswm_q, 
-               nsim=999)
-bperm1
+
+tmap_mode("plot")
+map1 <- tm_shape(lisa) +
+  tm_fill("ii") + 
+  tm_borders(alpha = 0.5) +
+  tm_view(set.zoom.limits = c(6,8)) +
+  tm_layout(main.title = "local Moran's I of Num_Cases",
+            main.title.size = 0.8)
+
+map2 <- tm_shape(lisa) +
+  tm_fill("p_ii",
+          breaks = c(0, 0.001, 0.01, 0.05, 1),
+              labels = c("0.001", "0.01", "0.05", "Not sig")) + 
+  tm_borders(alpha = 0.5) +
+  tm_layout(main.title = "p-value of local Moran's I",
+            main.title.size = 0.8)
+
+tmap_arrange(map1, map2, ncol = 2)
 ```
 
-From the simulation results, we can observe that the p-value is very small, at 0.001, which strongly rejects the null hypothesis of no spatial autocorrelation. This means that there is spatial autocorrelation in the distribution of Number of dengue cases across villages
+### 4.3 **Visualising LISA map**
 
-#### 3.4.3 Visualising Monte Carlo Geary's C 
-
-Let's display our findings in a histogram so that we can visualise it better
-
-Firstly, we can get a statistical summary of the Monte Carlo Geary's C output
+We will plot the LISA map to check for any kinds of outliers and clusters. It is done by combining the Local Moran's I of the different areas and their respective p-values.
 
 ```{r}
 #| echo: false
-summary(bperm1$res[1:999])
+
+lisa_sig <- lisa  %>%
+  filter(p_ii < 0.05)
+tmap_mode("plot")
+tm_shape(lisa) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(lisa_sig) +
+  tm_fill("mean") + 
+  tm_borders(alpha = 0.4)
 ```
 
-Now, we can plot the histogram
+Based on the above map, and comparing it with our initial distribution map (below), we can observe that:
 
-```{r}
-#| echo: false
-hist(bperm1$res, freq=TRUE, breaks=20, xlab="Simulated Geary c")
-abline(v=1, col="red") 
-```
+![](images/clipboard-3680948792.png){width="451"}
 
-### 3.5 **Spatial Correlogram**
+-   Areas highlighted in red as classified as **High-High Clusters (red)**, where there are a high number of dengue cases, and it could also indicate that it is surrounded by areas with high dengue case counts. Comparing it to our initial distribution map that we plot in the beginning (in our join-operation), we can see that the areas with higher dengue cases are situated in area where it is highlighted in a darker shade of blue (ranging from 76.2 to 616.0 cases)
 
-## 4 Local spatial autocorrelation analysis by using sfdep methods
+    -   This means that local authorities should focus on the public health efforts in these areas as they are more prone to an outbreak or transmission.
 
-## 5 Analyising emerging hotspot analysis by using sfdep methods
+-   Areas highlighted in red as classified as **Low-Low Clusters (green)**, where there are a lower number of dengue cases, and it could also indicate that it is surrounded by areas with low dengue case counts. Comparing to the initial distribution map (shown before this), we can see that the Low-Low Clusters are mostly situated at areas where there are lower number of cases (below 47.8)
+
+    -   This means that public health efforts in these areas are well-maintained and there may be prevention measures in place when there is an outbreak or transmission.
+
+-   For both types of outliers, the High-Low (highlighted in yellow) and Low-High (highlighted in purple) outlier areas, they are a high and low number of cases respectively. However, they are surrounded by areas where there is a low or high number of cases respectively, which is contradictory to the actual situation in their areas.
+
+    -   For High-Low outlier areas, it means that local authorities should seriously look into these areas as they are more prone to an outbreak or transmission, even though they are surrounded by areas with low case counts.
+
+    -   For Low-High outlier areas, it means that the area is well-prepared with preventive measures when there is an outbreak or transmission. This means that it is worth looking into the preventive strategies that they have in-place, which could be adopted by the areas with high case counts in the future.
+
+### 4.4 Conclusion for Local Spatial Autocorrelation
+
+-   It is interesting to gain more insights into the different areas by filtering the areas based on the Moran's I test and p-value, which has significantly helped in identifying clusters which have a high or low number of cases.
+
+-   It is also able to identify outlier areas which is interesting to dive into as it provides shows which area is more prone to an outbreak, or area where preventive measures are in-place, despite being surrounded by areas which has a different case counts.
+
+## 5 Analysing Emerging Hotspot Analysis by using sfdep methods
