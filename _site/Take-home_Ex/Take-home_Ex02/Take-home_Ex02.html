@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Gerald Lim">
-<meta name="dcterms.date" content="2024-02-25">
+<meta name="dcterms.date" content="2024-02-26">
 
 <title>IS415-GAA - Take-home Exercise 2: Application of Spatial and Spatio-temporal Analysis Methods to Discover the Distribution of Dengue Fever in Tainan City, Taiwan</title>
 <style>
@@ -316,7 +316,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#visualising-lisa-map" id="toc-visualising-lisa-map" class="nav-link" data-scroll-target="#visualising-lisa-map">4.3 <strong>Visualising LISA map</strong></a></li>
   <li><a href="#conclusion-for-local-spatial-autocorrelation" id="toc-conclusion-for-local-spatial-autocorrelation" class="nav-link" data-scroll-target="#conclusion-for-local-spatial-autocorrelation">4.4 Conclusion for Local Spatial Autocorrelation</a></li>
   </ul></li>
-  <li><a href="#analyising-emerging-hotspot-analysis-by-using-sfdep-methods" id="toc-analyising-emerging-hotspot-analysis-by-using-sfdep-methods" class="nav-link" data-scroll-target="#analyising-emerging-hotspot-analysis-by-using-sfdep-methods">5 Analyising Emerging Hotspot Analysis by using sfdep methods</a></li>
+  <li><a href="#hotspot-analysis-by-using-sfdep-methods" id="toc-hotspot-analysis-by-using-sfdep-methods" class="nav-link" data-scroll-target="#hotspot-analysis-by-using-sfdep-methods">5 Hotspot Analysis by using sfdep methods</a>
+  <ul>
+  <li><a href="#performing-hot-spot-and-cold-spot-area-analysis-hcsa" id="toc-performing-hot-spot-and-cold-spot-area-analysis-hcsa" class="nav-link" data-scroll-target="#performing-hot-spot-and-cold-spot-area-analysis-hcsa">5.1 Performing Hot Spot and Cold Spot Area Analysis (HCSA)</a>
+  <ul class="collapse">
+  <li><a href="#computing-spatial-weights" id="toc-computing-spatial-weights" class="nav-link" data-scroll-target="#computing-spatial-weights">5.1.1 Computing spatial weights</a></li>
+  <li><a href="#computing-local-gi-statistics" id="toc-computing-local-gi-statistics" class="nav-link" data-scroll-target="#computing-local-gi-statistics">5.1.2 Computing local Gi* statistics</a></li>
+  <li><a href="#visualising-gi" id="toc-visualising-gi" class="nav-link" data-scroll-target="#visualising-gi">5.1.3 Visualising Gi*</a></li>
+  <li><a href="#visualising-p-value-of-hcsa" id="toc-visualising-p-value-of-hcsa" class="nav-link" data-scroll-target="#visualising-p-value-of-hcsa"><strong>5.1.4 Visualising p-value of HCSA</strong></a></li>
+  <li><a href="#visualising-local-hcsa" id="toc-visualising-local-hcsa" class="nav-link" data-scroll-target="#visualising-local-hcsa"><strong>5.1.4 Visualising Local HCSA</strong></a></li>
+  <li><a href="#visualising-hot-spot-and-cold-spot-areas" id="toc-visualising-hot-spot-and-cold-spot-areas" class="nav-link" data-scroll-target="#visualising-hot-spot-and-cold-spot-areas"><strong>5.1.5 Visualising hot spot and cold spot areas</strong></a></li>
+  </ul></li>
+  <li><a href="#analysing-emerging-hotspot" id="toc-analysing-emerging-hotspot" class="nav-link" data-scroll-target="#analysing-emerging-hotspot">5.2 Analysing Emerging Hotspot</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">6 Conclusion</a></li>
   </ul>
 </nav>
     </div>
@@ -342,7 +355,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 25, 2024</p>
+      <p class="date">February 26, 2024</p>
     </div>
   </div>
   
@@ -796,8 +809,110 @@ alternative hypothesis: two.sided</code></pre>
 </ul>
 </section>
 </section>
-<section id="analyising-emerging-hotspot-analysis-by-using-sfdep-methods" class="level2">
-<h2 class="anchored" data-anchor-id="analyising-emerging-hotspot-analysis-by-using-sfdep-methods">5 Analyising Emerging Hotspot Analysis by using sfdep methods</h2>
+<section id="hotspot-analysis-by-using-sfdep-methods" class="level2">
+<h2 class="anchored" data-anchor-id="hotspot-analysis-by-using-sfdep-methods">5 Hotspot Analysis by using sfdep methods</h2>
+<p>After performing the Global and Local Autocorrelation Analysis, let us move on to Analysing the Emerging Hotspots in our research in the dengue cases in Tainan City.</p>
+<section id="performing-hot-spot-and-cold-spot-area-analysis-hcsa" class="level3">
+<h3 class="anchored" data-anchor-id="performing-hot-spot-and-cold-spot-area-analysis-hcsa">5.1 Performing Hot Spot and Cold Spot Area Analysis (HCSA)</h3>
+<p>In the previous section, we have used Moran’s I to identify clusters and outliers.</p>
+<p>Now, we will use <strong>Gi*</strong>, which is a spatial autocorrelation statistic tool, to identify statistically hot (clusters of high values) or cold spots (clusters of low values) based on spatial weights.</p>
+<section id="computing-spatial-weights" class="level4">
+<h4 class="anchored" data-anchor-id="computing-spatial-weights">5.1.1 Computing spatial weights</h4>
+<p>We have to compute the spatial weights before we can proceed to computing the local Gi* statistics</p>
+</section>
+<section id="computing-local-gi-statistics" class="level4">
+<h4 class="anchored" data-anchor-id="computing-local-gi-statistics">5.1.2 Computing local Gi* statistics</h4>
+<p>Next, we will compute the local Gi* statistics</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 2902 features and 24 fields
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: 120.0627 ymin: 22.89401 xmax: 120.2925 ymax: 23.09144
+Geodetic CRS:  TWD97
+# A tibble: 2,902 × 25
+   gi_star    e_gi  var_gi p_value    p_sim p_folded_sim skewness kurtosis nb   
+     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;nb&gt; 
+ 1   -1.40 3.33e-4 3.29e-8   -1.47 1.42e- 1         0.02     0.01     2.68 &lt;int&gt;
+ 2   -1.40 3.07e-4 1.87e-8   -1.77 7.74e- 2         0.02     0.01     4.44 &lt;int&gt;
+ 3   -1.40 3.32e-4 8.00e-9   -1.35 1.76e- 1         0.02     0.01     1.81 &lt;int&gt;
+ 4   -1.40 3.56e-4 9.64e-9   -1.49 1.37e- 1         0.04     0.02     1.05 &lt;int&gt;
+ 5   -1.40 3.50e-4 1.07e-8   -1.35 1.78e- 1         0.02     0.01     1.35 &lt;int&gt;
+ 6   -1.40 3.37e-4 6.52e-9   -1.56 1.18e- 1         0.02     0.01     1.49 &lt;int&gt;
+ 7   -1.40 3.59e-4 1.17e-8   -1.37 1.70e- 1         0.02     0.01     2.13 &lt;int&gt;
+ 8    6.44 3.38e-4 5.46e-9    8.12 4.61e-16         0.02     0.01     1.19 &lt;int&gt;
+ 9    6.44 3.35e-4 6.11e-9    7.70 1.31e-14         0.02     0.01     1.13 &lt;int&gt;
+10    6.44 3.38e-4 6.59e-9    7.39 1.49e-13         0.02     0.01     1.31 &lt;int&gt;
+# ℹ 2,892 more rows
+# ℹ 16 more variables: wt &lt;list&gt;, VILLCODE &lt;chr&gt;, COUNTYNAME &lt;chr&gt;,
+#   TOWNNAME &lt;chr&gt;, VILLNAME &lt;chr&gt;, VILLENG &lt;chr&gt;, COUNTYID &lt;chr&gt;,
+#   COUNTYCODE &lt;chr&gt;, TOWNID &lt;chr&gt;, TOWNCODE &lt;chr&gt;, NOTE &lt;chr&gt;,
+#   epi_week_num &lt;chr&gt;, Village &lt;chr&gt;, Num_Cases &lt;int&gt;, geometry &lt;POLYGON [°]&gt;,
+#   spatial_weights &lt;list&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="visualising-gi" class="level4">
+<h4 class="anchored" data-anchor-id="visualising-gi">5.1.3 Visualising Gi*</h4>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="Take-home_Ex02_files/figure-html/unnamed-chunk-45-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>From the above plot, we are able to see the spatial clustering pattern. We could see that most of the area have a lower density (in orange).</p>
+<ul>
+<li>The areas with higher density (in light and dark green) towards the center of the map. The high density areas indicates that there are a high Gi* value, which relates to an obvious trend of clusters of dengue cases.</li>
+</ul>
+<!-- -->
+<ul>
+<li>The areas with low density (in orange) indicates that there is a low Gi* value, which means that there might be a lower number of dengue clusters, or that there is randomness in the distribution of cases.</li>
+</ul>
+</section>
+<section id="visualising-p-value-of-hcsa" class="level4">
+<h4 class="anchored" data-anchor-id="visualising-p-value-of-hcsa"><strong>5.1.4 Visualising p-value of HCSA</strong></h4>
+<p>Let’s plot the p-value of the areas to check the significance level</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="Take-home_Ex02_files/figure-html/unnamed-chunk-46-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can see that some areas have a higher significance level (in dark brown), while most of it have a lower significance level (in beige)</p>
+</section>
+<section id="visualising-local-hcsa" class="level4">
+<h4 class="anchored" data-anchor-id="visualising-local-hcsa"><strong>5.1.4 Visualising Local HCSA</strong></h4>
+<p>Now, let’s put both maps (Gi* and p-value) side by side to make a comparison</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="Take-home_Ex02_files/figure-html/unnamed-chunk-47-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Based on the maps, we can see an obvious trend, which is that areas with lower density for Gi* (means lower number of dengue cluster) has a low p-value (0.001). This means that areas with lower number of dengue cluster has a higher significance level, and that indicates that the dengue cases are influenced by geographic proximity.</p>
+</section>
+<section id="visualising-hot-spot-and-cold-spot-areas" class="level4">
+<h4 class="anchored" data-anchor-id="visualising-hot-spot-and-cold-spot-areas"><strong>5.1.5 Visualising hot spot and cold spot areas</strong></h4>
+<p>Now, we can plot the significant hotspot and coldspot (p-values less than 0.05)</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="Take-home_Ex02_files/figure-html/unnamed-chunk-48-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>From the map, we can observe that:</p>
+<ul>
+<li><p>There is 1 significant hotspot in the middle of the map (in dark green), with gi_star between 15-20, which indicates that it has a higher dengue cluster, and is surrounded by areas which are hotspots too.</p>
+<ul>
+<li>This supports the findings from our LISA map and the initial distribution map, where the central area of Tainan City has a higher dengue cluster (higher number of dengue cases)</li>
+</ul></li>
+<li><p>There are a few smaller hotspots (light green) surrounding the significant hotspot (dark green), as well as some other areas.</p></li>
+<li><p>The areas towards the sides of the map has a number of coldspots (orange), with gi_star value between -5 to 0, which indicates there is a low dengue cluster.</p></li>
+</ul>
+</section>
+</section>
+<section id="analysing-emerging-hotspot" class="level3">
+<h3 class="anchored" data-anchor-id="analysing-emerging-hotspot">5.2 Analysing Emerging Hotspot</h3>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">6 Conclusion</h2>
 
 
 </section>

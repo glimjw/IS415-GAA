@@ -712,4 +712,138 @@ Based on the above map, and comparing it with our initial distribution map (belo
 
 -   It is also able to identify outlier areas which is interesting to dive into as it provides shows which area is more prone to an outbreak, or area where preventive measures are in-place, despite being surrounded by areas which has a different case counts.
 
-## 5 Analysing Emerging Hotspot Analysis by using sfdep methods
+## 5 Hotspot Analysis by using sfdep methods
+
+After performing the Global and Local Autocorrelation Analysis, let us move on to Analysing the Emerging Hotspots in our research in the dengue cases in Tainan City.
+
+### 5.1 Performing Hot Spot and Cold Spot Area Analysis (HCSA)
+
+In the previous section, we have used Moran's I to identify clusters and outliers.
+
+Now, we will use **Gi\***, which is a spatial autocorrelation statistic tool, to identify statistically hot (clusters of high values) or cold spots (clusters of low values) based on spatial weights.
+
+#### 5.1.1 Computing spatial weights
+
+We have to compute the spatial weights before we can proceed to computing the local Gi\* statistics
+
+```{r}
+#| echo: false
+
+wm_idw <- taiwan_village_dengue %>%
+  mutate(nb = st_contiguity(geometry),
+         wt = st_inverse_distance(nb, geometry,
+                                  scale = 1,
+                                  alpha = 1),
+         .before = 1)
+```
+
+#### 5.1.2 Computing local Gi\* statistics
+
+Next, we will compute the local Gi\* statistics
+
+```{r}
+#| echo: false
+
+HCSA <- wm_idw %>% 
+  mutate(local_Gi = local_gstar_perm(
+    Num_Cases, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_Gi)
+HCSA
+```
+
+#### 5.1.3 Visualising Gi\*
+
+```{r}
+#| echo: false
+
+tmap_mode("plot")
+tm_shape(HCSA) +
+  tm_fill("gi_star") + 
+  tm_borders(alpha = 0.5) +
+  tm_view(set.zoom.limits = c(6,8))
+```
+
+From the above plot, we are able to see the spatial clustering pattern. We could see that most of the area have a lower density (in orange).
+
+-   The areas with higher density (in light and dark green) towards the center of the map. The high density areas indicates that there are a high Gi\* value, which relates to an obvious trend of clusters of dengue cases.
+
+```{=html}
+<!-- -->
+```
+-   The areas with low density (in orange) indicates that there is a low Gi\* value, which means that there might be a lower number of dengue clusters, or that there is randomness in the distribution of cases.
+
+#### **5.1.4 Visualising p-value of HCSA**
+
+Let's plot the p-value of the areas to check the significance level
+
+```{r}
+#| echo: false
+
+tmap_mode("plot")
+tm_shape(HCSA) +
+  tm_fill("p_sim") + 
+  tm_borders(alpha = 0.5)
+```
+
+We can see that some areas have a higher significance level (in dark brown), while most of it have a lower significance level (in beige)
+
+#### **5.1.4 Visualising Local HCSA**
+
+Now, let's put both maps (Gi\* and p-value) side by side to make a comparison
+
+```{r}
+#| echo: false
+
+tmap_mode("plot")
+map1 <- tm_shape(HCSA) +
+  tm_fill("gi_star") + 
+  tm_borders(alpha = 0.5) +
+  tm_view(set.zoom.limits = c(6,8)) +
+  tm_layout(main.title = "Gi* of GDPPC",
+            main.title.size = 0.8)
+
+map2 <- tm_shape(HCSA) +
+  tm_fill("p_value",
+          breaks = c(0, 0.001, 0.01, 0.05, 1),
+              labels = c("0.001", "0.01", "0.05", "Not sig")) + 
+  tm_borders(alpha = 0.5) +
+  tm_layout(main.title = "p-value of Gi*",
+            main.title.size = 0.8)
+
+tmap_arrange(map1, map2, ncol = 2)
+```
+
+Based on the maps, we can see an obvious trend, which is that areas with lower density for Gi\* (means lower number of dengue cluster) has a low p-value (0.001). This means that areas with lower number of dengue cluster has a higher significance level, and that indicates that the dengue cases are influenced by geographic proximity.
+
+#### **5.1.5 Visualising hot spot and cold spot areas**
+
+Now, we can plot the significant hotspot and coldspot (p-values less than 0.05)
+
+```{r}
+#| echo: false
+
+HCSA_sig <- HCSA  %>%
+  filter(p_sim < 0.05)
+tmap_mode("plot")
+tm_shape(HCSA) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(HCSA_sig) +
+  tm_fill("gi_star") + 
+  tm_borders(alpha = 0.4)
+```
+
+From the map, we can observe that:
+
+-   There is 1 significant hotspot in the middle of the map (in dark green), with gi_star between 15-20, which indicates that it has a higher dengue cluster, and is surrounded by areas which are hotspots too.
+
+    -   This supports the findings from our LISA map and the initial distribution map, where the central area of Tainan City has a higher dengue cluster (higher number of dengue cases)
+
+-   There are a few smaller hotspots (light green) surrounding the significant hotspot (dark green), as well as some other areas.
+
+-   The areas towards the sides of the map has a number of coldspots (orange), with gi_star value between -5 to 0, which indicates there is a low dengue cluster.
+
+### 5.2 Analysing Emerging Hotspot 
+
+## 6 Conclusion
