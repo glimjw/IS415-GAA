@@ -1,12 +1,12 @@
 ---
-title: "About"
+title: "About Me"
 ---
-
-## About Me
 
 ##### I am a 3rd year IS student, Majoring in Business Analytics and Digital Business. My passion lies in harnessing the power of data analysis and visualization to make impactful business decisions using technology.
 
 ##### In IS415 Geospatial Analytics and Applications, I am excited to learn how Geospatial Analytics is able to generate insightful analysis, which will diversify my knowledge in data analytics. This will also value add to my major with an alternative source of data analysis.
+
+##### Click here to access me [LinkedIn](www.linkedin.com/in/geraldlimjw)
 
 ## About Site
 

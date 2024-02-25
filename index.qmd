@@ -5,3 +5,5 @@ title: "IS415-GAA"
 Welcome to **IS415 Geospatial Analytics and Applications**
 
 I am Gerald Lim and this is the course website of IS415 where I will be uploading my work. You will find my course work on this website too.
+
+Click here to [know more about me](about.qmd)

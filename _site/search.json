@@ -513,7 +513,7 @@
   {
     "objectID": "about.html#about-site",
     "href": "about.html#about-site",
-    "title": "About",
+    "title": "About Me",
     "section": "About Site",
     "text": "About Site\n\nThis is where I will be uploading my Hands-on, In-class and Take-home exercises, where I explore R programming language and build on my competencies in data analytics."
   },
@@ -529,12 +529,12 @@
     "href": "index.html",
     "title": "IS415-GAA",
     "section": "",
-    "text": "Welcome to IS415 Geospatial Analytics and Applications\nI am Gerald Lim and this is the course website of IS415 where I will be uploading my work. You will find my course work on this website too."
+    "text": "Welcome to IS415 Geospatial Analytics and Applications\nI am Gerald Lim and this is the course website of IS415 where I will be uploading my work. You will find my course work on this website too.\nClick here to know more about me"
   },
   {
     "objectID": "about.html#disclaimer",
     "href": "about.html#disclaimer",
-    "title": "About",
+    "title": "About Me",
     "section": "Disclaimer",
     "text": "Disclaimer\n\nThe codes and works on this page belong to me, Gerald Lim. They are for my learning purposes, and are meant for showcasing my work for my IS415 journey.\nPlease DO NOT copy or share any codes without seeking permission, and to uphold academic integrity.\nConstructive feedback is welcomed, but any misuse or misrepresentation of these materials, including mocking or using them to pass judgment, is strictly prohibited (let’s be real, everyone is in this module to learn).\nBy accessing this page, you agree to respect Gerald Lim’s ownership of the works on this site.\n\nThank you for your understanding and cooperation."
   }

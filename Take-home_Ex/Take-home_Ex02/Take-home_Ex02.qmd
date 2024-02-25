@@ -573,6 +573,7 @@ summary(bperm$res[1:999])
 Now, we can plot the histogram
 
 ```{r}
+#| echo: false
 hist(bperm$res, 
      freq=TRUE, 
      breaks=150, 
@@ -593,6 +594,7 @@ Geary's C test compares the average squared differences in attribute values betw
 Now, we will perform Geary's C test to dive into the differences in attribute values between the neighboring observations.
 
 ```{r}
+#| echo: false
 geary.test(taiwan_village_dengue$Num_Cases, listw=rswm_q)
 ```
 
@@ -607,12 +609,36 @@ Therefore, a low variance, of 2.537989e-05, indicates that the Geary' C statisti
 Let's perform simulation on our Geary's C Test
 
 ```{r}
+#| echo: false
 set.seed(1234)
 bperm1=geary.mc(taiwan_village_dengue$Num_Cases, 
                listw=rswm_q, 
                nsim=999)
 bperm1
 ```
+
+From the simulation results, we can observe that the p-value is very small, at 0.001, which strongly rejects the null hypothesis of no spatial autocorrelation. This means that there is spatial autocorrelation in the distribution of Number of dengue cases across villages
+
+#### 3.4.3 Visualising Monte Carlo Geary's C 
+
+Let's display our findings in a histogram so that we can visualise it better
+
+Firstly, we can get a statistical summary of the Monte Carlo Geary's C output
+
+```{r}
+#| echo: false
+summary(bperm1$res[1:999])
+```
+
+Now, we can plot the histogram
+
+```{r}
+#| echo: false
+hist(bperm1$res, freq=TRUE, breaks=20, xlab="Simulated Geary c")
+abline(v=1, col="red") 
+```
+
+### 3.5 **Spatial Correlogram**
 
 ## 4 Local spatial autocorrelation analysis by using sfdep methods
 
