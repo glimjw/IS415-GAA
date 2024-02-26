@@ -203,6 +203,16 @@ filtered_dengue_sf$epi_week_num <- format(filtered_dengue_sf$發病日, "%U")
 filtered_dengue_sf$month <- format(filtered_dengue_sf$發病日, "%m")
 filtered_dengue_sf$day <- format(filtered_dengue_sf$發病日, "%d")
 
+#convert epi_week_num to numeric (for use in future steps)
+filtered_dengue_sf$epi_week_num <- as.numeric(filtered_dengue_sf$epi_week_num)
+
+#order it by week num
+filtered_dengue_sf <- filtered_dengue_sf[order(filtered_dengue_sf$epi_week_num), ]
+
+#rename 居住村里 to VILLNAME
+filtered_dengue_sf <- filtered_dengue_sf %>%
+  rename(VILLNAME = 居住村里)
+
 # Display the first few rows of the modified dataset
 head(filtered_dengue_sf)
 ```
@@ -216,7 +226,7 @@ However, in our dengue dataset, we have noticed that there are rows of data with
 #| eval: false
 # Remove rows with village name = "None"
 filtered_dengue_sf <- filtered_dengue_sf %>%
-  filter(居住村里 != "None")
+  filter(VILLNAME != "None")
 ```
 
 #### 2.2.3 Basic Analysis of filtered_dengue_sf dataset
@@ -228,7 +238,7 @@ Since we have the finalised filtered_dengue_sf, it is important for us to create
 #| eval: false
 # Step 1: Group by day and village, then count the number of cases
 cases_by_day_village <- filtered_dengue_sf %>%
-  group_by(發病日, 居住村里, 最小統計區中心點X, 最小統計區中心點Y) %>%
+  group_by(發病日, VILLNAME, 最小統計區中心點X, 最小統計區中心點Y) %>%
   summarise(num_cases = n())
 
 # Step 2: Optionally, you can rename the columns for clarity
@@ -249,7 +259,7 @@ In addition to the cases_by_day_village dataset, it would be useful for us to cr
 #| eval: false
 # Step 1: Group by week and village, then count the number of cases and retain X and Y coordinates
 cases_by_week_village <- filtered_dengue_sf %>%
-  group_by(epi_week_num, 居住村里) %>%
+  group_by(epi_week_num, VILLNAME) %>%
   summarise(Num_Cases = n(),
             XCoordinate = mean(最小統計區中心點X),
             YCoordinate = mean(最小統計區中心點Y))
@@ -274,7 +284,7 @@ To get the number of cases in througout Tainan city during the whole epidemiolog
 #| eval: false
 # Step 1: Group by day and village, then count the number of cases
 cases_by_village  <- filtered_dengue_sf %>%
-  group_by(居住村里, 最小統計區中心點X, 最小統計區中心點Y) %>%
+  group_by(VILLNAME, 最小統計區中心點X, 最小統計區中心點Y) %>%
   summarise(num_cases = n())
 
 # Step 2: Optionally, you can rename the columns for clarity
@@ -420,6 +430,8 @@ We have noticed that there are "NA" values in the Num_Cases column of the newly 
 So, we have to remove it before going to the next step. We will remove the rows with has "NA" values in the epi_week_num column.
 
 ```{r}
+#| echo: false
+
 taiwan_village_dengue <- taiwan_village_dengue[!is.na(taiwan_village_dengue$Num_Cases), ]
 ```
 
@@ -475,6 +487,190 @@ tm_shape(total_cases_by_village) +
 ```
 
 Based on the map, we can see that there are some villages that have a significantly higher number of cases. If we look at our **total_cases_by_village** dataset, we can see that these are the villages with the highest number of cases.
+
+### 2.4 Creating **Time Series Cube (spacetime) for dengue cases**
+
+In this section, we will create the a spatio-temporal cube for our dengue cases (**dengue_st**).
+
+We will be using taiwan_village_dengue and filtered_taiwan_village_sf to create our spacetime data.
+
+#### 2.4.1 Create 2 dataframes to store both taiwan_village_dengue and filtered_taiwan_village_sf datasets
+
+We have to create new dataframes to store both datasets so that the original datasets won't be overwritten.
+
+Firstly, we duplicate taiwan_village_dengue into cases_dengue, and filtered_taiwan_village_sf into filtered_taiwan_village_sf_filtered
+
+```{r}
+#| echo: false 
+cases_village <- taiwan_village_dengue
+filtered_taiwan_village_sf_filtered <- filtered_taiwan_village_sf 
+```
+
+Let's check for the number of unique villages.
+
+```{r}
+#| echo: false 
+# Assuming your dataset is called cases_village and the village column is named VILLNAME
+unique_villages <- unique(cases_village$VILLNAME)
+num_unique_villages <- length(unique_villages)
+
+# Print the number of unique villages
+print(num_unique_villages)
+```
+
+Since we have 228 unique villages, we are expecting to create a spacetime data (dengue_st) with 228 x 21 = 4788 rows.
+
+#### 2.4.2 Data Preparation for cases_village dataset
+
+Let's check the data type of cases_village dataset.
+
+```{r}
+#| echo: false 
+class(cases_village)
+```
+
+As cases_village is still in sf format, we want to convert it into a df, as we are using it as a df for our spacetime operation.
+
+We will also filter the "VILLNAME", "epi_week_num" and "Num_Cases" columns which we will be using for the operation.
+
+```{r}
+#| echo: false 
+# Convert the spatial data to a data frame
+cases_village_df <- as.data.frame(cases_village)
+
+# Remove the geometry column
+cases_village_df <- cases_village_df[, !(names(cases_village_df) %in% "geometry")]
+
+# Select only the columns you want to keep
+cases_village_df <- cases_village_df[, c("VILLNAME", "epi_week_num", "Num_Cases")]
+```
+
+We need to convert "epi_week_num" into integer type for the spacetime operation.
+
+```{r}
+#| echo: false 
+# Convert epi_week_num to integer in cases_village_df
+cases_village_df$epi_week_num <- as.integer(cases_village_df$epi_week_num)
+```
+
+We need to remove the duplicate rows in our cases_village_df dataset as it would affect our spacetime operation.
+
+```{r}
+#| echo: false 
+# Identify duplicate rows based on selected columns
+duplicate_rows <- cases_village_df[duplicated(cases_village_df[, c("VILLNAME", "epi_week_num")]), ]
+
+# Remove duplicate rows from cases_village_df
+cases_village_df <- anti_join(cases_village_df, duplicate_rows)
+```
+
+Looking at our cases_village_df dataset, we noticed that there are missing rows as 0 cases are not recorded in the dataset. So, we will amend the dataset and add the rows for the respective village (and week) with 0 for weeks where there is no records.
+
+```{r}
+#| echo: false 
+# Create a complete dataset with all combinations of village names and week numbers
+complete_data <- expand.grid(VILLNAME = unique(cases_village_df$VILLNAME),
+                             epi_week_num = unique(cases_village_df$epi_week_num))
+
+
+# Left join with cases_village_df to fill in missing combinations
+cases_village_df <- complete_data %>%
+  left_join(cases_village_df, by = c("VILLNAME", "epi_week_num")) %>%
+  mutate(Num_Cases = ifelse(is.na(Num_Cases), 0, Num_Cases))
+
+# Check the dimensions of complete_data
+dim(cases_village_df)
+
+```
+
+Let's double check our epi_week_num data type. Make sure it is an integer.
+
+```{r}
+#| echo: false 
+class(cases_village_df$epi_week_num)
+
+```
+
+Let's double check our VILLNAME data type. Make sure it is an character.
+
+```{r}
+#| echo: false 
+class(cases_village_df$VILLNAME)
+```
+
+Now, we will filter filtered_taiwan_village_sf_filtered and keep the rows that has the same villages in cases_village_df.
+
+```{r}
+#| echo: false 
+# Get unique village names from cases_village_df
+unique_villages_cases <- unique(cases_village_df$VILLNAME)
+
+# Filter filtered_taiwan_village_sf_filtered to include only villages present in cases_village_df
+filtered_taiwan_village_sf_filtered <- filtered_taiwan_village_sf_filtered[filtered_taiwan_village_sf_filtered$VILLNAME %in% unique_villages_cases, ]
+
+# Check the number of unique villages in filtered_taiwan_village_sf_filtered
+print(length(unique(filtered_taiwan_village_sf_filtered$VILLNAME)))
+
+# Check the number of unique locations in filtered_taiwan_village_sf
+num_unique_locations_filtered_taiwan_village_sf <- nrow(unique(filtered_taiwan_village_sf_filtered))
+print(num_unique_locations_filtered_taiwan_village_sf)
+```
+
+As we can see that filtered_taiwan_village_sf_filtered has a total 233 rows, but with 228 unique village name (VILLNAME), which indicates that there is duplicated villages in the dataset. We need to remove the duplicated rows.
+
+```{r}
+#| echo: false 
+# Remove duplicate village names
+filtered_taiwan_village_sf_filtered <- filtered_taiwan_village_sf_filtered[!duplicated(filtered_taiwan_village_sf_filtered$VILLNAME), ]
+
+# Check the number of unique locations after removing duplicates
+num_unique_locations <- nrow(unique(filtered_taiwan_village_sf_filtered$VILLNAME))
+print(num_unique_locations)
+```
+
+Now, after removing the duplicated rows, let's check to make sure both datasets has 228 rows of data before we do the spacetime operation
+
+```{r}
+#| echo: false 
+# Check the number of unique locations in filtered_cases_village
+num_unique_locations_filtered_cases_village <- length(unique(cases_village_df$VILLNAME))
+print(num_unique_locations_filtered_cases_village)
+
+# Check the number of unique locations in filtered_taiwan_village_sf
+num_unique_locations_filtered_taiwan_village_sf <- nrow(unique(filtered_taiwan_village_sf_filtered))
+print(num_unique_locations_filtered_taiwan_village_sf)
+```
+
+#### 2.4.3 Spacetime Operation
+
+Let's perform the spacetime operation, by setting the VILLNAME as .loc_col, and epi_week_num as .time_col.
+
+```{r}
+#| echo: false 
+# Combine spatial and temporal data
+dengue_st <- spacetime(cases_village_df, filtered_taiwan_village_sf_filtered,
+                      .loc_col = "VILLNAME",
+                      .time_col = "epi_week_num")
+
+# Check the spacetime object
+dengue_st
+```
+
+Let's check the number of rows and columns for our newly created dengue_st
+
+```{r}
+#| echo: false 
+dim(dengue_st)
+```
+
+Let's check if dengue_st is truly a spacetime_cube
+
+```{r}
+#| echo: false 
+is_spacetime_cube(dengue_st)
+```
+
+We will save dengue_st for Analysing Emerging Hotspot in 5.2.
 
 ## 3 Global Spatial Autocorrelation Analysis by using sfdep methods
 
@@ -710,7 +906,7 @@ Based on the above map, and comparing it with our initial distribution map (belo
 
 -   It is interesting to gain more insights into the different areas by filtering the areas based on the Moran's I test and p-value, which has significantly helped in identifying clusters which have a high or low number of cases.
 
--   It is also able to identify outlier areas which is interesting to dive into as it provides shows which area is more prone to an outbreak, or area where preventive measures are in-place, despite being surrounded by areas which has a different case counts.
+-   It is also able to identify outlier areas which is interesting to dive into as it indicates which area is more prone to an outbreak, or area where preventive measures are in-place, despite being surrounded by areas which has a different case counts.
 
 ## 5 Hotspot Analysis by using sfdep methods
 
@@ -767,10 +963,6 @@ tm_shape(HCSA) +
 From the above plot, we are able to see the spatial clustering pattern. We could see that most of the area have a lower density (in orange).
 
 -   The areas with higher density (in light and dark green) towards the center of the map. The high density areas indicates that there are a high Gi\* value, which relates to an obvious trend of clusters of dengue cases.
-
-```{=html}
-<!-- -->
-```
 -   The areas with low density (in orange) indicates that there is a low Gi\* value, which means that there might be a lower number of dengue clusters, or that there is randomness in the distribution of cases.
 
 #### **5.1.4 Visualising p-value of HCSA**
@@ -844,6 +1036,112 @@ From the map, we can observe that:
 
 -   The areas towards the sides of the map has a number of coldspots (orange), with gi_star value between -5 to 0, which indicates there is a low dengue cluster.
 
-### 5.2 Analysing Emerging Hotspot 
+Let's find the details of the hotspot and coldspot, which we will be using it in 5.2 in analysing emerging hotspots
+
+```{r}
+#| echo: false 
+
+# Filter HCSA to include only rows where p_sim < 0.05
+HCSA_sig <- HCSA %>% 
+  filter(p_sim < 0.05)
+
+# Find the row with the highest gi_star among the filtered data
+hotspot <- HCSA_sig %>%
+  filter(gi_star == max(gi_star))
+
+# Print the hotspot
+cat("Hotspot with the highest gi_star and p_sim < 0.05:", hotspot$VILLNAME, "\n")
+```
+
+So, 大興里 is the hotspot. :)
+
+### 5.2 Analysing Emerging Hotspot
+
+Since we have computed the Gi\* values, which shows us the Hotspots and Coldspots, we will move on to performing Mann-Kendall test to look for any trend in the spots.
+
+However, we need to compute the local Gi\* statistics using the spacetime dataset, dengue_st, which we have created in 2.4.
+
+#### 5.2.1 Computing Gi\*
+
+We will use dengue_st to compute the Gi\*, where the geometry is in the spacetime dataset.
+
+```{r}
+#| echo: false
+
+# Activate the geometry column
+dengue_st <- activate(dengue_st, "geometry")
+
+# Create spatial weights
+tainan_dengue_nb <- dengue_st %>%
+  mutate(nb = st_contiguity(geometry),
+         wt = st_inverse_distance(nb, geometry, scale = 1, alpha = 1),
+         .before = 1) %>%
+  set_nbs("nb") %>%
+  set_wts("wt")
+
+
+```
+
+Let's look at the first 5 rows
+
+```{r}
+#| echo: false
+
+head(tainan_dengue_nb)
+```
+
+#### 5.2.2 Computing Local Gi\*
+
+Now, we need to compute the Local Gi\* for each villages, using the tainan_dengue_nb which we have created in 5.1.
+
+```{r}
+#| echo: false
+
+gi_stars <- tainan_dengue_nb %>%
+  group_by(epi_week_num) %>%
+  mutate(gi_star = ifelse(sapply(nb, is.list), 
+                          local_gstar_perm(Num_Cases, nb, wt), 
+                          NA_real_)) %>%
+  filter(!is.na(gi_star)) %>%
+  unnest(gi_star)
+```
+
+#### 5.2.3 Computing Mann-Kendall Test
+
+Now, we will use Mann-Kendall Test to evaluate the trend of the hotspot. We have found that 大興里 is the hotspot when we were analysing HCSA in step 5.1.
+
+```{r}
+#| echo: false
+
+cbg <- gi_stars %>% 
+  ungroup() %>% 
+  filter(VILLNAME == "大興里") |> 
+  select(VILLNAME, epi_week_num, gi_star)
+```
+
+Let's install Kendall
+
+```{r}
+#| eval: false
+#| echo: false
+
+install.packages("Kendall")
+```
+
+Let's plot the result using ggplot2
+
+```{r}
+#| eval: false
+#| echo: false
+
+ehsa <- gi_stars %>%
+  group_by(VILLNAME) %>%
+  summarise(mk = list(
+    unclass(
+      Kendall::MannKendall(gi_star)))) %>%
+  tidyr::unnest_wider(mk)
+```
 
 ## 6 Conclusion
+
+It is interesting to use the different tools such as Local and Global spatial autocorrelation to find the clusters or hotspots within the area of focus, in this case it is the dengue cases in Tainan City.

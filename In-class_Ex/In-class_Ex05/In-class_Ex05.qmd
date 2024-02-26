@@ -106,3 +106,35 @@ global_moran_perm(wm_q$GDPPC,
                   wm_q$wt,
                   nsim=99)
 ```
+
+```{r}
+GDPPC <- read_csv("data/aspatial/Hunan_GDPPC.csv")
+```
+
+```{r}
+str(GDPPC)
+```
+
+```{r}
+class(GDPPC$Year)
+```
+
+```{r}
+class(GDPPC$County)
+```
+
+```{r}
+GDPPC_st <- spacetime(GDPPC, hunan,
+                      .loc_col = "County",
+                      .time_col = "Year")
+```
+
+```{r}
+dim(GDPPC_st)
+
+```
+
+```{r}
+is_spacetime_cube(GDPPC_st)
+
+```
