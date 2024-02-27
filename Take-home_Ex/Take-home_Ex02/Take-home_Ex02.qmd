@@ -26,15 +26,15 @@ execute:
 
 ## **Setting the Scene**
 
-Dengue Hemorrhagic Fever (in short dengue fever) is one of the most widespread mosquito-borne diseases in the most tropical and subtropical regions. It is an acute disease caused by dengue virus infection which is transmitted by female Aedes aegypti and Aedes albopictus mosquitoes. In 2015, Taiwan had recorded the most severe dengue fever outbreak with more than 43,000 dengue cases and 228 deaths. Since then, the annual reported dengue fever cases were maintained at the level of not more than 200 cases. However, in 2023, Taiwan recorded 26703 dengue fever cases. Figure below reveals that more than 25,000 cases were reported at Tainan City.
+The surge in dengue fever cases in Taiwan during 2023 marks a concerning deviation from the relatively stable trend observed in previous years. Despite efforts to control the disease, the drastic increase to over 26,000 cases highlights potential challenges in disease management and prevention strategies. Tainan City emerges as a focal point, bearing the brunt of this outbreak with a significant concentration of reported cases, emphasizing the need for targeted interventions and heightened vigilance in affected regions.
 
-![](https://is415-ay2023-24t2.netlify.app/img/df1.jpg)
+![](images/clipboard-3174463590.png){width="511"}
 
 ## **Objectives**
 
-As a curious geospatial analytics green horn, you are interested to discover:
+In this geospatial analytics research, we are goal is to discover:
 
--   if the distribution of dengue fever outbreak at Tainan City, Taiwan are independent from space and space and time.
+-   If the distribution of dengue fever outbreak at Tainan City, Taiwan are independent from space and time.
 
 -   If the outbreak is indeed spatial and spatio-temporal dependent, then, you would like to detect where are the clusters and outliers, and the emerging hot spot/cold spot areas.
 
@@ -1144,4 +1144,4 @@ ehsa <- gi_stars %>%
 
 ## 6 Conclusion
 
-It is interesting to use the different tools such as Local and Global spatial autocorrelation to find the clusters or hotspots within the area of focus, in this case it is the dengue cases in Tainan City.
+It is interesting to use the different tools, such as Local and Global spatial autocorrelation, to find the clusters or hotspots within the area of focus, in this case it is the dengue cases in Tainan City.

@@ -127,6 +127,8 @@ class(GDPPC$County)
 GDPPC_st <- spacetime(GDPPC, hunan,
                       .loc_col = "County",
                       .time_col = "Year")
+
+GDPPC_st
 ```
 
 ```{r}
