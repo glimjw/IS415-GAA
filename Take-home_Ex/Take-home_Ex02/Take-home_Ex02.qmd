@@ -16,14 +16,6 @@ execute:
   freeze: false
 ---
 
-## **DISCLAIMER (Read this before you scroll down):**
-
-1.  **Some parts of this document have hidden codes that are kept PRIVATE for now. They contain confidential codes which I will ONLY be disclosing them on 1 March 2024 (week 9).**
-
-2.  **I will ONLY provide explanations for the exercise right now, and it is subjected to change during the duration of this exercise.**
-
-3.  **It is important to be honest and fair in our work, and respect the privacy of the work of others, so as to uphold academic integrity throughout the duration of this take-home exercise.**
-
 ## **Setting the Scene**
 
 The surge in dengue fever cases in Taiwan during 2023 marks a concerning deviation from the relatively stable trend observed in previous years. Despite efforts to control the disease, the drastic increase to over 26,000 cases highlights potential challenges in disease management and prevention strategies. Tainan City emerges as a focal point, bearing the brunt of this outbreak with a significant concentration of reported cases, emphasizing the need for targeted interventions and heightened vigilance in affected regions.
@@ -32,11 +24,13 @@ The surge in dengue fever cases in Taiwan during 2023 marks a concerning deviati
 
 ## **Objectives**
 
-In this geospatial analytics research, we are goal is to discover:
+In this geospatial analytics research, our goal is to discover:
 
 -   If the distribution of dengue fever outbreak at Tainan City, Taiwan are independent from space and time.
 
--   If the outbreak is indeed spatial and spatio-temporal dependent, then, you would like to detect where are the clusters and outliers, and the emerging hot spot/cold spot areas.
+-   If the outbreak is indeed spatial and spatio-temporal dependent
+
+-   where are the clusters and outliers, and the emerging hot spot/cold spot areas.
 
 ## 1 Install maptools
 
@@ -96,7 +90,6 @@ Currently, we have 649 rows of data in taiwan_village_sf.
 Therefore, we have to filter the taiwan_village_sf for village level of D01, D02, D04, D06, D07, D08, D32, and D39 of the Tainan City, Taiwan
 
 ```{r}
-#| echo: false
 #| eval: false
 #taiwan_village_sf <- st_transform(taiwan_village_sf, CRS=3414) - not needed
 #filter the specific town ID from taiwan_village_sf
@@ -113,7 +106,6 @@ Now, filtered_taiwan_village_sf will consist of 258 rows of data. This will help
 Since we're happy with the dataset for filtered_taiwan_village_sf, let's save it to a rds so that it would be easier for us to retrieve it in the future
 
 ```{r}
-#| echo: false
 #| eval: false
 write_rds(filtered_taiwan_village_sf, "data/rds/filtered_taiwan_village_sf.rds")
 ```
@@ -121,7 +113,6 @@ write_rds(filtered_taiwan_village_sf, "data/rds/filtered_taiwan_village_sf.rds")
 Import the filtered_taiwan_village_sf rds data
 
 ```{r}
-#| echo: false
 filtered_taiwan_village_sf <- read_rds("data/rds/filtered_taiwan_village_sf.rds")
 ```
 
@@ -130,7 +121,6 @@ filtered_taiwan_village_sf <- read_rds("data/rds/filtered_taiwan_village_sf.rds"
 Let's visualise how filtered_taiwan_village_sf looks like when we plot it
 
 ```{r}
-#| echo: false
 tmap_mode("plot") 
 tm_shape(filtered_taiwan_village_sf) + 
   tm_dots()
@@ -156,7 +146,6 @@ As dengue_sf consists of 106861 rows of data, with 26 types of variables, as sho
 Let's filter dengue_sf for fever cases that are confined to epidemiology week 31-50 of 2023, as well as the selected variables which we will be working with (發病日: Onset date, 居住縣市: County, 居住鄉鎮: Town, 居住村里: Village, 最小統計區中心點X: x-coordinate, 最小統計區中心點Y: y-coordinate)
 
 ```{r}
-#| echo: false
 #| eval: false
 
 # Filter the dataset for fever cases confined to epidemiology week 31-50, 2023
@@ -174,7 +163,6 @@ After filtering dengue_sf, and storing it in filtered_dengue_sf, the amount of d
 Let's check the data type of each variable before we proceed to performing left-join
 
 ```{r}
-#| echo: false
 #| eval: false
 str(filtered_dengue_sf)
 ```
@@ -185,7 +173,6 @@ Let's transform some of our variables and prepare it for the left-join operation
 -   This is the same for onset date where we need to convert it to date format
 
 ```{r}
-#| echo: false
 #| eval: false
 # Convert the columns to numeric
 filtered_dengue_sf$發病日 <- as.Date(filtered_dengue_sf$發病日)
@@ -196,7 +183,6 @@ filtered_dengue_sf$最小統計區中心點Y <- as.numeric(filtered_dengue_sf$�
 Let's create 3 different variables that stores the week number, month and day respectively. This is to facilitate our research and analysis in the later parts of this take-home exercise.
 
 ```{r}
-#| echo: false
 #| eval: false
 # Extract week number, month, and day separately
 filtered_dengue_sf$epi_week_num <- format(filtered_dengue_sf$發病日, "%U")
@@ -222,7 +208,6 @@ However, in our dengue dataset, we have noticed that there are rows of data with
 ![](images/clipboard-459349656.png){width="612"}
 
 ```{r}
-#| echo: false
 #| eval: false
 # Remove rows with village name = "None"
 filtered_dengue_sf <- filtered_dengue_sf %>%
@@ -234,7 +219,6 @@ filtered_dengue_sf <- filtered_dengue_sf %>%
 Since we have the finalised filtered_dengue_sf, it is important for us to create a new table to store the number of cases, grouped by the **day** and **village**. We will store it in cases_by_day_village dataset.
 
 ```{r}
-#| echo: false
 #| eval: false
 # Step 1: Group by day and village, then count the number of cases
 cases_by_day_village <- filtered_dengue_sf %>%
@@ -255,7 +239,6 @@ A snippet of the resulting dataset for **cases_by_day_village** looks like this:
 In addition to the cases_by_day_village dataset, it would be useful for us to create a new table to store the total number of cases, grouped by the **week** and **village**. We will store it in **cases_by_week_village** dataset.
 
 ```{r}
-#| echo: false
 #| eval: false
 # Step 1: Group by week and village, then count the number of cases and retain X and Y coordinates
 cases_by_week_village <- filtered_dengue_sf %>%
@@ -280,7 +263,6 @@ A snippet of the resulting dataset for **cases_by_week_village** looks like this
 To get the number of cases in througout Tainan city during the whole epidemiology week 31-50, it would be useful for us to create a new table to store the number of cases for each village. We will store it in **cases_by_village** dataset.
 
 ```{r}
-#| echo: false
 #| eval: false
 # Step 1: Group by day and village, then count the number of cases
 cases_by_village  <- filtered_dengue_sf %>%
@@ -301,7 +283,6 @@ A snippet of the resulting dataset for **cases_by_village** looks like this:
 To get the number of cases in a week througout Tainan city, it would be useful for us to create a new table to store the number of cases, grouped by the **week** alone. We will store it in **cases_by_week** dataset.
 
 ```{r}
-#| echo: false
 #| eval: false
 # Step 1: Group by day and village, then count the number of cases
 cases_by_week  <- filtered_dengue_sf %>%
@@ -326,7 +307,6 @@ Now, we have found valuable analysis from our dataset, let's move on to the next
 Since we're happy with the dataset for filtered_taiwan_village_sf, and datasets from our analysis in 2.2.3, let's save it to a rds so that it would be easier for us to retrieve it in the future
 
 ```{r}
-#| echo: false
 #| eval: false
 write_rds(filtered_dengue_sf, "data/rds/filtered_dengue_sf.rds")
 write_rds(cases_by_day_village, "data/rds/cases_by_day_village.rds")
@@ -362,9 +342,9 @@ Our goal is to perform the join operation to the **cases_by_week_village** and s
 
 The reason for using cases_by_week_village is because we are focusing on the number of cases in each village on a weekly basis.
 
-#### 2.3.1 Left-Join Operation and Outcome
+#### 2.3.1 Join Operation and Outcome
 
-Before we perform the left-join operation, we can see that the cases_by_village is not a spatial data. As for filtered_taiwan_village_sf, we have already checked the data type of the file is already in spatial data type (TWD97).
+Before we perform the join operation, we can see that the cases_by_village is not a spatial data. As for filtered_taiwan_village_sf, we have already checked the data type of the file is already in spatial data type (TWD97).
 
 ```{r}
 st_crs(cases_by_week_village)
@@ -381,7 +361,6 @@ And we have to clean up the NA values before proceeding to cases_by_week_village
 One option that we could remove the NA values which could potentially create problems in our future analysis, and they wouldn't provide us with accurate analysis. On the other hand, if we were to adopt the other option which is to find the mean / median of the x and y coordinates for the missing values, it would also affect the accuracy of our analysis.
 
 ```{r}
-#| echo: false
 # Convert cases_by_village to sf object
 cases_by_week_village <- cases_by_week_village[complete.cases(cases_by_week_village[, c("XCoordinate", "YCoordinate")]), ]
 ```
@@ -389,25 +368,22 @@ cases_by_week_village <- cases_by_week_village[complete.cases(cases_by_week_vill
 Now that we have cleared the NA values, let's transform the case_by_village dataset into a sf
 
 ```{r}
-#| echo: false
 cases_by_week_village_sf <- st_as_sf(cases_by_week_village, coords = c("XCoordinate", "YCoordinate"))
 ```
 
 ```{r}
-#| echo: false
 st_crs(cases_by_week_village_sf) <- st_crs(4326)
 ```
 
+Let's transform our case_by_village dataset into a spatial dataset (in sf)
+
 ```{r}
-#| echo: false
 cases_by_week_village_sf <- st_transform(cases_by_week_village_sf, crs = st_crs(filtered_taiwan_village_sf))
 ```
 
 The join dataset would be named taiwan_village_dengue
 
 ```{r}
-#| echo: false
-# Perform left join based on X and Y coordinates
 # Perform spatial join
 taiwan_village_dengue <- st_join(filtered_taiwan_village_sf, cases_by_week_village_sf, join = st_intersects)
 ```
@@ -415,7 +391,6 @@ taiwan_village_dengue <- st_join(filtered_taiwan_village_sf, cases_by_week_villa
 After performing the left-join operation, the taiwan_village_dengue dataset seems to have "NA" values. This is due to the fact that the village name (居住村里) value in the filtered_dengue_sf is not found in the list of village name (VILLNAME) in filtered_taiwan_village_sf.
 
 ```{r}
-#| echo: false
 st_crs(taiwan_village_dengue)
 ```
 
@@ -430,8 +405,6 @@ We have noticed that there are "NA" values in the Num_Cases column of the newly 
 So, we have to remove it before going to the next step. We will remove the rows with has "NA" values in the epi_week_num column.
 
 ```{r}
-#| echo: false
-
 taiwan_village_dengue <- taiwan_village_dengue[!is.na(taiwan_village_dengue$Num_Cases), ]
 ```
 
@@ -440,7 +413,6 @@ taiwan_village_dengue <- taiwan_village_dengue[!is.na(taiwan_village_dengue$Num_
 Since we are happy with our finalised taiwan_village_dengue dataset, let's keep it in our rds for easy reference in the future
 
 ```{r}
-#| echo: false
 #| eval: false 
 write_rds(taiwan_village_dengue, "data/rds/taiwan_village_dengue.rds")
 ```
@@ -448,7 +420,6 @@ write_rds(taiwan_village_dengue, "data/rds/taiwan_village_dengue.rds")
 Import the filtered_taiwan_village_sf rds data
 
 ```{r}
-#| echo: false
 taiwan_village_dengue <- read_rds("data/rds/taiwan_village_dengue.rds")
 ```
 
@@ -461,8 +432,6 @@ Let's plot **taiwan_village_dengue** and see how it looks like.
 We will create an "**total_cases_by_village**" dataset to count the number of cases in each village, and thereafter plot it on tmap, so that we can easily identify which village has a higher number of cases on the map.
 
 ```{r}
-#| echo: false
-
 # Aggregate the data to get the total number of cases for each village
 total_cases_by_village <- taiwan_village_dengue %>%
   group_by(VILLNAME) %>%
@@ -501,7 +470,6 @@ We have to create new dataframes to store both datasets so that the original dat
 Firstly, we duplicate taiwan_village_dengue into cases_dengue, and filtered_taiwan_village_sf into filtered_taiwan_village_sf_filtered
 
 ```{r}
-#| echo: false 
 cases_village <- taiwan_village_dengue
 filtered_taiwan_village_sf_filtered <- filtered_taiwan_village_sf 
 ```
@@ -509,7 +477,6 @@ filtered_taiwan_village_sf_filtered <- filtered_taiwan_village_sf
 Let's check for the number of unique villages.
 
 ```{r}
-#| echo: false 
 # Assuming your dataset is called cases_village and the village column is named VILLNAME
 unique_villages <- unique(cases_village$VILLNAME)
 num_unique_villages <- length(unique_villages)
@@ -525,7 +492,6 @@ Since we have 228 unique villages, we are expecting to create a spacetime data (
 Let's check the data type of cases_village dataset.
 
 ```{r}
-#| echo: false 
 class(cases_village)
 ```
 
@@ -534,7 +500,6 @@ As cases_village is still in sf format, we want to convert it into a df, as we a
 We will also filter the "VILLNAME", "epi_week_num" and "Num_Cases" columns which we will be using for the operation.
 
 ```{r}
-#| echo: false 
 # Convert the spatial data to a data frame
 cases_village_df <- as.data.frame(cases_village)
 
@@ -548,7 +513,6 @@ cases_village_df <- cases_village_df[, c("VILLNAME", "epi_week_num", "Num_Cases"
 We need to convert "epi_week_num" into integer type for the spacetime operation.
 
 ```{r}
-#| echo: false 
 # Convert epi_week_num to integer in cases_village_df
 cases_village_df$epi_week_num <- as.integer(cases_village_df$epi_week_num)
 ```
@@ -556,7 +520,6 @@ cases_village_df$epi_week_num <- as.integer(cases_village_df$epi_week_num)
 We need to remove the duplicate rows in our cases_village_df dataset as it would affect our spacetime operation.
 
 ```{r}
-#| echo: false 
 # Identify duplicate rows based on selected columns
 duplicate_rows <- cases_village_df[duplicated(cases_village_df[, c("VILLNAME", "epi_week_num")]), ]
 
@@ -567,7 +530,6 @@ cases_village_df <- anti_join(cases_village_df, duplicate_rows)
 Looking at our cases_village_df dataset, we noticed that there are missing rows as 0 cases are not recorded in the dataset. So, we will amend the dataset and add the rows for the respective village (and week) with 0 for weeks where there is no records.
 
 ```{r}
-#| echo: false 
 # Create a complete dataset with all combinations of village names and week numbers
 complete_data <- expand.grid(VILLNAME = unique(cases_village_df$VILLNAME),
                              epi_week_num = unique(cases_village_df$epi_week_num))
@@ -586,7 +548,6 @@ dim(cases_village_df)
 Let's double check our epi_week_num data type. Make sure it is an integer.
 
 ```{r}
-#| echo: false 
 class(cases_village_df$epi_week_num)
 
 ```
@@ -594,14 +555,12 @@ class(cases_village_df$epi_week_num)
 Let's double check our VILLNAME data type. Make sure it is an character.
 
 ```{r}
-#| echo: false 
 class(cases_village_df$VILLNAME)
 ```
 
 Now, we will filter filtered_taiwan_village_sf_filtered and keep the rows that has the same villages in cases_village_df.
 
 ```{r}
-#| echo: false 
 # Get unique village names from cases_village_df
 unique_villages_cases <- unique(cases_village_df$VILLNAME)
 
@@ -619,7 +578,6 @@ print(num_unique_locations_filtered_taiwan_village_sf)
 As we can see that filtered_taiwan_village_sf_filtered has a total 233 rows, but with 228 unique village name (VILLNAME), which indicates that there is duplicated villages in the dataset. We need to remove the duplicated rows.
 
 ```{r}
-#| echo: false 
 # Remove duplicate village names
 filtered_taiwan_village_sf_filtered <- filtered_taiwan_village_sf_filtered[!duplicated(filtered_taiwan_village_sf_filtered$VILLNAME), ]
 
@@ -631,7 +589,6 @@ print(num_unique_locations)
 Now, after removing the duplicated rows, let's check to make sure both datasets has 228 rows of data before we do the spacetime operation
 
 ```{r}
-#| echo: false 
 # Check the number of unique locations in filtered_cases_village
 num_unique_locations_filtered_cases_village <- length(unique(cases_village_df$VILLNAME))
 print(num_unique_locations_filtered_cases_village)
@@ -645,8 +602,8 @@ print(num_unique_locations_filtered_taiwan_village_sf)
 
 Let's perform the spacetime operation, by setting the VILLNAME as .loc_col, and epi_week_num as .time_col.
 
-```{r}
-#| echo: false 
+```{r, results='hide'}
+
 # Combine spatial and temporal data
 dengue_st <- spacetime(cases_village_df, filtered_taiwan_village_sf_filtered,
                       .loc_col = "VILLNAME",
@@ -656,17 +613,25 @@ dengue_st <- spacetime(cases_village_df, filtered_taiwan_village_sf_filtered,
 dengue_st
 ```
 
+The results for the spacetime operation is too long, so let's see a shorten version
+
+![](images/clipboard-1994988612.png){width="322"}
+
+A snippet of how the newly created dengue_st would look like
+
+![](images/clipboard-2023401532.png){width="404"}
+
+It looks like the cases_village_df, while the spacial data (geometry) is also included in the dataset, but it is not seen.
+
 Let's check the number of rows and columns for our newly created dengue_st
 
 ```{r}
-#| echo: false 
 dim(dengue_st)
 ```
 
 Let's check if dengue_st is truly a spacetime_cube
 
 ```{r}
-#| echo: false 
 is_spacetime_cube(dengue_st)
 ```
 
@@ -679,7 +644,6 @@ We will save dengue_st for Analysing Emerging Hotspot in 5.2.
 Let's visualize taiwan_village_dengue before we move on to performing global spatial autocorrelation analysis
 
 ```{r}
-#| echo: false 
 equal <- tm_shape(taiwan_village_dengue) +
   tm_fill("Num_Cases",
           n = 5,
@@ -711,8 +675,6 @@ Before we can perform the global spatial autocorrelation analysis, we need to co
 We have to prepare our dataset before computing the spatial weights
 
 ```{r}
-#| echo: false
-
 # Convert geometry to simple feature collection
 taiwan_village_dengue_sf <- st_as_sf(taiwan_village_dengue)
 
@@ -734,7 +696,6 @@ taiwan_village_dengue$spatial_weights <- spatial_weights
 The code calculates a spatial weights matrix using the queen contiguity criterion for the villages in Taiwan represented by polygons in the taiwan_village_dengue dataset, and then provides a summary of this matrix.
 
 ```{r}
-#| echo: false
 # Create wm_q with spatial weights
 wm_q <- taiwan_village_dengue %>%
   mutate(nb = st_contiguity(geometry),
@@ -751,7 +712,6 @@ wm_q
 We will compute the Global Moran's I value
 
 ```{r}
-#| echo: false
 moranI <- global_moran(wm_q$Num_Cases,
                        wm_q$nb,
                        wm_q$wt)
@@ -782,7 +742,6 @@ Based on the above explanation, it suggests that the areas with high number of d
 Let's perform simulation on our Moran's I test
 
 ```{r}
-#| echo: false
 set.seed(1234)
 # Compute Monte Carlo Moran's I
 global_moran_perm <- global_moran_perm(wm_q$Num_Cases,  # Variable of interest
@@ -802,14 +761,12 @@ Let's display our findings in a histogram so that we can visualise it better
 Firstly, we can get a statistical summary of the Monte Carlo Moran's I output
 
 ```{r}
-#| echo: false
 summary(global_moran_perm$res[1:999])
 ```
 
 Now, we can plot the histogram
 
 ```{r}
-#| echo: false
 hist(global_moran_perm$res, 
      freq=TRUE, 
      breaks=50, 
@@ -826,7 +783,6 @@ abline(v=0,
 We will compute the Local Moran's I value
 
 ```{r}
-#| echo: false
 lisa <- wm_q %>% 
   mutate(local_moran = local_moran(
     Num_Cases, nb, wt, nsim = 99),
@@ -845,8 +801,6 @@ For effective comparison, it will be better for us to plot both maps next to eac
 We will create a choropeth map by using the values in the "ii" field in lisa sf for the local Moran's I, and the values in the "p_ii_sim" field in lisa sf for the p-value.
 
 ```{r}
-#| echo: false
-
 tmap_mode("plot")
 map1 <- tm_shape(lisa) +
   tm_fill("ii") + 
@@ -871,8 +825,6 @@ tmap_arrange(map1, map2, ncol = 2)
 We will plot the LISA map to check for any kinds of outliers and clusters. It is done by combining the Local Moran's I of the different areas and their respective p-values.
 
 ```{r}
-#| echo: false
-
 lisa_sig <- lisa  %>%
   filter(p_ii < 0.05)
 tmap_mode("plot")
@@ -923,7 +875,6 @@ Now, we will use **Gi\***, which is a spatial autocorrelation statistic tool, to
 We have to compute the spatial weights before we can proceed to computing the local Gi\* statistics
 
 ```{r}
-#| echo: false
 
 wm_idw <- taiwan_village_dengue %>%
   mutate(nb = st_contiguity(geometry),
@@ -938,7 +889,6 @@ wm_idw <- taiwan_village_dengue %>%
 Next, we will compute the local Gi\* statistics
 
 ```{r}
-#| echo: false
 
 HCSA <- wm_idw %>% 
   mutate(local_Gi = local_gstar_perm(
@@ -951,7 +901,6 @@ HCSA
 #### 5.1.3 Visualising Gi\*
 
 ```{r}
-#| echo: false
 
 tmap_mode("plot")
 tm_shape(HCSA) +
@@ -970,7 +919,6 @@ From the above plot, we are able to see the spatial clustering pattern. We could
 Let's plot the p-value of the areas to check the significance level
 
 ```{r}
-#| echo: false
 
 tmap_mode("plot")
 tm_shape(HCSA) +
@@ -985,7 +933,6 @@ We can see that some areas have a higher significance level (in dark brown), whi
 Now, let's put both maps (Gi\* and p-value) side by side to make a comparison
 
 ```{r}
-#| echo: false
 
 tmap_mode("plot")
 map1 <- tm_shape(HCSA) +
@@ -1013,7 +960,6 @@ Based on the maps, we can see an obvious trend, which is that areas with lower d
 Now, we can plot the significant hotspot and coldspot (p-values less than 0.05)
 
 ```{r}
-#| echo: false
 
 HCSA_sig <- HCSA  %>%
   filter(p_sim < 0.05)
@@ -1039,7 +985,6 @@ From the map, we can observe that:
 Let's find the details of the hotspot and coldspot, which we will be using it in 5.2 in analysing emerging hotspots
 
 ```{r}
-#| echo: false 
 
 # Filter HCSA to include only rows where p_sim < 0.05
 HCSA_sig <- HCSA %>% 
@@ -1066,7 +1011,6 @@ However, we need to compute the local Gi\* statistics using the spacetime datase
 We will use dengue_st to compute the Gi\*, where the geometry is in the spacetime dataset.
 
 ```{r}
-#| echo: false
 
 # Activate the geometry column
 dengue_st <- activate(dengue_st, "geometry")
@@ -1085,7 +1029,6 @@ tainan_dengue_nb <- dengue_st %>%
 Let's look at the first 5 rows
 
 ```{r}
-#| echo: false
 
 head(tainan_dengue_nb)
 ```
@@ -1095,7 +1038,6 @@ head(tainan_dengue_nb)
 Now, we need to compute the Local Gi\* for each villages, using the tainan_dengue_nb which we have created in 5.1.
 
 ```{r}
-#| echo: false
 
 gi_stars <- tainan_dengue_nb %>%
   group_by(epi_week_num) %>%
@@ -1111,7 +1053,6 @@ gi_stars <- tainan_dengue_nb %>%
 Now, we will use Mann-Kendall Test to evaluate the trend of the hotspot. We have found that 大興里 is the hotspot when we were analysing HCSA in step 5.1.
 
 ```{r}
-#| echo: false
 
 cbg <- gi_stars %>% 
   ungroup() %>% 
@@ -1123,7 +1064,6 @@ Let's install Kendall
 
 ```{r}
 #| eval: false
-#| echo: false
 
 install.packages("Kendall")
 ```
@@ -1132,7 +1072,6 @@ Let's plot the result using ggplot2
 
 ```{r}
 #| eval: false
-#| echo: false
 
 ehsa <- gi_stars %>%
   group_by(VILLNAME) %>%
@@ -1144,4 +1083,8 @@ ehsa <- gi_stars %>%
 
 ## 6 Conclusion
 
-It is interesting to use the different tools, such as Local and Global spatial autocorrelation, to find the clusters or hotspots within the area of focus, in this case it is the dengue cases in Tainan City.
+It is interesting to use the different tools, such as Local and Global spatial autocorrelation, to find the clusters or hotspots within the area of focus, in this case it is the dengue cases in Tainan City. Through this exercise, we are able to find out which village has the highest number of dengue cases, and with the highest cluster. In addition, it would be beneficial for relevant authorities to see which village requires evaluation in their precautionary measure against dengue (in areas with high cluster), and how areas with low clusters are able to keep their case counts low even during a peak dengue season.
+
+This has showed that the distribution of dengue fever outbreak at Tainan City, Taiwan are dependent on space and time, as the numbers differs from villages, and the numbers changes over the week. Moreover, we are able to determine if the distribution of dengue cases are spatial and spatio-temporal dependent.
+
+Lastly, we are able to identify the hotspots with high cluster in our analysis. Furthermore, we identified other villages with smaller clusters and low number of cases.
