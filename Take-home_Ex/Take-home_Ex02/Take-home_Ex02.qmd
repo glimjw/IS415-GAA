@@ -771,7 +771,7 @@ hist(global_moran_perm$res,
      freq=TRUE, 
      breaks=50, 
      xlab="Simulated Moran's I",
-     xlim=c(-0.008,0.01))
+     xlim=c(-0.02,0.02))
 abline(v=0, 
        col="red") 
 ```
