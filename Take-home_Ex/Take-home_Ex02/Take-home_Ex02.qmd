@@ -978,9 +978,9 @@ From the map, we can observe that:
 
     -   This supports the findings from our LISA map and the initial distribution map, where the central area of Tainan City has a higher dengue cluster (higher number of dengue cases)
 
--   There are a few smaller hotspots (light green) surrounding the significant hotspot (dark green), as well as some other areas.
+-   There are a few smaller hotspots (light green) scattered around the middle of the map.
 
--   The areas towards the sides of the map has a number of coldspots (orange), with gi_star value between -5 to 0, which indicates there is a low dengue cluster.
+-   The areas towards the sides of the map has a number of coldspots (light orange), with gi_star value between -5 to 0, which indicates there is a low dengue cluster.
 
 Let's find the details of the hotspot and coldspot, which we will be using it in 5.2 in analysing emerging hotspots
 
@@ -998,7 +998,7 @@ hotspot <- HCSA_sig %>%
 cat("Hotspot with the highest gi_star and p_sim < 0.05:", hotspot$VILLNAME, "\n")
 ```
 
-So, 大興里 is the hotspot. :)
+So, 溪墘里 is the hotspot. :)
 
 ### 5.2 Analysing Emerging Hotspot
 
@@ -1056,7 +1056,7 @@ Now, we will use Mann-Kendall Test to evaluate the trend of the hotspot. We have
 
 cbg <- gi_stars %>% 
   ungroup() %>% 
-  filter(VILLNAME == "大興里") |> 
+  filter(VILLNAME == "溪墘里") |> 
   select(VILLNAME, epi_week_num, gi_star)
 ```
 

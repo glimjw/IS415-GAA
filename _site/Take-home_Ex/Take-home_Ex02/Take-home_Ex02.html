@@ -1284,7 +1284,7 @@ alternative hypothesis: two.sided</code></pre>
 <span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">freq=</span><span class="cn">TRUE</span>, </span>
 <span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">breaks=</span><span class="dv">50</span>, </span>
 <span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"Simulated Moran's I"</span>,</span>
-<span id="cb73-5"><a href="#cb73-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.008</span>,<span class="fl">0.01</span>))</span>
+<span id="cb73-5"><a href="#cb73-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.02</span>,<span class="fl">0.02</span>))</span>
 <span id="cb73-6"><a href="#cb73-6" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="dv">0</span>, </span>
 <span id="cb73-7"><a href="#cb73-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span><span class="st">"red"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -1546,8 +1546,8 @@ Geodetic CRS:  TWD97
 <ul>
 <li>This supports the findings from our LISA map and the initial distribution map, where the central area of Tainan City has a higher dengue cluster (higher number of dengue cases)</li>
 </ul></li>
-<li><p>There are a few smaller hotspots (light green) surrounding the significant hotspot (dark green), as well as some other areas.</p></li>
-<li><p>The areas towards the sides of the map has a number of coldspots (orange), with gi_star value between -5 to 0, which indicates there is a low dengue cluster.</p></li>
+<li><p>There are a few smaller hotspots (light green) scattered around the middle of the map.</p></li>
+<li><p>The areas towards the sides of the map has a number of coldspots (light orange), with gi_star value between -5 to 0, which indicates there is a low dengue cluster.</p></li>
 </ul>
 <p>Let’s find the details of the hotspot and coldspot, which we will be using it in 5.2 in analysing emerging hotspots</p>
 <div class="cell">
@@ -1568,7 +1568,7 @@ Geodetic CRS:  TWD97
 <pre><code>Hotspot with the highest gi_star and p_sim &lt; 0.05: 溪墘里 溪墘里 溪墘里 溪墘里 溪墘里 溪墘里 溪墘里 溪墘里 溪墘里 溪墘里 溪墘里 溪墘里 溪墘里 溪墘里 溪墘里 </code></pre>
 </div>
 </div>
-<p>So, 大興里 is the hotspot. :)</p>
+<p>So, 溪墘里 is the hotspot. :)</p>
 </section>
 </section>
 <section id="analysing-emerging-hotspot" class="level3">
@@ -1641,7 +1641,7 @@ Geodetic CRS:  TWD97
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>cbg <span class="ot">&lt;-</span> gi_stars <span class="sc">%&gt;%</span> </span>
 <span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(VILLNAME <span class="sc">==</span> <span class="st">"大興里"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(VILLNAME <span class="sc">==</span> <span class="st">"溪墘里"</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb90-4"><a href="#cb90-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(VILLNAME, epi_week_num, gi_star)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
