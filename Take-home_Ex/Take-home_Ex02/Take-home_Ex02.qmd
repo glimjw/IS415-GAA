@@ -928,7 +928,7 @@ tm_shape(HCSA) +
 
 We can see that some areas have a higher significance level (in dark brown), while most of it have a lower significance level (in beige)
 
-#### **5.1.4 Visualising Local HCSA**
+#### **5.1.5 Visualising Local HCSA**
 
 Now, let's put both maps (Gi\* and p-value) side by side to make a comparison
 
@@ -955,7 +955,7 @@ tmap_arrange(map1, map2, ncol = 2)
 
 Based on the maps, we can see an obvious trend, which is that areas with lower density for Gi\* (means lower number of dengue cluster) has a low p-value (0.001). This means that areas with lower number of dengue cluster has a higher significance level, and that indicates that the dengue cases are influenced by geographic proximity.
 
-#### **5.1.5 Visualising hot spot and cold spot areas**
+#### **5.1.6 Visualising hot spot and cold spot areas**
 
 Now, we can plot the significant hotspot and coldspot (p-values less than 0.05)
 
