@@ -1050,7 +1050,7 @@ gi_stars <- tainan_dengue_nb %>%
 
 #### 5.2.3 Computing Mann-Kendall Test
 
-Now, we will use Mann-Kendall Test to evaluate the trend of the hotspot. We have previously found that 溪墘里 is the hotspot when we were analysing HCSA in step 5.1, so we will input 溪墘里 into our mann-kendall test
+Now, we will use Mann-Kendall Test to evaluate the trend of the hotspot. We have found that 溪墘里 is the hotspot when we were analysing HCSA in step 5.1.
 
 ```{r}
 
