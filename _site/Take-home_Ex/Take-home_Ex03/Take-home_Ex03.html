@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Gerald Lim">
-<meta name="dcterms.date" content="2024-03-15">
+<meta name="dcterms.date" content="2024-03-16">
 
 <title>IS415-GAA - Take-home Exercise 3: Prototyping Modules for Geospatial Analytics Shiny Application</title>
 <style>
@@ -314,7 +314,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">March 15, 2024</p>
+      <p class="date">March 16, 2024</p>
     </div>
   </div>
   
@@ -433,8 +433,9 @@ PROJCRS["SVY21",
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mpsz_sf) <span class="sc">+</span>   </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_options</span>(<span class="at">check.and.fix =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mpsz_sf) <span class="sc">+</span>   </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
@@ -817,23 +818,150 @@ enclosing rectangle: [2663.93, 56047.79] x [16357.98, 50244.03] units</code></pr
 <p>We will be computing the KDE of hawker centres in Singapore.</p>
 <section id="computing-kde-using-automatic-bandwidth-selection-method" class="level4">
 <h4 class="anchored" data-anchor-id="computing-kde-using-automatic-bandwidth-selection-method">3.1.1 Computing KDE using automatic bandwidth selection method</h4>
-<p>We will use the density() method to get the KDE</p>
+<p>We will convert the range type to km</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>kde_hawker_centre_bw <span class="ot">&lt;-</span> <span class="fu">density</span>(hawker_centre_SG_ppp, <span class="at">sigma=</span>bw.diggle, <span class="at">edge=</span><span class="cn">TRUE</span>, <span class="at">kernel=</span><span class="st">"gaussian"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the coordinates of hawker_centre_SG_ppp to a suitable CRS using kilometers</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>hawker_centre_SG_ppp_km <span class="ot">&lt;-</span> <span class="fu">rescale</span>(hawker_centre_SG_ppp, <span class="dv">1000</span>, <span class="st">"km"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Let’s plot and see</p>
+<p>Let’s keep kde_hawker_centre_bw_km in our rds for easy reference in the future. So as to save time in the future when we are performing our analysis.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(kde_hawker_centre_bw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(hawker_centre_SG_ppp_km, <span class="st">"data/rds/hawker_centre_SG_ppp_km"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Retrieve kde_hawker_centre_bw_km from rds.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>hawker_centre_SG_ppp_km <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"data/rds/hawker_centre_SG_ppp_km"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Now, We will use the density() method to get the KDE</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform kernel density estimation with the specified bandwidth and kernel</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>kde_hawker_centre_bw_km <span class="ot">&lt;-</span> <span class="fu">density</span>(hawker_centre_SG_ppp_km,</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">sigma =</span> bw.diggle,</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">edge=</span><span class="cn">TRUE</span>,</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">kernel =</span> <span class="st">"gaussian"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Let’s keep kde_hawker_centre_bw_km in our rds for easy reference in the future. So as to save time in the future when we are performing our analysis.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(kde_hawker_centre_bw_km, <span class="st">"data/rds/kde_hawker_centre_bw_km"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Retrieve kde_hawker_centre_bw_km from rds.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>kde_hawker_centre_bw_km <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"data/rds/kde_hawker_centre_bw_km"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Let’s plot kde_hawker_centre_bw_km and visualise it</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(kde_hawker_centre_bw_km)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid" width="672"></p>
+<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p>As you can see from the map above, we can see that there is a higher density of hawker centers in the southern region of Singapore, which is in the Central Business District (CBD), followed by the Eastern side (along the East Coast region of Singapore), and the Central region of Singapore. There are other regions in the West and North where we could see a smaller density of hawker centers.</p>
+<p>Firstly,We will zoom into the different kernel types in the next few steps.</p>
+<p>When kernel is gaussian type</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(hawker_centre_SG_ppp_km, </span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">sigma=</span>bw.ppl, </span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">edge=</span><span class="cn">TRUE</span>, </span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">kernel=</span><span class="st">"gaussian"</span>), </span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Gaussian"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>When kernel is epanechnikov type</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(hawker_centre_SG_ppp_km, </span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">sigma=</span>bw.ppl, </span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">edge=</span><span class="cn">TRUE</span>, </span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">kernel=</span><span class="st">"epanechnikov"</span>), </span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Epanechnikov"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>When kernel is quartic type</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(hawker_centre_SG_ppp_km, </span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">sigma=</span>bw.ppl, </span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">edge=</span><span class="cn">TRUE</span>, </span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">kernel=</span><span class="st">"quartic"</span>), </span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Quartic"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>When kernel is disc type</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(hawker_centre_SG_ppp_km, </span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">sigma=</span>bw.ppl, </span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">edge=</span><span class="cn">TRUE</span>, </span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">kernel=</span><span class="st">"disc"</span>), </span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Disc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Point to note:</p>
+<p>For our <strong>shiny app</strong>, we will allow users to choose their preferred <strong>Kernel type</strong> and they are:</p>
+<ol type="1">
+<li><p><strong>Gaussian kernel:</strong></p>
+<ul>
+<li><p>Density is highest at the center of each data point.</p></li>
+<li><p>Density gradually decreases as you move away.</p></li>
+<li><p>It’s like a smooth hill around each point.</p></li>
+</ul></li>
+<li><p><strong>Epanechnikov kernel:</strong></p>
+<ul>
+<li><p>Density forms a bowl shape around each data point.</p></li>
+<li><p>Focuses more on points close to the center.</p></li>
+<li><p>It’s like a shallow bowl where nearby points matter more.</p></li>
+</ul></li>
+<li><p><strong>Quartic kernel:</strong></p>
+<ul>
+<li><p>Similar to the Epanechnikov, but with a smoother curve.</p></li>
+<li><p>Still focused on each data point.</p></li>
+<li><p>Resembles a rounded mound where nearby points influence density.</p></li>
+</ul></li>
+<li><p><strong>Disc kernel:</strong></p>
+<ul>
+<li><p>Creates a circle around each data point.</p></li>
+<li><p>All points within the circle contribute equally to density.</p></li>
+<li><p>It’s like spreading paint around each point with no preference for distance.</p></li>
+</ul></li>
+</ol>
+<p>Location-based / region-based for shiny</p>
 
 
 </section>

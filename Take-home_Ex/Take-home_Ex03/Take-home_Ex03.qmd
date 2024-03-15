@@ -80,6 +80,7 @@ st_crs(mpsz_sf)
 Let's plot it to take a look
 
 ```{r}
+tmap_options(check.and.fix = TRUE)
 tm_shape(mpsz_sf) +   
   tm_polygons()
 ```
@@ -249,14 +250,132 @@ We will be computing the KDE of hawker centres in Singapore.
 
 #### 3.1.1 Computing KDE using automatic bandwidth selection method
 
-We will use the density() method to get the KDE
-
+We will convert the range type to km
 ```{r}
-kde_hawker_centre_bw <- density(hawker_centre_SG_ppp, sigma=bw.diggle, edge=TRUE, kernel="gaussian")
+#| eval: false
+# Convert the coordinates of hawker_centre_SG_ppp to a suitable CRS using kilometers
+hawker_centre_SG_ppp_km <- rescale(hawker_centre_SG_ppp, 1000, "km")
 ```
 
-Let's plot and see
+Let's keep kde_hawker_centre_bw_km in our rds for easy reference in the future. So as to save time in the future when we are performing our analysis.
 
 ```{r}
-plot(kde_hawker_centre_bw)
+#| eval: false 
+write_rds(hawker_centre_SG_ppp_km, "data/rds/hawker_centre_SG_ppp_km")
 ```
+
+Retrieve kde_hawker_centre_bw_km from rds.
+
+```{r}
+hawker_centre_SG_ppp_km <- read_rds("data/rds/hawker_centre_SG_ppp_km")
+```
+
+
+Now, We will use the density() method to get the KDE
+
+```{r}
+#| eval: false
+# Perform kernel density estimation with the specified bandwidth and kernel
+kde_hawker_centre_bw_km <- density(hawker_centre_SG_ppp_km,
+                                    sigma = bw.diggle,
+                                    edge=TRUE,
+                                    kernel = "gaussian") 
+```
+
+Let's keep kde_hawker_centre_bw_km in our rds for easy reference in the future. So as to save time in the future when we are performing our analysis.
+
+```{r}
+#| eval: false 
+write_rds(kde_hawker_centre_bw_km, "data/rds/kde_hawker_centre_bw_km")
+```
+
+Retrieve kde_hawker_centre_bw_km from rds.
+
+```{r}
+kde_hawker_centre_bw_km <- read_rds("data/rds/kde_hawker_centre_bw_km")
+```
+
+Let's plot kde_hawker_centre_bw_km and visualise it
+
+```{r}
+plot(kde_hawker_centre_bw_km)
+```
+
+As you can see from the map above, we can see that there is a higher density of hawker centers in the southern region of Singapore, which is in the Central Business District (CBD), followed by the Eastern side (along the East Coast region of Singapore), and the Central region of Singapore. There are other regions in the West and North where we could see a smaller density of hawker centers. 
+
+Firstly,We will zoom into the different kernel types in the next few steps.
+
+When kernel is gaussian type
+```{r}
+plot(density(hawker_centre_SG_ppp_km, 
+             sigma=bw.ppl, 
+             edge=TRUE, 
+             kernel="gaussian"), 
+     main="Gaussian")
+```
+
+When kernel is epanechnikov type
+```{r}
+
+plot(density(hawker_centre_SG_ppp_km, 
+             sigma=bw.ppl, 
+             edge=TRUE, 
+             kernel="epanechnikov"), 
+     main="Epanechnikov")
+```
+
+When kernel is quartic type
+```{r}
+plot(density(hawker_centre_SG_ppp_km, 
+             sigma=bw.ppl, 
+             edge=TRUE, 
+             kernel="quartic"), 
+     main="Quartic")
+```
+
+When kernel is disc type
+```{r}
+plot(density(hawker_centre_SG_ppp_km, 
+             sigma=bw.ppl, 
+             edge=TRUE, 
+             kernel="disc"), 
+     main="Disc")
+```
+
+Point to note:
+
+For our **shiny app**, we will allow users to choose their preferred **Kernel type** and they are:
+
+1.  **Gaussian kernel:**
+
+    -   Density is highest at the center of each data point.
+
+    -   Density gradually decreases as you move away.
+
+    -   It's like a smooth hill around each point.
+
+2.  **Epanechnikov kernel:**
+
+    -   Density forms a bowl shape around each data point.
+
+    -   Focuses more on points close to the center.
+
+    -   It's like a shallow bowl where nearby points matter more.
+
+3.  **Quartic kernel:**
+
+    -   Similar to the Epanechnikov, but with a smoother curve.
+
+    -   Still focused on each data point.
+
+    -   Resembles a rounded mound where nearby points influence density.
+
+4.  **Disc kernel:**
+
+    -   Creates a circle around each data point.
+
+    -   All points within the circle contribute equally to density.
+
+    -   It's like spreading paint around each point with no preference for distance.
+
+Location-based / region-based for shiny
