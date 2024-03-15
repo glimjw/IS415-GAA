@@ -1,0 +1,262 @@
+---
+title: "Take-home Exercise 3: Prototyping Modules for Geospatial Analytics Shiny Application"
+author: "Gerald Lim"
+date: "`r Sys.Date()`"
+format: 
+  html: 
+    code-fold: true
+    code-summary: "Show the code"
+    toc-depth: 4
+output:
+  html_document:
+    toc: true
+    code_echo: false
+execute:
+  warning: false
+  freeze: false
+---
+
+## **Objectives**
+
+Prototyping Modules for Geospatial Analytics Shiny Application involves selecting the "1st Order Analysis - Density and Distribution of Hawker Centres" module and completing tasks such as:
+
+-   Evaluating R packages compatibility
+
+-   Testing R codes for expected outputs
+
+-   Determining parameters and outputs for the Shiny application
+
+-   Selecting suitable Shiny UI components to expose these parameters.
+
+## **1 Install Packages**
+
+Installing the required tools for the analysis:
+
+-   **sf**: Package for importing, managing, and processing vector-based geospatial data efficiently.
+
+-   **spatstat**: Package for analyzing spatial point pattern data, including spatial statistics and point process modeling.
+
+-   **raster**: Package for working with raster (gridded) spatial data, enabling analysis and visualization of spatial phenomena.
+
+-   **maptools**: Package providing tools for reading, writing, and manipulating spatial data in various formats, enhancing interoperability between different geospatial data sources.
+
+-   **tmap**: Package for creating thematic maps and visualizations of spatial data, offering an intuitive interface and flexible options for customization
+
+-   **readr**: R package that provides fast and friendly functions for reading structured text data, including CSV files
+
+```{r}
+pacman::p_load(maptools, sf, raster, spatstat, tmap, readr)
+```
+
+## 2 Data Import and Wrangling
+
+This is where we import the data and prepare it before analysis.
+
+Let's use st_read() of sf package to import these 3 geospatial data sets into R. And we will be using other functions to prepare our data upon importing them.
+
+The data sets are:
+
+-   **updated_hawker_centres**: shows the postal code, latitude and longitude of all hawker centres in Singapore
+
+-   **MP14_SUBZONE_WEB_PL**: polygon feature data providing information of URA 2014 Master Plan Planning Subzone boundary data. It is in ESRI shapefile format. This data set was also downloaded from Data.gov.sg.
+
+-   **CoastalOutline**: a polygon feature data showing the national boundary of Singapore. It is provided by SLA and is in ESRI shapefile format.
+
+### 2.1 Import subzone **dataset**
+
+We will use st_read() of sf package to import the MP14_SUBZONE_WEB_PL dataset into R
+
+```{r}
+mpsz_sf <- st_read(dsn = "data/geospatial", 
+                layer = "MP14_SUBZONE_WEB_PL")
+```
+
+Let's check mpsz_sf
+
+```{r}
+st_crs(mpsz_sf)
+```
+
+Let's plot it to take a look
+
+```{r}
+tm_shape(mpsz_sf) +   
+  tm_polygons()
+```
+
+Ok, now we have a map of Singapore, which we will be using to plot the hawker centres in the future steps.
+
+### 2.2 Import hawker centre data
+
+Next, we will import our updated_hawker_centres into R
+
+```{r}
+hawker_centre_sf <- read_csv("data/aspatial/updated_hawker_centres.csv")
+```
+
+Let's check the sf type for hawker_centre_sf
+
+```{r}
+st_crs(hawker_centre_sf)
+```
+
+Since hawker_centre_sf does not have a Coordinate Reference System, that means it is not a spatial dataframe.
+
+Now, we have to convert hawker_centre_sf to a spatial dataframe using st_as_sf method
+
+```{r}
+# Convert hawker_centre_sf to sf object
+hawker_centre_sf <- st_as_sf(hawker_centre_sf, coords = c("Longitude", "Latitude"), crs = 4326)
+```
+
+Let's check again
+
+```{r}
+st_crs(hawker_centre_sf)
+```
+
+### 2.3 Import **CoastalOutline dataset**
+
+Next, we will import our CoastalOutline into R
+
+```{r}
+sg_sf <- st_read(dsn = "data/", 
+                layer = "CostalOutline")
+```
+
+Let's check sg_sf
+
+```{r}
+st_crs(sg_sf)
+```
+
+The crs information isn’t consistent as hawker_centre_sf is in WGS84, while the 'sg_sf" and 'mpsz_sf' are in SVY21
+
+```{r}
+target_crs = st_crs(sg_sf)
+hawker_centre_sf <- st_transform(hawker_centre_sf, target_crs)
+st_crs(hawker_centre_sf)
+```
+
+### 2.4 Visualise mpsz_sf and hawker_centre_sf datasets
+
+Let's plot both mpsz_sf and hawker_centre_sf datasets using tmap to see the hawker centres points on the map
+
+```{r}
+tm_shape(mpsz_sf) +
+  tm_borders() +
+  tm_fill("lightgrey") +
+  tm_layout(title = "Map of Singapore with Hawker Centres") +
+# Add the hawker_centre_sf layer
+tm_shape(hawker_centre_sf) +
+  tm_bubbles(size = 0.2, col = "red")
+```
+
+Now that we can see the hawker centres (represented by red dots) on the map, we will proceed to doing the necessary preparation for our 1st Order Analysis model.
+
+### 2.5 Convert sf data frames to sp's Spatial class
+
+We have to convert our datasets to sp's spatial class type by using
+
+```{r}
+mpsz <- as_Spatial(mpsz_sf)
+hawker_centre <- as_Spatial(hawker_centre_sf)
+sg <- as_Spatial(sg_sf)
+```
+
+Let's take a look at our newly created spatial classes
+
+```{r}
+mpsz
+```
+
+```{r}
+hawker_centre
+```
+
+```{r}
+sg
+```
+
+### 2.6 Convert spatial class to sp type
+
+As the spatial classes are created successfully, we will proceed to converting them into sp type. As spatstat requires data to be in ppp object form, we will have to convert our spatial classes into sp type (sp objects) first. So, we will convert our hawker_centre spatial class into sp type.
+
+```{r}
+hawker_centre_sp <- as(hawker_centre, "SpatialPoints")
+sg_sp <- as(sg, "SpatialPolygons")
+```
+
+Let's take a look at the hawker_centre_sp and sg_sp
+
+```{r}
+hawker_centre_sp
+```
+
+```{r}
+sg_sp
+```
+
+### 2.7 Convert sp type to ppp type
+
+As mentioned earlier, we will have to convert our sp type for hawker_centre_sp to ppp type
+
+```{r}
+hawker_centre_ppp <- as.ppp(hawker_centre_sp)
+hawker_centre_ppp
+```
+
+Let's plot the hawker_centre_ppp and visualise it
+
+```{r}
+plot(hawker_centre_ppp)
+```
+
+### 2.8 Create owin object
+
+We will create an owin object so that we can ensure our analysis is within Singapore. We will create an owin object using mpsz.
+
+```{r}
+sg_owin <- as(sg_sp, "owin")
+sg_owin
+```
+
+Let's plot mpsz_owin and visualise it.
+
+```{r}
+plot(sg_owin)
+```
+
+### 2.9 Combine ppp with owin object
+
+Now that we have created our hawker_centre_ppp and mpsz_owin objects, we will combine them and to make sure all our points in hawker_centre_ppp are within the mpsz_owin.
+
+```{r}
+# Plot the PPP on the sg_owin window
+hawker_centre_SG_ppp = hawker_centre_ppp[sg_owin]
+plot(hawker_centre_SG_ppp)
+```
+
+Now, we can see all the hawker centres which are plotted on the Singapore Map in our newly created hawker_centre_SG_ppp.
+
+## 3 **First-order Spatial Point Patterns Analysis (1st Order Analysis)**
+
+This is where the magic happens.
+
+### 3.1 Kernel Density Estimation (KDE)
+
+We will be computing the KDE of hawker centres in Singapore.
+
+#### 3.1.1 Computing KDE using automatic bandwidth selection method
+
+We will use the density() method to get the KDE
+
+```{r}
+kde_hawker_centre_bw <- density(hawker_centre_SG_ppp, sigma=bw.diggle, edge=TRUE, kernel="gaussian")
+```
+
+Let's plot and see
+
+```{r}
+plot(kde_hawker_centre_bw)
+```
