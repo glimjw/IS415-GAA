@@ -251,6 +251,7 @@ We will be computing the KDE of hawker centres in Singapore.
 #### 3.1.1 Computing KDE using automatic bandwidth selection method
 
 We will convert the range type to km
+
 ```{r}
 #| eval: false
 # Convert the coordinates of hawker_centre_SG_ppp to a suitable CRS using kilometers
@@ -269,7 +270,6 @@ Retrieve kde_hawker_centre_bw_km from rds.
 ```{r}
 hawker_centre_SG_ppp_km <- read_rds("data/rds/hawker_centre_SG_ppp_km")
 ```
-
 
 Now, We will use the density() method to get the KDE
 
@@ -301,11 +301,12 @@ Let's plot kde_hawker_centre_bw_km and visualise it
 plot(kde_hawker_centre_bw_km)
 ```
 
-As you can see from the map above, we can see that there is a higher density of hawker centers in the southern region of Singapore, which is in the Central Business District (CBD), followed by the Eastern side (along the East Coast region of Singapore), and the Central region of Singapore. There are other regions in the West and North where we could see a smaller density of hawker centers. 
+As you can see from the map above, we can see that there is a higher density of hawker centers in the southern region of Singapore, which is in the Central Business District (CBD), followed by the Eastern side (along the East Coast region of Singapore), and the Central region of Singapore. There are other regions in the West and North where we could see a smaller density of hawker centers.
 
 Firstly,We will zoom into the different kernel types in the next few steps.
 
 When kernel is gaussian type
+
 ```{r}
 plot(density(hawker_centre_SG_ppp_km, 
              sigma=bw.ppl, 
@@ -315,6 +316,7 @@ plot(density(hawker_centre_SG_ppp_km,
 ```
 
 When kernel is epanechnikov type
+
 ```{r}
 
 plot(density(hawker_centre_SG_ppp_km, 
@@ -325,6 +327,7 @@ plot(density(hawker_centre_SG_ppp_km,
 ```
 
 When kernel is quartic type
+
 ```{r}
 plot(density(hawker_centre_SG_ppp_km, 
              sigma=bw.ppl, 
@@ -334,6 +337,7 @@ plot(density(hawker_centre_SG_ppp_km,
 ```
 
 When kernel is disc type
+
 ```{r}
 plot(density(hawker_centre_SG_ppp_km, 
              sigma=bw.ppl, 
@@ -344,7 +348,7 @@ plot(density(hawker_centre_SG_ppp_km,
 
 Point to note:
 
-For our **shiny app**, we will allow users to choose their preferred **Kernel type** and they are:
+**For our shiny app, we will allow users to choose their preferred [Kernel type]{.underline} and they are:**
 
 1.  **Gaussian kernel:**
 
@@ -378,4 +382,242 @@ For our **shiny app**, we will allow users to choose their preferred **Kernel ty
 
     -   It's like spreading paint around each point with no preference for distance.
 
-Location-based / region-based for shiny
+#### 3.1.2 Computing KDE using manual bandwidth (sigma)
+
+We will try to set sigma to 0.6 and 1.2, which represents 600m and 1.2km respectively.
+
+```{r}
+plot(density(hawker_centre_SG_ppp_km, 
+             sigma=0.6, 
+             edge=TRUE, 
+             kernel="disc"), 
+     main="sigma=0.6")
+```
+
+```{r}
+plot(density(hawker_centre_SG_ppp_km, 
+             sigma=1.2, 
+             edge=TRUE, 
+             kernel="disc"), 
+     main="sigma=0.6")
+```
+
+Point to note:
+
+**For our shiny app, we will allow users to choose their preferred [sigma (bandwidth)]{.underline}**:
+
+-   Example: 0.3, 0.6, 1.2, etc
+
+### 3.2 Comparing Spatial Point Patterns using KDE
+
+We will be exploring the different spatial point patterns of each areas and region using KDE.
+
+#### 3.2.1 Computing KDE of different areas (planning areas)
+
+We will check the number of unique planning areas, PLN_AREA_N, in our mpsz_sf.
+
+```{r}
+num_planning_areas <- length(unique(mpsz$PLN_AREA_N))
+print(num_planning_areas)
+```
+
+We will also look at the list of planning areas
+
+```{r}
+planning_areas <- unique(mpsz$PLN_AREA_N)
+print(planning_areas)
+```
+
+Now, we know that there are 55 regions, which the users can choose from in Shiny app.
+
+Let's test some of it and visualize it
+
+```{r}
+amk = mpsz[mpsz@data$PLN_AREA_N == "ANG MO KIO",]
+tm = mpsz[mpsz@data$PLN_AREA_N == "TAMPINES",]
+dt = mpsz[mpsz@data$PLN_AREA_N == "DOWNTOWN CORE",]
+```
+
+Let's plot and see
+
+```{r}
+par(mfrow=c(2,2))
+plot(amk, main = "Ang Mo Kio")
+plot(tm, main = "Tampines")
+plot(dt, main = "Downtown")
+```
+
+We will convert them into spatialpolygonsdataframe
+
+```{r}
+amk_sp = as(amk, "SpatialPolygons")
+tm_sp = as(tm, "SpatialPolygons")
+dt_sp = as(dt, "SpatialPolygons")
+```
+
+We will create the owin object
+
+```{r}
+amk_owin = as(amk_sp, "owin")
+tm_owin = as(tm_sp, "owin")
+dt_owin = as(dt_sp, "owin")
+```
+
+Combine them with the hawker centre points into a ppp
+
+```{r}
+hawker_centre_amk_ppp = hawker_centre_ppp[amk_owin]
+hawker_centre_tm_ppp = hawker_centre_ppp[tm_owin]
+hawker_centre_dt_ppp = hawker_centre_ppp[dt_owin]
+```
+
+We have to rescale it to the unit of measurement to km
+
+```{r}
+hawker_centre_amk_ppp_km = rescale(hawker_centre_amk_ppp, 1000, "km")
+hawker_centre_tm_ppp_km = rescale(hawker_centre_tm_ppp, 1000, "km")
+hawker_centre_dt_ppp_km = rescale(hawker_centre_dt_ppp, 1000, "km")
+```
+
+Let's plot and see
+
+```{r}
+par(mfrow=c(2,2))
+plot(hawker_centre_amk_ppp_km, main="Ang Mo Kio")
+plot(hawker_centre_tm_ppp_km, main="Tampines")
+plot(hawker_centre_dt_ppp_km, main="Downntown")
+```
+
+Now, it is time for the KDE
+
+```{r}
+par(mfrow=c(2,2))
+plot(density(hawker_centre_amk_ppp_km, 
+             sigma=0.25, 
+             edge=TRUE, 
+             kernel="gaussian"),
+     main="Ang Mo Kio")
+plot(density(hawker_centre_tm_ppp_km, 
+             sigma=0.25, 
+             edge=TRUE, 
+             kernel="gaussian"),
+     main="Tampines")
+plot(density(hawker_centre_dt_ppp_km, 
+             sigma=0.25, 
+             edge=TRUE, 
+             kernel="gaussian"),
+     main="Downtown")
+```
+
+#### 3.2.2 Computing KDE of different regions
+
+We will check the number of unique planning area (or region), REGION_N, in our mpsz_sf.
+
+```{r}
+num_regions <- length(unique(mpsz$REGION_N)) 
+print(num_regions)
+```
+
+We will also look at the list of planning areas
+
+```{r}
+regions <- unique(mpsz$REGION_N) 
+print(regions)
+```
+
+Now, we know that there are 55 regions, which the users can choose from in Shiny app.
+
+Let's test some of it and visualize it
+
+```{r}
+central = mpsz[mpsz@data$REGION_N == "CENTRAL REGION",] 
+east = mpsz[mpsz@data$REGION_N == "EAST REGION",] 
+north = mpsz[mpsz@data$REGION_N == "NORTH REGION",]
+```
+
+Let's plot and see
+
+```{r}
+par(mfrow=c(2,2))
+plot(central, main = "Central")
+plot(east, main = "East")
+plot(north, main = "North")
+```
+
+We will convert them into spatialpolygonsdataframe
+
+```{r}
+central_sp = as(central, "SpatialPolygons") 
+east_sp = as(east, "SpatialPolygons") 
+north_sp = as(north, "SpatialPolygons")
+```
+
+We will create the owin object
+
+```{r}
+central_owin = as(central_sp, "owin") 
+east_owin = as(east_sp, "owin") 
+north_owin = as(north_sp, "owin")
+```
+
+Combine them with the hawker centre points into a ppp
+
+```{r}
+hawker_centre_central_ppp = hawker_centre_ppp[central_owin] 
+hawker_centre_east_ppp = hawker_centre_ppp[east_owin] 
+hawker_centre_north_ppp = hawker_centre_ppp[north_owin]
+```
+
+We have to rescale it to the unit of measurement to km
+
+```{r}
+hawker_centre_central_ppp_km = rescale(hawker_centre_central_ppp, 1000, "km") 
+hawker_centre_east_ppp_km = rescale(hawker_centre_east_ppp, 1000, "km") 
+hawker_centre_north_ppp_km = rescale(hawker_centre_north_ppp, 1000, "km")
+```
+
+Let's plot and see
+
+```{r}
+par(mfrow=c(2,2)) 
+plot(hawker_centre_central_ppp_km, main="Central") 
+plot(hawker_centre_east_ppp_km, main="East") 
+plot(hawker_centre_north_ppp_km, main="North")
+```
+
+Now, it is time for the KDE
+
+```{r}
+par(mfrow=c(2,2))
+plot(density(hawker_centre_central_ppp_km, 
+             sigma=0.25, 
+             edge=TRUE, 
+             kernel="gaussian"),
+     main="Central")
+plot(density(hawker_centre_east_ppp_km, 
+             sigma=0.25, 
+             edge=TRUE, 
+             kernel="gaussian"),
+     main="East")
+plot(density(hawker_centre_north_ppp_km, 
+             sigma=0.25, 
+             edge=TRUE, 
+             kernel="gaussian"),
+     main="North")
+```
+
+We can see that there is a higher density of hawker centres in the Central region.
+
+In our **shiny app**, we will allow our users to select the **different regions**, of which they could do the comparison on their own.
+
+**IN SUMMARY for our Shiny App, we will allow our users to provide input for:**
+
+-   Sigma (or bandwidth): Users can enter their preferred bandwidth (on a scale)
+
+-   Kernel: Users can choose the type of kernel type (e.g. Gaussian, Epanechnikov, Quartic, Disc)
+
+-   Location: Users can choose a specific location (planning area) that they would wish to analyse (e.g. Ang Mo Kio, Downtown)
+
+-   Region: Users can choose a specific region that they would wish to analyse (e.g. NORTH, EAST, NORTH-EAST, CENTRAL, WEST)\\
+
+Note: Region and Location are different. However, we would look into the possibility of allow users to filter region (without choosing a Location), and also allowing them to choose a location through a region should they wish to analyse a specific location.
