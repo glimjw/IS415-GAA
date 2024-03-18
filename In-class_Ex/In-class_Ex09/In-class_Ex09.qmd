@@ -1,5 +1,5 @@
 ---
-title: "In-class-Exercise 9"
+title: "In-class-Exercise 9
 author: "Gerald Lim"
 execute:
   warning: false
@@ -83,24 +83,5 @@ summary(price_mlr)
 ```
 
 ```{r}
-#| eval: false
-vi <- as.data.frame(rs_sf$variable.importance)
-vi$variables <- rownames(vi)
-vi <- vi %>%
-  rename(vi = "rs_rf$variable.importance")
-```
-
-```{r}
-#| eval: false
-yardstick::rmse(test_pred,
-                RESALE_PRICE,
-                mlr_pred)
-```
-
-```{r}
-#| eval: false
-mc <- test_pred %>%
-  pivot_longer(cols = c(2:4),
-               names_to = "models",
-               values_to = "predicted")
+train_sp <- as_Spatial()
 ```
