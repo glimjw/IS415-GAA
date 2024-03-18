@@ -908,5 +908,26 @@
     "title": "IS415-GAA",
     "section": "",
     "text": "&lt;!DOCTYPE qgis PUBLIC ‘http://mrcc.com/qgis.dtd’ ‘SYSTEM’&gt;     dataset\n\n\n        0 0     false"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex09/In-class_Ex09.html",
+    "href": "In-class_Ex/In-class_Ex09/In-class_Ex09.html",
+    "title": "In-class-Exercise 9",
+    "section": "",
+    "text": "This code chunk performs 3 tasks:\n\nA list called packages will be created and will consists of all the R packages required to accomplish this exercise.\nCheck if R packages on package have been installed in R and if not, they will be installed.\nAfter all the R packages have been installed, they will be loaded.\n\n\npacman::p_load(sf, spdep, GWmodel, SpatialML, tmap, rsample, Metrics, tidyverse, rpart, rpart.plot, ggstatsplot, performance)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex09/In-class_Ex09.html#installing-and-loading-r-packages",
+    "href": "In-class_Ex/In-class_Ex09/In-class_Ex09.html#installing-and-loading-r-packages",
+    "title": "In-class-Exercise 9",
+    "section": "",
+    "text": "This code chunk performs 3 tasks:\n\nA list called packages will be created and will consists of all the R packages required to accomplish this exercise.\nCheck if R packages on package have been installed in R and if not, they will be installed.\nAfter all the R packages have been installed, they will be loaded.\n\n\npacman::p_load(sf, spdep, GWmodel, SpatialML, tmap, rsample, Metrics, tidyverse, rpart, rpart.plot, ggstatsplot, performance)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex09/In-class_Ex09.html#preparing-data",
+    "href": "In-class_Ex/In-class_Ex09/In-class_Ex09.html#preparing-data",
+    "title": "In-class-Exercise 9",
+    "section": "14.4 Preparing Data",
+    "text": "14.4 Preparing Data\n\n14.4.1 Reading data file to rds\nReading the input data sets. It is in simple feature data frame.\n\nrs_sf &lt;- read_rds(\"data/rds/HDB_resale.rds\")\n\n\n\n14.4.2 Data Sampling\nThe entire data are split into training and test data sets with 65% and 35% respectively by using initial_split() of rsample package. rsample is one of the package of tigymodels.\n\nset.seed(1234) \nresale_split &lt;- initial_split(\n  rs_sf,                                \n  prop = 5/10,) \ntrain_sf &lt;- training(resale_split) \ntest_sf &lt;- testing(resale_split)\n\n\ntrain_df &lt;- train_sf %&gt;%\n  st_drop_geometry() %&gt;%\n  as.data.frame()\n\ntest_df &lt;- test_sf %&gt;%\n  st_drop_geometry() %&gt;%\n  as.data.frame()\n\n\ntrain_df &lt;- train_df %&gt;%\n  select(-c(PROX_CHAS))\ntrain_sf &lt;- train_sf %&gt;%\n  select(-c(PROX_CHAS))\ntest_df &lt;- test_df %&gt;%\n  select(-c(PROX_CHAS))\ntest_sf &lt;- test_sf %&gt;%\n  select(-c(PROX_CHAS))\n\n\nrs_mlr &lt;- lm(formula = RESALE_PRICE ~ floor_area_sqm +\n                  storey_order + remaining_lease_mths +\n                  PROX_CBD + PROX_ELDERLYCARE + PROX_HAWKER +\n                  PROX_MRT + PROX_PARK + PROX_MALL + \n                  PROX_SUPERMARKET + WITHIN_350M_KINDERGARTEN +\n                  WITHIN_350M_CHILDCARE + WITHIN_350M_BUS +\n                  WITHIN_1KM_PRISCH,\n                data=train_data)\nsummary(price_mlr)"
   }
 ]
