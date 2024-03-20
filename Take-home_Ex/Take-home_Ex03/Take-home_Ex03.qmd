@@ -2,15 +2,15 @@
 title: "Take-home Exercise 3: Prototyping Modules for Geospatial Analytics Shiny Application"
 author: "Gerald Lim"
 date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    code_echo: false
 format: 
   html: 
     code-fold: true
     code-summary: "Show the code"
     toc-depth: 4
-output:
-  html_document:
-    toc: true
-    code_echo: false
 execute:
   warning: false
   freeze: false
@@ -137,6 +137,37 @@ The crs information isn’t consistent as hawker_centre_sf is in WGS84, while th
 target_crs = st_crs(sg_sf)
 hawker_centre_sf <- st_transform(hawker_centre_sf, target_crs)
 st_crs(hawker_centre_sf)
+```
+
+Let's plot sg_sf to see how it looks like
+
+```{r}
+tmap_options(check.and.fix = TRUE)
+tm_shape(sg_sf) +   
+  tm_polygons()
+```
+
+We can see that sg_sf includes the outlying islands of Singapore, where there are no hawker centers. Therefore, we will remove those outlying islands from sg_sf dataset.
+
+```{r}
+main_island_name <- "SINGAPORE - MAIN ISLAND"
+
+# Filter out the main island from sg_sf based on the COSTAL_NAM column
+sg_sf <- sg_sf[sg_sf$COSTAL_NAM == main_island_name, ]
+```
+
+Now, let's check sg_sf again.
+
+```{r}
+tmap_options(check.and.fix = TRUE)
+tm_shape(sg_sf) +   
+  tm_polygons()
+```
+
+We have successfully removed the outlying island, and now sg_sf consist of just the mainland. We will have to ensure that mpsz_sf follows the same.
+
+```{r}
+mpsz_sf <- st_intersection(mpsz_sf, sg_sf)
 ```
 
 ### 2.4 Visualise mpsz_sf and hawker_centre_sf datasets
@@ -381,6 +412,16 @@ Point to note:
     -   All points within the circle contribute equally to density.
 
     -   It's like spreading paint around each point with no preference for distance.
+
+```{r}
+# Identify duplicated points
+duplicated_points <- hawker_centre_SG_ppp_km[duplicated(hawker_centre_SG_ppp_km), ]
+
+# Remove duplicated points
+hawker_centre_SG_ppp_km <- unique(hawker_centre_SG_ppp_km)
+
+summary(hawker_centre_SG_ppp_km)
+```
 
 #### 3.1.2 Computing KDE using manual bandwidth (sigma)
 
