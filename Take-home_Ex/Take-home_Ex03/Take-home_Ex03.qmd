@@ -168,6 +168,7 @@ We have successfully removed the outlying island, and now sg_sf consist of just 
 
 ```{r}
 mpsz_sf <- st_intersection(mpsz_sf, sg_sf)
+st_crs(mpsz_sf)
 ```
 
 ### 2.4 Visualise mpsz_sf and hawker_centre_sf datasets
@@ -193,7 +194,6 @@ We have to convert our datasets to sp's spatial class type by using
 ```{r}
 mpsz <- as_Spatial(mpsz_sf)
 hawker_centre <- as_Spatial(hawker_centre_sf)
-sg <- as_Spatial(sg_sf)
 ```
 
 Let's take a look at our newly created spatial classes
@@ -216,7 +216,6 @@ As the spatial classes are created successfully, we will proceed to converting t
 
 ```{r}
 hawker_centre_sp <- as(hawker_centre, "SpatialPoints")
-sg_sp <- as(sg, "SpatialPolygons")
 ```
 
 Let's take a look at the hawker_centre_sp and sg_sp
@@ -244,12 +243,17 @@ Let's plot the hawker_centre_ppp and visualise it
 plot(hawker_centre_ppp)
 ```
 
+```{r}
+class(mpsz)
+
+```
+
 ### 2.8 Create owin object
 
 We will create an owin object so that we can ensure our analysis is within Singapore. We will create an owin object using mpsz.
 
 ```{r}
-sg_owin <- as(sg_sp, "owin")
+mpsz_owin <- as.owin(as(mpsz, "SpatialPolygons"))
 sg_owin
 ```
 
