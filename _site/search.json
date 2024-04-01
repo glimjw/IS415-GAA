@@ -936,5 +936,26 @@
     "title": "Take-home Exercise 3: Prototyping Modules for Geospatial Analytics Shiny Application",
     "section": "4 Shiny App Parameters",
     "text": "4 Shiny App Parameters\n\n4.1 Parameters that will be used\nIn our shiny app, we will allow our users to select the different regions, of which they could do the comparison on their own.\nThese will be the parameters for our shiny app.\nIN SUMMARY for our Shiny App, we will allow our users to provide input for:\n\nSigma (or bandwidth): Users can enter their preferred bandwidth (on a scale)\nKernel: Users can choose the type of kernel type (e.g. Gaussian, Epanechnikov, Quartic, Disc)\nLocation: Users can choose a specific location (planning area) that they would wish to analyse (e.g. Ang Mo Kio, Downtown)\nRegion: Users can choose a specific region that they would wish to analyse (e.g. NORTH, EAST, NORTH-EAST, CENTRAL, WEST)\n\nNote: Region and Location are different. However, we would look into the possibility of allow users to filter region (without choosing a Location), and also allowing them to choose a location through a region should they wish to analyse a specific location.\n\n\n4.2 Prototype 1.0 on shinyapp\nThe shinyapp for this module is completed and it can be accessed via the this link"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex10/data/geospatial/hexagons.html",
+    "href": "Hands-on_Ex/Hands-on_Ex10/data/geospatial/hexagons.html",
+    "title": "IS415-GAA",
+    "section": "",
+    "text": "&lt;!DOCTYPE qgis PUBLIC ‘http://mrcc.com/qgis.dtd’ ‘SYSTEM’&gt;     dataset\n\n\n                 0 0     false"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex10/data/geospatial/ELDERCARE.html",
+    "href": "Hands-on_Ex/Hands-on_Ex10/data/geospatial/ELDERCARE.html",
+    "title": "IS415-GAA",
+    "section": "",
+    "text": "&lt;!DOCTYPE qgis PUBLIC ‘http://mrcc.com/qgis.dtd’ ‘SYSTEM’&gt;  ELDERCARE  ENG dataset\n\nELDERCARE\n\n                 0 0     false"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex11/data/geospatial/MPSZ-2019.html",
+    "href": "Hands-on_Ex/Hands-on_Ex11/data/geospatial/MPSZ-2019.html",
+    "title": "IS415-GAA",
+    "section": "",
+    "text": "&lt;!DOCTYPE qgis PUBLIC ‘http://mrcc.com/qgis.dtd’ ‘SYSTEM’&gt;     dataset\n\n\n        0 0     false"
   }
 ]
