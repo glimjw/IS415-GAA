@@ -9,7 +9,7 @@
 <meta name="author" content="Gerald Lim">
 <meta name="dcterms.date" content="2024-04-01">
 
-<title>IS415-GAA - Hands-on-Exercise 10: Geographically Weighted Predictive Models</title>
+<title>IS415-GAA - Hands-on-Exercise 10: Modelling Geographical Accessibility</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -272,40 +272,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><strong>17.1 Introduction</strong></a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><strong>10.1 Introduction</strong></a>
   <ul class="collapse">
-  <li><a href="#learning-outcome" id="toc-learning-outcome" class="nav-link" data-scroll-target="#learning-outcome"><strong>17.1.1 Learning Outcome</strong></a></li>
+  <li><a href="#learning-outcome" id="toc-learning-outcome" class="nav-link" data-scroll-target="#learning-outcome"><strong>10.1.1 Learning Outcome</strong></a></li>
   </ul></li>
-  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data"><strong>17.2 The data</strong></a></li>
-  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started"><strong>17.3 Getting Started</strong></a></li>
-  <li><a href="#geospatial-data-wrangling" id="toc-geospatial-data-wrangling" class="nav-link" data-scroll-target="#geospatial-data-wrangling"><strong>17.4 Geospatial Data Wrangling</strong></a>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data"><strong>10.2 The data</strong></a></li>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started"><strong>10.3 Getting Started</strong></a></li>
+  <li><a href="#geospatial-data-wrangling" id="toc-geospatial-data-wrangling" class="nav-link" data-scroll-target="#geospatial-data-wrangling"><strong>10.4 Geospatial Data Wrangling</strong></a>
   <ul class="collapse">
-  <li><a href="#importing-geospatial-data" id="toc-importing-geospatial-data" class="nav-link" data-scroll-target="#importing-geospatial-data"><strong>17.4.1 Importing geospatial data</strong></a></li>
-  <li><a href="#updating-crs-information" id="toc-updating-crs-information" class="nav-link" data-scroll-target="#updating-crs-information"><strong>17.4.2 Updating CRS information</strong></a></li>
-  <li><a href="#cleaning-and-updating-attribute-fields-of-the-geospatial-data" id="toc-cleaning-and-updating-attribute-fields-of-the-geospatial-data" class="nav-link" data-scroll-target="#cleaning-and-updating-attribute-fields-of-the-geospatial-data"><strong>17.4.3 Cleaning and updating attribute fields of the geospatial data</strong></a></li>
+  <li><a href="#importing-geospatial-data" id="toc-importing-geospatial-data" class="nav-link" data-scroll-target="#importing-geospatial-data"><strong>10.4.1 Importing geospatial data</strong></a></li>
+  <li><a href="#updating-crs-information" id="toc-updating-crs-information" class="nav-link" data-scroll-target="#updating-crs-information"><strong>10.4.2 Updating CRS information</strong></a></li>
+  <li><a href="#cleaning-and-updating-attribute-fields-of-the-geospatial-data" id="toc-cleaning-and-updating-attribute-fields-of-the-geospatial-data" class="nav-link" data-scroll-target="#cleaning-and-updating-attribute-fields-of-the-geospatial-data"><strong>10.4.3 Cleaning and updating attribute fields of the geospatial data</strong></a></li>
   </ul></li>
-  <li><a href="#apsaital-data-handling-and-wrangling" id="toc-apsaital-data-handling-and-wrangling" class="nav-link" data-scroll-target="#apsaital-data-handling-and-wrangling"><strong>17.5 Apsaital Data Handling and Wrangling</strong></a>
+  <li><a href="#apsaital-data-handling-and-wrangling" id="toc-apsaital-data-handling-and-wrangling" class="nav-link" data-scroll-target="#apsaital-data-handling-and-wrangling"><strong>10.5 Apsaital Data Handling and Wrangling</strong></a>
   <ul class="collapse">
-  <li><a href="#importing-distance-matrix" id="toc-importing-distance-matrix" class="nav-link" data-scroll-target="#importing-distance-matrix"><strong>17.5.1 Importing Distance Matrix</strong></a></li>
-  <li><a href="#tidying-distance-matrix" id="toc-tidying-distance-matrix" class="nav-link" data-scroll-target="#tidying-distance-matrix"><strong>17.5.2 Tidying distance matrix</strong></a></li>
+  <li><a href="#importing-distance-matrix" id="toc-importing-distance-matrix" class="nav-link" data-scroll-target="#importing-distance-matrix"><strong>10.5.1 Importing Distance Matrix</strong></a></li>
+  <li><a href="#tidying-distance-matrix" id="toc-tidying-distance-matrix" class="nav-link" data-scroll-target="#tidying-distance-matrix"><strong>10.5.2 Tidying distance matrix</strong></a></li>
   </ul></li>
-  <li><a href="#modelling-and-visualising-accessibility-using-hansen-method" id="toc-modelling-and-visualising-accessibility-using-hansen-method" class="nav-link" data-scroll-target="#modelling-and-visualising-accessibility-using-hansen-method"><strong>17.6 Modelling and Visualising Accessibility using Hansen Method</strong></a>
+  <li><a href="#modelling-and-visualising-accessibility-using-hansen-method" id="toc-modelling-and-visualising-accessibility-using-hansen-method" class="nav-link" data-scroll-target="#modelling-and-visualising-accessibility-using-hansen-method"><strong>10.6 Modelling and Visualising Accessibility using Hansen Method</strong></a>
   <ul class="collapse">
-  <li><a href="#computing-hansens-accessibility" id="toc-computing-hansens-accessibility" class="nav-link" data-scroll-target="#computing-hansens-accessibility"><strong>17.6.1 Computing Hansen’s accessibility</strong></a></li>
-  <li><a href="#visualising-hansens-accessibility" id="toc-visualising-hansens-accessibility" class="nav-link" data-scroll-target="#visualising-hansens-accessibility"><strong>17.6.2 Visualising Hansen’s accessibility</strong></a></li>
-  <li><a href="#statistical-graphic-visualisation" id="toc-statistical-graphic-visualisation" class="nav-link" data-scroll-target="#statistical-graphic-visualisation"><strong>17.6.3 Statistical graphic visualisation</strong></a></li>
+  <li><a href="#computing-hansens-accessibility" id="toc-computing-hansens-accessibility" class="nav-link" data-scroll-target="#computing-hansens-accessibility"><strong>10.6.1 Computing Hansen’s accessibility</strong></a></li>
+  <li><a href="#visualising-hansens-accessibility" id="toc-visualising-hansens-accessibility" class="nav-link" data-scroll-target="#visualising-hansens-accessibility"><strong>10.6.2 Visualising Hansen’s accessibility</strong></a></li>
+  <li><a href="#statistical-graphic-visualisation" id="toc-statistical-graphic-visualisation" class="nav-link" data-scroll-target="#statistical-graphic-visualisation"><strong>10.6.3 Statistical graphic visualisation</strong></a></li>
   </ul></li>
-  <li><a href="#modelling-and-visualising-accessibility-using-kd2sfca-method" id="toc-modelling-and-visualising-accessibility-using-kd2sfca-method" class="nav-link" data-scroll-target="#modelling-and-visualising-accessibility-using-kd2sfca-method"><strong>17.7 Modelling and Visualising Accessibility using KD2SFCA Method</strong></a>
+  <li><a href="#modelling-and-visualising-accessibility-using-kd2sfca-method" id="toc-modelling-and-visualising-accessibility-using-kd2sfca-method" class="nav-link" data-scroll-target="#modelling-and-visualising-accessibility-using-kd2sfca-method"><strong>10.7 Modelling and Visualising Accessibility using KD2SFCA Method</strong></a>
   <ul class="collapse">
-  <li><a href="#computing-kd2sfcas-accessibility" id="toc-computing-kd2sfcas-accessibility" class="nav-link" data-scroll-target="#computing-kd2sfcas-accessibility"><strong>17.7.1 Computing KD2SFCA’s accessibility</strong></a></li>
-  <li><a href="#visualising-kd2sfcas-accessibility" id="toc-visualising-kd2sfcas-accessibility" class="nav-link" data-scroll-target="#visualising-kd2sfcas-accessibility"><strong>17.7.2 Visualising KD2SFCA’s accessibility</strong></a></li>
-  <li><a href="#statistical-graphic-visualisation-1" id="toc-statistical-graphic-visualisation-1" class="nav-link" data-scroll-target="#statistical-graphic-visualisation-1"><strong>17.7.3 Statistical graphic visualisation</strong></a></li>
+  <li><a href="#computing-kd2sfcas-accessibility" id="toc-computing-kd2sfcas-accessibility" class="nav-link" data-scroll-target="#computing-kd2sfcas-accessibility"><strong>10.7.1 Computing KD2SFCA’s accessibility</strong></a></li>
+  <li><a href="#visualising-kd2sfcas-accessibility" id="toc-visualising-kd2sfcas-accessibility" class="nav-link" data-scroll-target="#visualising-kd2sfcas-accessibility"><strong>10.7.2 Visualising KD2SFCA’s accessibility</strong></a></li>
+  <li><a href="#statistical-graphic-visualisation-1" id="toc-statistical-graphic-visualisation-1" class="nav-link" data-scroll-target="#statistical-graphic-visualisation-1"><strong>10.7.3 Statistical graphic visualisation</strong></a></li>
   </ul></li>
-  <li><a href="#modelling-and-visualising-accessibility-using-spatial-accessibility-measure-sam-method" id="toc-modelling-and-visualising-accessibility-using-spatial-accessibility-measure-sam-method" class="nav-link" data-scroll-target="#modelling-and-visualising-accessibility-using-spatial-accessibility-measure-sam-method"><strong>17.8 Modelling and Visualising Accessibility using Spatial Accessibility Measure (SAM) Method</strong></a>
+  <li><a href="#modelling-and-visualising-accessibility-using-spatial-accessibility-measure-sam-method" id="toc-modelling-and-visualising-accessibility-using-spatial-accessibility-measure-sam-method" class="nav-link" data-scroll-target="#modelling-and-visualising-accessibility-using-spatial-accessibility-measure-sam-method"><strong>10.8 Modelling and Visualising Accessibility using Spatial Accessibility Measure (SAM) Method</strong></a>
   <ul class="collapse">
-  <li><a href="#computing-sam-accessibility" id="toc-computing-sam-accessibility" class="nav-link" data-scroll-target="#computing-sam-accessibility"><strong>17.8.1 Computing SAM accessibility</strong></a></li>
-  <li><a href="#visualising-sams-accessibility" id="toc-visualising-sams-accessibility" class="nav-link" data-scroll-target="#visualising-sams-accessibility"><strong>17.8.2 Visualising SAM’s accessibility</strong></a></li>
-  <li><a href="#statistical-graphic-visualisation-2" id="toc-statistical-graphic-visualisation-2" class="nav-link" data-scroll-target="#statistical-graphic-visualisation-2"><strong>17.8.3 Statistical graphic visualisation</strong></a></li>
+  <li><a href="#computing-sam-accessibility" id="toc-computing-sam-accessibility" class="nav-link" data-scroll-target="#computing-sam-accessibility"><strong>10.8.1 Computing SAM accessibility</strong></a></li>
+  <li><a href="#visualising-sams-accessibility" id="toc-visualising-sams-accessibility" class="nav-link" data-scroll-target="#visualising-sams-accessibility"><strong>10.8.2 Visualising SAM’s accessibility</strong></a></li>
+  <li><a href="#statistical-graphic-visualisation-2" id="toc-statistical-graphic-visualisation-2" class="nav-link" data-scroll-target="#statistical-graphic-visualisation-2"><strong>10.8.3 Statistical graphic visualisation</strong></a></li>
   </ul></li>
   </ul>
 </nav>
@@ -315,7 +315,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Hands-on-Exercise 10: Geographically Weighted Predictive Models</h1>
+<h1 class="title">Hands-on-Exercise 10: Modelling Geographical Accessibility</h1>
 </div>
 
 
@@ -343,10 +343,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 <section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction"><strong>17.1 Introduction</strong></h2>
+<h2 class="anchored" data-anchor-id="introduction"><strong>10.1 Introduction</strong></h2>
 <p>In this hands-on exercise, you will gain hands-on experience on how to model geographical accessibility by using R’s geospatial analysis packages.</p>
 <section id="learning-outcome" class="level3">
-<h3 class="anchored" data-anchor-id="learning-outcome"><strong>17.1.1 Learning Outcome</strong></h3>
+<h3 class="anchored" data-anchor-id="learning-outcome"><strong>10.1.1 Learning Outcome</strong></h3>
 <p>By the end of this hands-on exercise, you will be able:</p>
 <ul>
 <li><p>to import GIS polygon data into R and save them as simple feature data frame by using appropriate functions of sf package of R;</p></li>
@@ -357,7 +357,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 </section>
 <section id="the-data" class="level2">
-<h2 class="anchored" data-anchor-id="the-data"><strong>17.2 The data</strong></h2>
+<h2 class="anchored" data-anchor-id="the-data"><strong>10.2 The data</strong></h2>
 <p>Four data sets will be used in this hands-on exercise, they are:</p>
 <ul>
 <li><p><code>MP14_SUBZONE_NO_SEA_PL</code>: URA Master Plan 2014 subzone boundary GIS data. This data set is downloaded from data.gov.sg.</p></li>
@@ -377,7 +377,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Reminder:</strong> <em>Except <code>MP14_SUBZONE_NO_SEA_PL</code> data set, the other three data set are specially prepared by Prof.&nbsp;Kam for teaching and research purpose. Students taking IS415 Geospatial Analytics and Applications are allowed to use them for hands-on exercise purpose. Please obtain formal approval from Prof.&nbsp;Kam if you want to use them for other courses or usage.</em></p>
 </section>
 <section id="getting-started" class="level2">
-<h2 class="anchored" data-anchor-id="getting-started"><strong>17.3 Getting Started</strong></h2>
+<h2 class="anchored" data-anchor-id="getting-started"><strong>10.3 Getting Started</strong></h2>
 <p>Before we getting started, it is important for us to install the necessary R packages and launch them into RStudio environment.</p>
 <p>The R packages need for this exercise are as follows:</p>
 <ul>
@@ -415,9 +415,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Notice that with tidyverse, we do not have to install readr, dplyr and ggplots packages separately. In fact, tidyverse also installs other R packages such as tidyr, stringr, forcats, tibble, purrr and magrittr.</p>
 </section>
 <section id="geospatial-data-wrangling" class="level2">
-<h2 class="anchored" data-anchor-id="geospatial-data-wrangling"><strong>17.4 Geospatial Data Wrangling</strong></h2>
+<h2 class="anchored" data-anchor-id="geospatial-data-wrangling"><strong>10.4 Geospatial Data Wrangling</strong></h2>
 <section id="importing-geospatial-data" class="level3">
-<h3 class="anchored" data-anchor-id="importing-geospatial-data"><strong>17.4.1 Importing geospatial data</strong></h3>
+<h3 class="anchored" data-anchor-id="importing-geospatial-data"><strong>10.4.1 Importing geospatial data</strong></h3>
 <p>Three geospatial data will be imported from the <em>data/geospatial</em> sub-folder. They are MP14_SUBZONE_NO_SEA_PL, hexagons and ELDERCARE.</p>
 <p>The code chunk below is used to import these three data sets shapefile by using <em>st_read()</em> of <strong>sf</strong> packages.</p>
 <div class="cell">
@@ -462,7 +462,7 @@ Projected CRS: SVY21 / Singapore TM</code></pre>
 <p>The report above shows that the R object used to contain the imported MP14_SUBZONE_WEB_PL shapefile is called <em>mpsz</em> and it is a simple feature object. The geometry type is <em>multipolygon</em>. it is also important to note that mpsz simple feature object does not have EPSG information.</p>
 </section>
 <section id="updating-crs-information" class="level3">
-<h3 class="anchored" data-anchor-id="updating-crs-information"><strong>17.4.2 Updating CRS information</strong></h3>
+<h3 class="anchored" data-anchor-id="updating-crs-information"><strong>10.4.2 Updating CRS information</strong></h3>
 <p>The code chunk below updates the newly imported <em>mpsz</em> with the correct ESPG code (i.e.&nbsp;3414)</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>mpsz <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(mpsz, <span class="dv">3414</span>)</span>
@@ -520,7 +520,7 @@ PROJCRS["SVY21 / Singapore TM",
 <p>Notice that the EPSG: is indicated as <em>3414</em> now.</p>
 </section>
 <section id="cleaning-and-updating-attribute-fields-of-the-geospatial-data" class="level3">
-<h3 class="anchored" data-anchor-id="cleaning-and-updating-attribute-fields-of-the-geospatial-data"><strong>17.4.3 Cleaning and updating attribute fields of the geospatial data</strong></h3>
+<h3 class="anchored" data-anchor-id="cleaning-and-updating-attribute-fields-of-the-geospatial-data"><strong>10.4.3 Cleaning and updating attribute fields of the geospatial data</strong></h3>
 <p>There are many redundant fields in the data tables of both <code>eldercare</code> and <code>hexagons</code>. The code chunks below will be used to exclude those redundant fields. At the same time, a new field called <code>demand</code> and a new field called <code>capacity</code> will be added into the data table of <code>hexagons</code> and <code>eldercare</code> sf data frame respectively. Both fields are derive using <em>mutate()</em> of <strong>dplyr</strong> package.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>eldercare <span class="ot">&lt;-</span> eldercare <span class="sc">%&gt;%</span></span>
@@ -536,16 +536,16 @@ PROJCRS["SVY21 / Singapore TM",
 </section>
 </section>
 <section id="apsaital-data-handling-and-wrangling" class="level2">
-<h2 class="anchored" data-anchor-id="apsaital-data-handling-and-wrangling"><strong>17.5 Apsaital Data Handling and Wrangling</strong></h2>
+<h2 class="anchored" data-anchor-id="apsaital-data-handling-and-wrangling"><strong>10.5 Apsaital Data Handling and Wrangling</strong></h2>
 <section id="importing-distance-matrix" class="level3">
-<h3 class="anchored" data-anchor-id="importing-distance-matrix"><strong>17.5.1 Importing Distance Matrix</strong></h3>
+<h3 class="anchored" data-anchor-id="importing-distance-matrix"><strong>10.5.1 Importing Distance Matrix</strong></h3>
 <p>The code chunk below uses <em>read_cvs()</em> of <strong>readr</strong> package to import <code>OD_Matrix.csv</code> into RStudio. The imported object is a tibble data.frame called <code>ODMatrix</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>ODMatrix <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/aspatial/OD_Matrix.csv"</span>, <span class="at">skip =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="tidying-distance-matrix" class="level3">
-<h3 class="anchored" data-anchor-id="tidying-distance-matrix"><strong>17.5.2 Tidying distance matrix</strong></h3>
+<h3 class="anchored" data-anchor-id="tidying-distance-matrix"><strong>10.5.2 Tidying distance matrix</strong></h3>
 <p>The imported ODMatrix organised the distance matrix columnwise.</p>
 <p>On the other hands, most of the modelling packages in R is expecting a matrix look similar to the figure below.</p>
 <p>The rows represent <strong>origins</strong> (i.e.&nbsp;also know as <strong>from</strong> field) and the columns represent <strong>destination</strong> (i.e.&nbsp;also known as <strong>to</strong> field.)</p>
@@ -564,9 +564,9 @@ PROJCRS["SVY21 / Singapore TM",
 </section>
 </section>
 <section id="modelling-and-visualising-accessibility-using-hansen-method" class="level2">
-<h2 class="anchored" data-anchor-id="modelling-and-visualising-accessibility-using-hansen-method"><strong>17.6 Modelling and Visualising Accessibility using Hansen Method</strong></h2>
+<h2 class="anchored" data-anchor-id="modelling-and-visualising-accessibility-using-hansen-method"><strong>10.6 Modelling and Visualising Accessibility using Hansen Method</strong></h2>
 <section id="computing-hansens-accessibility" class="level3">
-<h3 class="anchored" data-anchor-id="computing-hansens-accessibility"><strong>17.6.1 Computing Hansen’s accessibility</strong></h3>
+<h3 class="anchored" data-anchor-id="computing-hansens-accessibility"><strong>10.6.1 Computing Hansen’s accessibility</strong></h3>
 <p>Now, we ready to compute Hansen’s accessibility by using <em>ac()</em> of <a href="https://cran.r-project.org/web/packages/SpatialAcc/"><strong>SpatialAcc</strong></a> package. Before getting started, you are encourage to read the <a href="https://cran.r-project.org/web/packages/SpatialAcc/SpatialAcc.pdf">arguments</a> of the function at least once in order to ensure that the required inputs are available.</p>
 <p>The code chunk below calculates Hansen’s accessibility using <em>ac()</em> of <strong>SpatialAcc</strong> and <em>data.frame()</em> is used to save the output in a data frame called <code>acc_Handsen</code>.</p>
 <div class="cell">
@@ -608,9 +608,9 @@ PROJCRS["SVY21 / Singapore TM",
 </div>
 </section>
 <section id="visualising-hansens-accessibility" class="level3">
-<h3 class="anchored" data-anchor-id="visualising-hansens-accessibility"><strong>17.6.2 Visualising Hansen’s accessibility</strong></h3>
+<h3 class="anchored" data-anchor-id="visualising-hansens-accessibility"><strong>10.6.2 Visualising Hansen’s accessibility</strong></h3>
 <section id="extracting-map-extend" class="level4">
-<h4 class="anchored" data-anchor-id="extracting-map-extend">17.6.2.1 Extracting map extend</h4>
+<h4 class="anchored" data-anchor-id="extracting-map-extend">10.6.2.1 Extracting map extend</h4>
 <p>Firstly, we will extract the extend of <code>hexagons</code> simple feature data frame by by using <em>st_bbox()</em> of <strong>sf</strong> package.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>mapex <span class="ot">&lt;-</span> <span class="fu">st_bbox</span>(hexagons)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -646,7 +646,7 @@ PROJCRS["SVY21 / Singapore TM",
 </section>
 </section>
 <section id="statistical-graphic-visualisation" class="level3">
-<h3 class="anchored" data-anchor-id="statistical-graphic-visualisation"><strong>17.6.3 Statistical graphic visualisation</strong></h3>
+<h3 class="anchored" data-anchor-id="statistical-graphic-visualisation"><strong>10.6.3 Statistical graphic visualisation</strong></h3>
 <p>In this section, we are going to compare the distribution of Hansen’s accessibility values by URA Planning Region.</p>
 <p>Firstly, we need to add the planning region field into <em>haxegon_Hansen</em> simple feature data frame by using the code chunk below.</p>
 <div class="cell">
@@ -670,9 +670,9 @@ PROJCRS["SVY21 / Singapore TM",
 </section>
 </section>
 <section id="modelling-and-visualising-accessibility-using-kd2sfca-method" class="level2">
-<h2 class="anchored" data-anchor-id="modelling-and-visualising-accessibility-using-kd2sfca-method"><strong>17.7 Modelling and Visualising Accessibility using KD2SFCA Method</strong></h2>
+<h2 class="anchored" data-anchor-id="modelling-and-visualising-accessibility-using-kd2sfca-method"><strong>10.7 Modelling and Visualising Accessibility using KD2SFCA Method</strong></h2>
 <section id="computing-kd2sfcas-accessibility" class="level3">
-<h3 class="anchored" data-anchor-id="computing-kd2sfcas-accessibility"><strong>17.7.1 Computing KD2SFCA’s accessibility</strong></h3>
+<h3 class="anchored" data-anchor-id="computing-kd2sfcas-accessibility"><strong>10.7.1 Computing KD2SFCA’s accessibility</strong></h3>
 <p>In this section, you are going to repeat most of the steps you had learned in previous section to perform the analysis. However, some of the codes will be combined into one code chunk.<br>
 The code chunk below calculates Hansen’s accessibility using <em>ac()</em> of <strong>SpatialAcc</strong> and <em>data.frame()</em> is used to save the output in a data frame called <code>acc_KD2SFCA</code>. Notice that <code>KD2SFCA</code> is used for family argument.’</p>
 <div class="cell">
@@ -689,7 +689,7 @@ The code chunk below calculates Hansen’s accessibility using <em>ac()</em> of 
 </div>
 </section>
 <section id="visualising-kd2sfcas-accessibility" class="level3">
-<h3 class="anchored" data-anchor-id="visualising-kd2sfcas-accessibility"><strong>17.7.2 Visualising KD2SFCA’s accessibility</strong></h3>
+<h3 class="anchored" data-anchor-id="visualising-kd2sfcas-accessibility"><strong>10.7.2 Visualising KD2SFCA’s accessibility</strong></h3>
 <p>The code chunk below uses a collection of mapping fucntions of tmap package to create a high cartographic quality accessibility to eldercare centre in Singapore. Notice that <code>mapex</code> is reused for <em>bbox</em> argument.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">"plot"</span>)</span>
@@ -720,7 +720,7 @@ The code chunk below calculates Hansen’s accessibility using <em>ac()</em> of 
 </div>
 </section>
 <section id="statistical-graphic-visualisation-1" class="level3">
-<h3 class="anchored" data-anchor-id="statistical-graphic-visualisation-1"><strong>17.7.3 Statistical graphic visualisation</strong></h3>
+<h3 class="anchored" data-anchor-id="statistical-graphic-visualisation-1"><strong>10.7.3 Statistical graphic visualisation</strong></h3>
 <p>Now, we are going to compare the distribution of KD2CFA accessibility values by URA Planning Region.</p>
 <p>Firstly, we need to add the planning region field into <em>hexagon_KD2SFCA</em> simple feature data frame by using the code chunk below.</p>
 <div class="cell">
@@ -744,9 +744,9 @@ The code chunk below calculates Hansen’s accessibility using <em>ac()</em> of 
 </section>
 </section>
 <section id="modelling-and-visualising-accessibility-using-spatial-accessibility-measure-sam-method" class="level2">
-<h2 class="anchored" data-anchor-id="modelling-and-visualising-accessibility-using-spatial-accessibility-measure-sam-method"><strong>17.8 Modelling and Visualising Accessibility using Spatial Accessibility Measure (SAM) Method</strong></h2>
+<h2 class="anchored" data-anchor-id="modelling-and-visualising-accessibility-using-spatial-accessibility-measure-sam-method"><strong>10.8 Modelling and Visualising Accessibility using Spatial Accessibility Measure (SAM) Method</strong></h2>
 <section id="computing-sam-accessibility" class="level3">
-<h3 class="anchored" data-anchor-id="computing-sam-accessibility"><strong>17.8.1 Computing SAM accessibility</strong></h3>
+<h3 class="anchored" data-anchor-id="computing-sam-accessibility"><strong>10.8.1 Computing SAM accessibility</strong></h3>
 <p>In this section, you are going to repeat most of the steps you had learned in previous section to perform the analysis. However, some of the codes will be combined into one code chunk.<br>
 The code chunk below calculates Hansen’s accessibility using <em>ac()</em> of <strong>SpatialAcc</strong> and <em>data.frame()</em> is used to save the output in a data frame called <code>acc_SAM</code>. Notice that <code>SAM</code> is used for family argument.</p>
 <div class="cell">
@@ -763,7 +763,7 @@ The code chunk below calculates Hansen’s accessibility using <em>ac()</em> of 
 </div>
 </section>
 <section id="visualising-sams-accessibility" class="level3">
-<h3 class="anchored" data-anchor-id="visualising-sams-accessibility"><strong>17.8.2 Visualising SAM’s accessibility</strong></h3>
+<h3 class="anchored" data-anchor-id="visualising-sams-accessibility"><strong>10.8.2 Visualising SAM’s accessibility</strong></h3>
 <p>The code chunk below uses a collection of mapping fucntions of tmap package to create a high cartographic quality accessibility to eldercare centre in Singapore. Notice that <code>mapex</code> is reused for <em>bbox</em> argument.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">"plot"</span>)</span>
@@ -794,7 +794,7 @@ The code chunk below calculates Hansen’s accessibility using <em>ac()</em> of 
 </div>
 </section>
 <section id="statistical-graphic-visualisation-2" class="level3">
-<h3 class="anchored" data-anchor-id="statistical-graphic-visualisation-2"><strong>17.8.3 Statistical graphic visualisation</strong></h3>
+<h3 class="anchored" data-anchor-id="statistical-graphic-visualisation-2"><strong>10.8.3 Statistical graphic visualisation</strong></h3>
 <p>Now, we are going to compare the distribution of SAM accessibility values by URA Planning Region.</p>
 <p>Firstly, we need to add the planning region field into <em>hexagon_SAM</em> simple feature data frame by using the code chunk below.</p>
 <div class="cell">
