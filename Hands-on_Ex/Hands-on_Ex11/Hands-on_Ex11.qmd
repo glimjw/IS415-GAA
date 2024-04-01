@@ -6,13 +6,19 @@ execute:
 date: "`r Sys.Date()`"
 ---
 
-15.1 Overview Spatial interaction represent the flow of people, material, or information between locations in geographical space. It encompasses everything from freight shipments, energy flows, and the global trade in rare antiquities, to flight schedules, rush hour woes, and pedestrian foot traffic.
+## 11.1 Overview 
+
+Spatial interaction represent the flow of people, material, or information between locations in geographical space. It encompasses everything from freight shipments, energy flows, and the global trade in rare antiquities, to flight schedules, rush hour woes, and pedestrian foot traffic.
 
 Each spatial interaction, as an analogy for a set of movements, is composed of a discrete origin/destination pair. Each pair can be represented as a cell in a matrix where rows are related to the locations (centroids) of origin, while columns are related to locations (centroids) of destination. Such a matrix is commonly known as an origin/destination matrix, or a spatial interaction matrix.
 
 In this hands-on exercise, you will learn how to build an OD matrix by using Passenger Volume by Origin Destination Bus Stops data set downloaded from LTA DataMall. By the end of this hands-on exercise, you will be able:
 
-to import and extract OD data for a selected time interval, to import and save geospatial data (i.e. bus stops and mpsz) into sf tibble data frame objects, to populate planning subzone code into bus stops sf tibble data frame, to construct desire lines geospatial data from the OD data, and to visualise passenger volume by origin and destination bus stops by using the desire lines data. 15.2 Getting Started For the purpose of this exercise, seven r packages will be used. They are:
+to import and extract OD data for a selected time interval, to import and save geospatial data (i.e. bus stops and mpsz) into sf tibble data frame objects, to populate planning subzone code into bus stops sf tibble data frame, to construct desire lines geospatial data from the OD data, and to visualise passenger volume by origin and destination bus stops by using the desire lines data.
+
+## 11.2 Getting Started 
+
+For the purpose of this exercise, seven r packages will be used. They are:
 
 sf for importing, integrating, processing and transforming geospatial data. tidyverse for importing, integrating, wrangling and visualising data. tmap for creating elegent and cartographic quality thematic maps. stplanr provides functions for solving common problems in transport planning and modelling such as downloading and cleaning transport datasets; creating geographic “desire lines” from origin-destination (OD) data; route assignment, locally and interfaces to routing services such as CycleStreets.net; calculation of route segment attributes such as bearing and aggregate flow; and ‘travel watershed’ analysis. DT provides an R interface to the JavaScript library DataTables. R data objects (matrices or data frames) can be displayed as tables on HTML pages, and DataTables provides filtering, pagination, sorting, and many other features in the tables.
 
@@ -20,9 +26,9 @@ sf for importing, integrating, processing and transforming geospatial data. tidy
 pacman::p_load(tmap, sf, DT, stplanr, tidyverse)
 ```
 
-## **15.3 Preparing the Flow Data**
+## **11.3 Preparing the Flow Data**
 
-### **15.3.1 Importing the OD data**
+### **11.3.1 Importing the OD data**
 
 Firstly, we will import the *Passenger Volume by Origin Destination Bus Stops* data set downloaded from LTA DataMall by using `read_csv()` of **readr** package.
 
@@ -43,7 +49,7 @@ odbus$ORIGIN_PT_CODE <- as.factor(odbus$ORIGIN_PT_CODE)
 odbus$DESTINATION_PT_CODE <- as.factor(odbus$DESTINATION_PT_CODE) 
 ```
 
-### **15.3.2 Extracting the study data**
+### **11.3.2 Extracting the study data**
 
 For the purpose of this exercise, we will extract commuting flows on weekday and between 6 and 9 o’clock.
 
@@ -75,7 +81,7 @@ The code chunk below will be used to import the save odbus6_9.rds into R environ
 odbus6_9 <- read_rds("data/rds/odbus6_9.rds")
 ```
 
-## **15.4 Working with Geospatial Data**
+## **11.4 Working with Geospatial Data**
 
 For the purpose of this exercise, two geospatial data will be used. They are:
 
@@ -85,7 +91,7 @@ For the purpose of this exercise, two geospatial data will be used. They are:
 
 Both data sets are in ESRI shapefile format.
 
-### **15.4.1 Importing geospatial data**
+### **11.4.1 Importing geospatial data**
 
 Two geospatial data will be used in this exercise, they are:
 
@@ -117,9 +123,9 @@ The code chunk below will be used to write mpsz sf tibble data frame into an rds
 mpsz <- write_rds(mpsz, "data/rds/mpsz.rds")
 ```
 
-## **15.5 Geospatial data wrangling**
+## **11.5 Geospatial data wrangling**
 
-### **15.5.1 Combining Busstop and mpsz**
+### **11.5.1 Combining Busstop and mpsz**
 
 Code chunk below populates the planning subzone code (i.e. SUBZONE_C) of mpsz sf data frame into busstop sf data frame.
 
@@ -211,11 +217,11 @@ write_rds(od_data, "data/rds/od_data_fii.rds")
 od_data_fii <- read_rds("data/rds/od_data_fii.rds")
 ```
 
-## **15.6 Visualising Spatial Interaction**
+## **11.6 Visualising Spatial Interaction**
 
 In this section, you will learn how to prepare a desire line by using **stplanr** package.
 
-### **15.6.1 Removing intra-zonal flows**
+### **11.6.1 Removing intra-zonal flows**
 
 We will not plot the intra-zonal flows. The code chunk below will be used to remove intra-zonal flows.
 
@@ -231,7 +237,7 @@ write_rds(od_data_fij, "data/rds/od_data_fij.rds")
 od_data_fij <- read_rds("data/rds/od_data_fij.rds")
 ```
 
-### **15.6.2 Creating desire lines**
+### **11.6.2 Creating desire lines**
 
 In this code chunk below, `od2line()` of **stplanr** package is used to create the desire lines.
 
@@ -249,7 +255,7 @@ write_rds(flowLine, "data/rds/flowLine.rds")
 flowLine <- read_rds("data/rds/flowLine.rds")
 ```
 
-### **15.6.3 Visualising the desire lines**
+### **11.6.3 Visualising the desire lines**
 
 To visualise the resulting desire lines, the code chunk below is used.
 
